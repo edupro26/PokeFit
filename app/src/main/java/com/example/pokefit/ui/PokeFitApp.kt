@@ -23,7 +23,18 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import com.example.pokefit.R
+import com.example.pokefit.ui.theme.Primary
+import com.example.pokefit.ui.theme.Transparent
 
 @Composable
 fun PokeFitApp() {
@@ -37,17 +48,13 @@ fun PokeFitApp() {
                 BottomBarItem.Leaderboards,
                 BottomBarItem.Profile
             )
-
             val backStackEntry by navController.currentBackStackEntryAsState()
             val currentRoute = backStackEntry?.destination
-
-            NavigationBar {
-                items.forEach { item ->
-                    AddItem(
-                        item = item,
-                        currentRoute = currentRoute,
-                        navController = navController
-                    )
+            NavigationBar (
+                modifier = Modifier.clip(MaterialTheme.shapes.medium)
+            ) {
+                items.forEach {
+                    item -> AddItem(item, currentRoute, navController)
                 }
             }
         }
@@ -57,12 +64,21 @@ fun PokeFitApp() {
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            Text(
-                text = "Hello, PokeFit!",
-                fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.Black
-            )
+            Row (
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                Image(
+                    modifier = Modifier.size(55.dp),
+                    painter = painterResource(id = R.drawable.ic_app_logo),
+                    contentDescription = "App Logo"
+                )
+                Text(
+                    text = "PokéFit",
+                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.Black
+                )
+            }
         }
         BottomBarNavGraph(navController = navController)
     }
@@ -77,14 +93,22 @@ private fun RowScope.AddItem(
 ) {
     NavigationBarItem (
         label = {
-            Text(text = item.title)
+            Text(
+                text = item.title,
+                style = MaterialTheme.typography.labelSmall
+            )
         },
         icon = {
             Icon(
-                imageVector = item.icon,
+                painter = painterResource(item.icon),
                 contentDescription = "Icon"
             )
         },
+        colors =  NavigationBarItemDefaults.colors(
+            selectedIconColor = Primary,
+            selectedTextColor = Primary,
+            indicatorColor = Transparent
+        ),
         selected = currentRoute?.hierarchy?.any {
             it.route == item.route
         } == true,
