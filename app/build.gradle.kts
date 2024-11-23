@@ -40,6 +40,16 @@ android {
 }
 
 dependencies {
+//    // Glide
+//    implementation (libs.glide)
+//    // Retrofit & GSON
+//    implementation (libs.retrofit2.retrofit)
+//    implementation (libs.converter.gson)
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation ("io.coil-kt:coil-compose:2.2.2")
+
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -49,6 +59,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.runtime.livedata)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
