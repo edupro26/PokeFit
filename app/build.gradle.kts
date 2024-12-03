@@ -40,16 +40,10 @@ android {
 }
 
 dependencies {
-//    // Glide
-//    implementation (libs.glide)
-//    // Retrofit & GSON
-//    implementation (libs.retrofit2.retrofit)
-//    implementation (libs.converter.gson)
-    implementation ("com.github.bumptech.glide:glide:4.16.0")
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation ("io.coil-kt:coil-compose:2.2.2")
-
+    implementation (libs.glide)
+    implementation (libs.retrofit2.retrofit)
+    implementation (libs.converter.gson)
+    implementation (libs.coil.compose)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
