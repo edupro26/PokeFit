@@ -8,7 +8,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,14 +18,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
-import com.example.pokefit.api.domain.Pokemon
+import com.example.pokefit.domain.Pokemon
 import com.example.pokefit.ui.viewModel.PokemonViewModel
 
 @Composable
-fun PokemonScreen(viewModel: PokemonViewModel = viewModel()) {
-    // Observe Pokémon data from the ViewModel
-    val pokemons = viewModel.pokemons.observeAsState(initial = emptyList())
-
+fun PokemonScreen() {
+    val viewModel: PokemonViewModel = viewModel()
+    val pokemonList by viewModel.pokemonList.collectAsState()
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Top,
@@ -38,7 +38,7 @@ fun PokemonScreen(viewModel: PokemonViewModel = viewModel()) {
             modifier = Modifier.padding(16.dp)
         )
 
-        if (pokemons.value.isNullOrEmpty()) {
+        if (pokemonList.isEmpty()) {
             // Show a loading state while data is being fetched
             Text(
                 text = "Loading Pokémon...",
@@ -52,7 +52,7 @@ fun PokemonScreen(viewModel: PokemonViewModel = viewModel()) {
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(pokemons.value.filterNotNull().take(2)) { pokemon ->
+                items(pokemonList) { pokemon ->
                     PokemonCard(pokemon)
                 }
             }
@@ -78,20 +78,22 @@ fun PokemonCard(pokemon: Pokemon) {
             Image(
                 painter = rememberAsyncImagePainter(model = pokemon.imageUrl),
                 contentDescription = "${pokemon.name} image",
-                modifier = Modifier.size(64.dp),
+                modifier = Modifier.size(100.dp),
                 contentScale = ContentScale.Crop
             )
 
             // Pokémon Details
             Column {
                 Text(
-                    text = pokemon.formattedName,
+                    text = pokemon.name.replaceFirstChar { it.uppercase() },
                     fontWeight = FontWeight.Bold,
                     fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                     color = Color.Black
                 )
                 Text(
-                    text = "Types: ${pokemon.types.joinToString(", ") { it.name.capitalize() }}",
+                    text = "Types: ${pokemon.types.joinToString(", ") { 
+                        it.replaceFirstChar { it.uppercase() } 
+                    }}",
                     fontSize = MaterialTheme.typography.bodyMedium.fontSize,
                     color = Color.Gray
                 )
