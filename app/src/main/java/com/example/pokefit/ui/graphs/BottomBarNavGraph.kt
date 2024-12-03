@@ -1,9 +1,9 @@
 package com.example.pokefit.ui.graphs
 
-import com.example.pokefit.ui.screens.HomeScreen
-import com.example.pokefit.ui.screens.PokemonScreen
-import com.example.pokefit.ui.screens.LeaderboardScreen
-import com.example.pokefit.ui.screens.ProfileScreen
+import com.example.pokefit.ui.screens.home.HomeScreen
+import com.example.pokefit.ui.screens.pokemon.PokemonScreen
+import com.example.pokefit.ui.screens.leaderboard.LeaderboardScreen
+import com.example.pokefit.ui.screens.profile.ProfileScreen
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController

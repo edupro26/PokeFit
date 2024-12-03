@@ -1,4 +1,4 @@
-package com.example.pokefit.ui.screens
+package com.example.pokefit.ui.screens.home
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,21 +15,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun LeaderboardScreen() {
+fun HomeScreen() {
     Column (
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Leaderboard Screen",
+            text = "Home Screen",
             fontSize = MaterialTheme.typography.titleLarge.fontSize,
             fontWeight = FontWeight.Bold,
             color = Color.Black
         )
         Text(
             modifier = Modifier.padding(16.dp),
-            text = "This will be the screen where you can see the leaderboards of the app.",
+            text = "This will be the home screen for the app.",
             fontSize = MaterialTheme.typography.bodyMedium.fontSize,
             color = Color.Black
         )
@@ -38,6 +38,6 @@ fun LeaderboardScreen() {
 
 @Composable
 @Preview(showBackground = true)
-fun LeaderboardScreenPreview() {
-    LeaderboardScreen()
+fun HomeScreenPreview() {
+    HomeScreen()
 }

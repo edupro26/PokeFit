@@ -1,4 +1,4 @@
-package com.example.pokefit.ui.screens
+package com.example.pokefit.ui.screens.profile
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

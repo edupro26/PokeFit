@@ -1,4 +1,4 @@
-package com.example.pokefit.ui.screens
+package com.example.pokefit.ui.screens.pokemon
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.pokefit.domain.Pokemon
-import com.example.pokefit.ui.viewModel.PokemonViewModel
 
 @Composable
 fun PokemonScreen() {

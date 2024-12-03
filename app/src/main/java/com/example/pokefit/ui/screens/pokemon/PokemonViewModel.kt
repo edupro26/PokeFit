@@ -1,4 +1,4 @@
-package com.example.pokefit.ui.viewModel
+package com.example.pokefit.ui.screens.pokemon
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
