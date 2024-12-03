@@ -4,39 +4,105 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
+import com.example.pokefit.R
 import com.example.pokefit.domain.Pokemon
+import com.example.pokefit.ui.theme.Primary
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PokemonScreen() {
     val viewModel: PokemonViewModel = viewModel()
     val pokemonList by viewModel.pokemonList.collectAsState()
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    Scaffold (
+        modifier = Modifier
+            .fillMaxSize()
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            TopAppBar(
+                title = {
+                    Row (verticalAlignment = Alignment.CenterVertically) {
+                        Image(
+                            modifier = Modifier.size(38.dp),
+                            painter = painterResource(id = R.drawable.ic_app_logo),
+                            contentDescription = "App Logo"
+                        )
+                        Text(
+                            text = buildAnnotatedString {
+                                withStyle(style = SpanStyle(color = Color.Black)) {
+                                    append("POKÉ")
+                                }
+                                withStyle(style = SpanStyle(color = Primary)) {
+                                    append("FIT")
+                                }
+                            },
+                            fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "Search"
+                        )
+                    }
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(
+                            imageVector = Icons.Default.MoreVert,
+                            contentDescription = "Filters"
+                        )
+                    }
+                },
+                scrollBehavior = scrollBehavior
+            )
+        }
+    ) { paddingValues ->
+        ScrollContent(paddingValues, pokemonList)
+    }
+}
+
+@Composable
+private fun ScrollContent(
+    paddingValues: PaddingValues,
+    pokemonList: List<Pokemon>
+) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "Pokémon Screen",
-            fontSize = MaterialTheme.typography.titleLarge.fontSize,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            modifier = Modifier.padding(16.dp)
-        )
-
         if (pokemonList.isEmpty()) {
             // Show a loading state while data is being fetched
             Text(
@@ -49,7 +115,7 @@ fun PokemonScreen() {
             // Display Pokémon in a scrollable list
             LazyColumn(
                 contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 items(pokemonList) { pokemon ->
                     PokemonCard(pokemon)
@@ -60,11 +126,12 @@ fun PokemonScreen() {
 }
 
 @Composable
-fun PokemonCard(pokemon: Pokemon) {
+private fun PokemonCard(pokemon: Pokemon) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
+            .size(100.dp)
     ) {
         Row(
             modifier = Modifier
@@ -77,7 +144,7 @@ fun PokemonCard(pokemon: Pokemon) {
             Image(
                 painter = rememberAsyncImagePainter(model = pokemon.imageUrl),
                 contentDescription = "${pokemon.name} image",
-                modifier = Modifier.size(100.dp),
+                modifier = Modifier.size(94.dp),
                 contentScale = ContentScale.Crop
             )
 
