@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.pokefit"
+    namespace = "pt.ul.fc.cm.pokefit"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.pokefit"
+        applicationId = "pt.ul.fc.cm.pokefit"
         minSdk = 26
         targetSdk = 35
         versionCode = 1
