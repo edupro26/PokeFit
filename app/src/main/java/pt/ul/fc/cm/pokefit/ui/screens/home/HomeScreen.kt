@@ -43,6 +43,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import pt.ul.fc.cm.pokefit.R
 import pt.ul.fc.cm.pokefit.ui.theme.Pink80
@@ -114,7 +115,6 @@ fun HomeScreen(viewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.v
             PokemonStatsSection(
                 pokemonImage = painterResource(id = R.drawable.trainer),
                 steps = steps,
-                progress = progress
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -153,9 +153,9 @@ fun PokemonStatsSection(
     steps: Int = 0,
     heartRate: Int = 88,
     sleepDuration: String = "7h 34m",
-    progress: Float = 0.56f,
-    caloriesBurned: Float = 1116.5f,
-    calorieGoal: Float = 2000f
+    caloriesProgress: Float = 0.5f,
+    caloriesBurned: Int = 1000,
+    calorieGoal: Int = 2000,
 ) {
     Column(
         modifier = Modifier
@@ -197,7 +197,7 @@ fun PokemonStatsSection(
                 .padding(horizontal = 20.dp)
                 .clip(RoundedCornerShape(12.dp))
                 .background(PrimaryGrey)
-                .padding(8.dp) // Padding inside the box
+                .padding(8.dp)
         ) {
             Row(
                 modifier = Modifier
@@ -234,7 +234,6 @@ fun PokemonStatsSection(
             }
         }
 
-
         Spacer(modifier = Modifier.height(16.dp))
 
         // Stats Section
@@ -245,41 +244,67 @@ fun PokemonStatsSection(
         )
 
         // Progress Section
-        Column(
-            modifier = Modifier.fillMaxWidth()
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(60.dp)
+                .padding(horizontal = 20.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .background(PrimaryGrey)
+                .padding(14.dp)
         ) {
-            Text(
-                text = "In-Progress",
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color.Gray
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            LinearProgressIndicator(
-                progress = { progress },
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(8.dp),
-                color = MaterialTheme.colorScheme.primary,
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "Burned ${"%.1f".format(caloriesBurned)} out of ${calorieGoal.toInt()} cal",
-                style = MaterialTheme.typography.bodySmall,
-                color = Color.Gray
-            )
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally, // Centraliza os elementos horizontalmente
+            )  {
+                Text(
+                    text = buildAnnotatedString {
+                        withStyle(style = SpanStyle(fontSize = MaterialTheme.typography.bodySmall.fontSize)) { // Tamanho menor para o texto
+                            append("Burned ")
+                        }
+                        withStyle(
+                            style = SpanStyle(
+                                fontSize = MaterialTheme.typography.bodyMedium.fontSize, // Texto do valor um pouco maior que o restante
+                                fontWeight = FontWeight.Bold
+                            )
+                        ) {
+                            append("$caloriesBurned")
+                        }
+                        withStyle(style = SpanStyle(fontSize = MaterialTheme.typography.bodySmall.fontSize)) { // Tamanho menor para o texto
+                            append(" out of $calorieGoal cal")
+                        }
+                    },
+                    color = Color.Black
+                )
+                LinearProgressIndicator(
+                    progress = { caloriesProgress },
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(4.dp),
+                    color = Color.Red,
+                    trackColor = Color(0xFFE0E0E0), // Light gray background
+                )
+            }
         }
     }
 }
 
+
 @Composable
 fun StatsSection(steps: String, heartRate: String, sleepDuration: String) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(188.dp)
+            .padding(horizontal = 20.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        // Column containing Steps and Sleep
+        // Coluna contendo Steps e Sleep
         Column(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight(),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             StatItem(
@@ -294,39 +319,41 @@ fun StatsSection(steps: String, heartRate: String, sleepDuration: String) {
             )
         }
 
-        //Heart Rate card
+        // Cartão de Heart Rate
         Box(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxHeight()
-                .clip(RoundedCornerShape(12.dp)) // Optional: Rounded corners
-                .background(MaterialTheme.colorScheme.surface) // Optional: Add background color
-                .padding(8.dp) // Padding inside the box
+                .clip(RoundedCornerShape(12.dp)) // Cantos arredondados
+                .background(MaterialTheme.colorScheme.surface) // Cor de fundo
         ) {
-            StatItem(
-                label = "Heart Rate",
-                value = heartRate,
-                indicatorColor = Color(0xFFFF9800) // Orange
-            )
+                StatItem(
+                    label = "Heart Rate",
+                    value = heartRate,
+                    indicatorColor = Color(0xFFFF9800), // Laranja
+                    size = 172.dp // Define altura para o StatItem
+                )
+
         }
     }
 }
 
 @Composable
-fun StatItem(label: String, value: String, indicatorColor: Color) {
+fun StatItem(label: String, value: String, indicatorColor: Color, size: Dp = 80.dp) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .height(size)
             .clip(RoundedCornerShape(12.dp))
-            .background(MaterialTheme.colorScheme.surface)
+            .background(PrimaryGrey)
             .padding(vertical = 8.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .fillMaxHeight(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(4.dp)
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
             // Label
             Text(
