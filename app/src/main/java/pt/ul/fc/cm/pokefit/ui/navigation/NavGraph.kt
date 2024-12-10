@@ -1,4 +1,4 @@
-package pt.ul.fc.cm.pokefit.ui.graphs
+package pt.ul.fc.cm.pokefit.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -10,22 +10,22 @@ import pt.ul.fc.cm.pokefit.ui.screens.pokemon.PokemonScreen
 import pt.ul.fc.cm.pokefit.ui.screens.profile.ProfileScreen
 
 @Composable
-fun BottomBarNavGraph(navController: NavHostController) {
+fun NavGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = BottomBarItem.Home.route
+        startDestination = Screen.Home.route
     ) {
-        composable(route = BottomBarItem.Home.route) {
-            HomeScreen()
+        composable(route = Screen.Home.route) {
+            HomeScreen(navController)
         }
-        composable(route = BottomBarItem.Pokemon.route) {
-            PokemonScreen()
+        composable(route = Screen.Pokemon.route) {
+            PokemonScreen(navController)
         }
-        composable(route = BottomBarItem.Leaderboards.route) {
-            LeaderboardScreen()
+        composable(route = Screen.Leaderboards.route) {
+            LeaderboardScreen(navController)
         }
-        composable(route = BottomBarItem.Profile.route) {
-            ProfileScreen()
+        composable(route = Screen.Profile.route) {
+            ProfileScreen(navController)
         }
     }
 }

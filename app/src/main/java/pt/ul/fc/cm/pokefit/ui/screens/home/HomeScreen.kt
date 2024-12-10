@@ -35,7 +35,9 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import pt.ul.fc.cm.pokefit.R
+import pt.ul.fc.cm.pokefit.ui.common.BottomAppBar
 import pt.ul.fc.cm.pokefit.ui.screens.home.components.ScreenTopBar
 import pt.ul.fc.cm.pokefit.ui.screens.home.components.StatsSection
 import pt.ul.fc.cm.pokefit.ui.theme.PrimaryGrey
@@ -43,7 +45,10 @@ import pt.ul.fc.cm.pokefit.ui.theme.Transparent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(viewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
+fun HomeScreen(
+    navController: NavController,
+    viewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+) {
     val steps by viewModel.steps // Observe steps state
     val stepGoal = 10000 // Set a daily step goal
     val progress = (steps.toFloat() / stepGoal).coerceIn(0f, 1f)
@@ -53,7 +58,8 @@ fun HomeScreen(viewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.v
         modifier = Modifier
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = { ScreenTopBar(scrollBehavior) }
+        topBar = { ScreenTopBar(scrollBehavior) },
+        bottomBar = { BottomAppBar(navController) }
     ) { paddingValues ->
         Column(
             modifier = Modifier
