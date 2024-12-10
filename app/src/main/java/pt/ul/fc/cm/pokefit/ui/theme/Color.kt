@@ -12,3 +12,4 @@ val Pink40 = Color(0xFF7D5260)
 
 val Primary = Color(0xFFFF6060)
 val Transparent = Color(0x41FF6060)
+val PrimaryGrey = Color(0xFFEBEBF6)
