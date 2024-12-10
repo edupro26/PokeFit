@@ -10,7 +10,7 @@ import pt.ul.fc.cm.pokefit.ui.screens.pokemon.PokemonScreen
 import pt.ul.fc.cm.pokefit.ui.screens.profile.ProfileScreen
 
 @Composable
-fun BottomBarNavGraph(navController: NavHostController) {
+fun NavGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
         startDestination = Screen.Home.route

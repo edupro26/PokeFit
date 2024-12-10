@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.rememberNavController
-import pt.ul.fc.cm.pokefit.ui.navigation.BottomBarNavGraph
+import pt.ul.fc.cm.pokefit.ui.navigation.NavGraph
 import pt.ul.fc.cm.pokefit.ui.theme.PokeFitTheme
 
 class MainActivity : ComponentActivity() {
@@ -15,7 +15,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             PokeFitTheme {
                 val navController = rememberNavController()
-                BottomBarNavGraph(navController = navController)
+                NavGraph(navController = navController)
             }
         }
     }
