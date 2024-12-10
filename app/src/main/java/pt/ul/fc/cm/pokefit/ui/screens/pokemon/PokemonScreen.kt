@@ -17,12 +17,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import pt.ul.fc.cm.pokefit.ui.screens.pokemon.components.PokemonCard
 import pt.ul.fc.cm.pokefit.ui.screens.pokemon.components.ScreenTopBar
+import pt.ul.fc.cm.pokefit.ui.common.BottomAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PokemonScreen() {
+fun PokemonScreen(
+    navController: NavController
+) {
     val viewModel: PokemonViewModel = viewModel()
     val pokemonList by viewModel.pokemonList.collectAsState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -30,7 +34,8 @@ fun PokemonScreen() {
         modifier = Modifier
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = { ScreenTopBar(scrollBehavior) }
+        topBar = { ScreenTopBar(scrollBehavior) },
+        bottomBar = { BottomAppBar(navController) }
     ) { paddingValues ->
         Column(
             modifier = Modifier
