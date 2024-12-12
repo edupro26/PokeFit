@@ -39,7 +39,7 @@ fun PokemonCard(pokemon: Pokemon) {
             Image(
                 painter = rememberAsyncImagePainter(model = pokemon.imgUrl),
                 contentDescription = "${pokemon.name} image",
-                modifier = Modifier.size(94.dp),
+                modifier = Modifier.size(84.dp),
                 contentScale = ContentScale.Crop
             )
             // Pokémon Details
