@@ -1,4 +1,4 @@
-package pt.ul.fc.cm.pokefit
+package pt.ul.fc.cm.pokefit.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
