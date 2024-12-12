@@ -18,7 +18,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
-import pt.ul.fc.cm.pokefit.domain.Pokemon
+import pt.ul.fc.cm.pokefit.domain.model.Pokemon
 
 @Composable
 fun PokemonCard(pokemon: Pokemon) {
@@ -37,12 +37,11 @@ fun PokemonCard(pokemon: Pokemon) {
         ) {
             // Pokémon Image
             Image(
-                painter = rememberAsyncImagePainter(model = pokemon.imageUrl),
+                painter = rememberAsyncImagePainter(model = pokemon.imgUrl),
                 contentDescription = "${pokemon.name} image",
                 modifier = Modifier.size(94.dp),
                 contentScale = ContentScale.Crop
             )
-
             // Pokémon Details
             Column {
                 Text(
@@ -51,14 +50,8 @@ fun PokemonCard(pokemon: Pokemon) {
                     fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                     color = Color.Black
                 )
-                Text(
-                    text = "Types: ${pokemon.types.joinToString(", ") {
-                        it.replaceFirstChar { it.uppercase() }
-                    }}",
-                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                    color = Color.Gray
-                )
             }
+            /* TODO: Add a pokemon level indicator */
         }
     }
 }
