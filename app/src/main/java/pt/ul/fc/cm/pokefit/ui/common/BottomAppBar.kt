@@ -17,6 +17,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
+import pt.ul.fc.cm.pokefit.ui.navigation.Screen
 import pt.ul.fc.cm.pokefit.ui.theme.Primary
 import pt.ul.fc.cm.pokefit.ui.theme.Transparent
 
@@ -68,7 +69,7 @@ private fun RowScope.AddItem(
         } == true,
         onClick = {
             navController.navigate(item.route) {
-                popUpTo(navController.graph.findStartDestination().id)
+                popUpTo(Screen.Home.route)
                 launchSingleTop = true
             }
         }
