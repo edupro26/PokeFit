@@ -52,7 +52,6 @@ object AppModule {
     @Singleton
     fun provideUserRepository(): UserRepository {
         return UserRepositoryImpl(
-            Firebase.auth,
             Firebase.firestore
         )
     }

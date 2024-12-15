@@ -32,9 +32,9 @@ class Authentication @Inject constructor(
         return authRepository.signIn(email, password)
     }
 
-    suspend fun getCurrentUser(): User? {
-        return userRepository.getCurrentUser()
-    }
-
     fun isSignedIn(): Boolean = authRepository.currentUser != null
+
+    fun signOut() = authRepository.signOut()
+
+    fun getCurrentUser() = authRepository.currentUser
 }

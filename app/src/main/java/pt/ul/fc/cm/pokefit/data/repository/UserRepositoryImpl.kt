@@ -9,7 +9,6 @@ import pt.ul.fc.cm.pokefit.utils.Response
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
-    private val auth: FirebaseAuth,
     private val store: FirebaseFirestore
 ) : UserRepository {
 
@@ -26,13 +25,18 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getCurrentUser(): User? {
-        return auth.currentUser?.let { currentUser ->
-            val document = store.collection("users")
-                .document(currentUser.uid)
-                .get()
-                .await()
-            document.toObject(User::class.java)
+    override suspend fun getUserById(uid: String): Response<User> {
+        return try {
+            Response.Success(
+                store.collection("users")
+                    .document(uid)
+                    .get()
+                    .await()
+                    .toObject(User::class.java)!!
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Response.Failure("Failed to get user data")
         }
     }
 
