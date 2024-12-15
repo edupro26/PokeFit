@@ -21,7 +21,6 @@ import pt.ul.fc.cm.pokefit.domain.repository.UserRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
-@Suppress("unused")
 object AppModule {
 
     @Provides

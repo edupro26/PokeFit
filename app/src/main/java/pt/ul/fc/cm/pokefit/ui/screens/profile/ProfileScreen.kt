@@ -57,6 +57,7 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.size(16.dp))
                 DisplayName(
                     displayName = state.user.displayName,
+                    username = state.user.username,
                     onSignout = { viewModel.signOut() }
                 )
             }

@@ -17,6 +17,7 @@ class Authentication @Inject constructor(
             val newUser = User(
                 uid = authRepository.currentUser!!.uid,
                 email = email,
+                username = email.substringBefore('@'),
                 displayName = name
             )
             val storeResponse = userRepository.saveUser(newUser)

@@ -1,6 +1,5 @@
 package pt.ul.fc.cm.pokefit.data.repository
 
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import pt.ul.fc.cm.pokefit.domain.model.User
