@@ -1,5 +1,6 @@
 package pt.ul.fc.cm.pokefit.ui.screens.auth.components
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,35 +16,33 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import pt.ul.fc.cm.pokefit.ui.navigation.Screen
 import pt.ul.fc.cm.pokefit.ui.theme.Primary
 import pt.ul.fc.cm.pokefit.ui.theme.PrimaryGrey
+import pt.ul.fc.cm.pokefit.utils.Response
 
 @Composable
 fun AuthenticationButton(
     navController: NavController,
-    labelValue: String
+    state: Response<Unit>,
+    labelValue: String,
+    onClick: () -> Unit = {}
 ) {
     Button(
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(42.dp),
-        onClick = {
-            navController.navigate(Screen.Home.route) {
-                popUpTo(navController.graph.findStartDestination().id) {
-                    inclusive = true
-                }
-            }
-        },
+        onClick = { onClick() },
         contentPadding = PaddingValues(0.dp),
         colors = ButtonDefaults.buttonColors(Color.Transparent),
     ) {
@@ -64,6 +63,34 @@ fun AuthenticationButton(
                 fontWeight = FontWeight.Bold
             )
         }
+    }
+    HandleButtonResponse(state, navController)
+}
+
+@Composable
+private fun HandleButtonResponse(
+    state: Response<Unit>,
+    navController: NavController
+) {
+    when (state) {
+        is Response.Success -> {
+            LaunchedEffect(Unit) {
+                navController.navigate(Screen.Home.route) {
+                    popUpTo(navController.graph.startDestinationId) {
+                        inclusive = true
+                    }
+                    navController.graph.setStartDestination(Screen.Home.route)
+                }
+            }
+        }
+        is Response.Failure -> {
+            Toast.makeText(
+                LocalContext.current,
+                state.error,
+                Toast.LENGTH_LONG
+            ).show()
+        }
+        else -> {}
     }
 }
 

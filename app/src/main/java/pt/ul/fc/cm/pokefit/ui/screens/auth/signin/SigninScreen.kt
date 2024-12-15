@@ -1,4 +1,4 @@
-package pt.ul.fc.cm.pokefit.ui.screens.auth
+package pt.ul.fc.cm.pokefit.ui.screens.auth.signin
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -11,6 +11,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import pt.ul.fc.cm.pokefit.R
 import pt.ul.fc.cm.pokefit.ui.navigation.Screen
@@ -35,9 +40,13 @@ import pt.ul.fc.cm.pokefit.ui.screens.auth.components.PasswordTextField
 import pt.ul.fc.cm.pokefit.ui.theme.Primary
 
 @Composable
-fun LoginScreen(
-    navController: NavController
+fun SigninScreen(
+    navController: NavController,
+    viewModel: SigninViewModel = hiltViewModel()
 ) {
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    val state = viewModel.state.value
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -47,16 +56,26 @@ fun LoginScreen(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            LoginScreenHeader()
+            SigninScreenHeader()
             Spacer(modifier = Modifier.size(24.dp))
-            GeneralTextField(labelValue = stringResource(R.string.email))
-            PasswordTextField(labelValue = stringResource(R.string.password))
+            GeneralTextField(
+                value = email,
+                labelValue = stringResource(R.string.email),
+                onValueChange = { value -> email = value }
+            )
+            PasswordTextField(
+                value = password,
+                labelValue = stringResource(R.string.password),
+                onValueChange = { value -> password = value }
+            )
             Spacer(modifier = Modifier.size(12.dp))
             NavigateToPasswordReset()
             Spacer(modifier = Modifier.size(8.dp))
             AuthenticationButton(
                 navController = navController,
-                labelValue = stringResource(R.string.sign_in)
+                state = state,
+                labelValue = stringResource(R.string.sign_in),
+                onClick = { viewModel.signIn(email, password) }
             )
             Divider(top = 18.dp, bottom = 16.dp)
             ContinueWithButton(
@@ -110,7 +129,7 @@ private fun NavigateToPasswordReset() {
 }
 
 @Composable
-private fun LoginScreenHeader() {
+private fun SigninScreenHeader() {
     Image(
         modifier = Modifier
             .fillMaxWidth()
