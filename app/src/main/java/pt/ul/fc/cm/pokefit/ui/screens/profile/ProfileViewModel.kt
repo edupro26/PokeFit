@@ -21,11 +21,18 @@ class ProfileViewModel @Inject constructor(
     private val _state = mutableStateOf(ProfileState())
     val state: State<ProfileState> = _state
 
+    private val _isUserSignedIn = mutableStateOf(false)
+    val isUserSignedIn: State<Boolean> = _isUserSignedIn
+
     init {
+        _isUserSignedIn.value = true
         getProfileInfo(authentication.getCurrentUser()!!.uid)
     }
 
-    fun signOut() = authentication.signOut()
+    fun signOut() {
+        authentication.signOut()
+        _isUserSignedIn.value = false
+    }
 
     private fun getProfileInfo(uid: String) {
         getUserProfile(uid).onEach { response ->

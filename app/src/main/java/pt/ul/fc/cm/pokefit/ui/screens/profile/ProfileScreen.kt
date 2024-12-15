@@ -13,6 +13,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import pt.ul.fc.cm.pokefit.ui.common.BottomAppBar
+import pt.ul.fc.cm.pokefit.ui.navigation.Screen
 import pt.ul.fc.cm.pokefit.ui.screens.profile.components.ScreenTopBar
 import pt.ul.fc.cm.pokefit.ui.screens.profile.components.DisplayName
 import pt.ul.fc.cm.pokefit.ui.screens.profile.components.ProfilePicture
@@ -33,7 +35,9 @@ fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value
+    val isUserSignedIn = viewModel.isUserSignedIn.value
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    ObserveSignoutEvent(isUserSignedIn, navController)
     Scaffold (
         modifier = Modifier
             .fillMaxSize()
@@ -65,6 +69,23 @@ fun ProfileScreen(
                 )
             }
             if (state.isLoading) CircularProgressIndicator()
+        }
+    }
+}
+
+@Composable
+private fun ObserveSignoutEvent(
+    isUserSignedIn: Boolean,
+    navController: NavController
+) {
+    LaunchedEffect(isUserSignedIn) {
+        if (!isUserSignedIn) {
+            navController.navigate(Screen.Signin.route) {
+                popUpTo(navController.graph.startDestinationId) {
+                    inclusive = true
+                }
+                navController.graph.setStartDestination(Screen.Signin.route)
+            }
         }
     }
 }
