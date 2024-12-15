@@ -1,4 +1,4 @@
-package pt.ul.fc.cm.pokefit.ui.screens.auth
+package pt.ul.fc.cm.pokefit.ui.screens.auth.signup
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -11,6 +11,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,8 +28,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import pt.ul.fc.cm.pokefit.R
 import pt.ul.fc.cm.pokefit.ui.navigation.Screen
 import pt.ul.fc.cm.pokefit.ui.screens.auth.components.ContinueWithButton
@@ -37,8 +41,14 @@ import pt.ul.fc.cm.pokefit.ui.theme.Primary
 
 @Composable
 fun SignupScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: SignupViewModel = hiltViewModel()
 ) {
+    var name by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
+    val state = viewModel.state.value
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -50,13 +60,27 @@ fun SignupScreen(
         ) {
             SignupScreenHeader()
             Spacer(modifier = Modifier.size(24.dp))
-            GeneralTextField(labelValue = stringResource(R.string.name))
-            GeneralTextField(labelValue = stringResource(R.string.email))
-            PasswordTextField(labelValue = stringResource(R.string.password))
+            GeneralTextField(
+                value = name,
+                labelValue = stringResource(R.string.name),
+                onValueChange = { value -> name = value }
+            )
+            GeneralTextField(
+                value = email,
+                labelValue = stringResource(R.string.email),
+                onValueChange = { value -> email = value }
+            )
+            PasswordTextField(
+                value = password,
+                labelValue = stringResource(R.string.password),
+                onValueChange = { value -> password = value }
+            )
             Spacer(modifier = Modifier.size(12.dp))
             AuthenticationButton(
                 navController = navController,
-                labelValue = stringResource(R.string.sign_up)
+                state = state,
+                labelValue = stringResource(R.string.sign_up),
+                onClick = { viewModel.signUp(email, password, name) }
             )
             Divider(top = 18.dp, bottom = 16.dp)
             ContinueWithButton(
@@ -69,13 +93,13 @@ fun SignupScreen(
                 painter = R.drawable.ic_apple_logo
             )
             Spacer(modifier = Modifier.size(76.dp))
-            NavigateToLogin(navController)
+            NavigateToSignin(navController)
         }
     }
 }
 
 @Composable
-private fun NavigateToLogin(navController: NavController) {
+private fun NavigateToSignin(navController: NavController) {
     Text(
         text = buildAnnotatedString {
             withStyle(style = SpanStyle(color = Color.Black)) {
@@ -84,14 +108,15 @@ private fun NavigateToLogin(navController: NavController) {
             append(" ")
             withLink(
                 LinkAnnotation.Url(
-                    Screen.Login.route,
+                    Screen.Signin.route,
                     TextLinkStyles(style = SpanStyle(color = Primary))
                 ) {
                     val route = (it as LinkAnnotation.Url).url
                     navController.navigate(route) {
-                        popUpTo(navController.graph.findStartDestination().id) {
+                        popUpTo(navController.graph.startDestinationId) {
                             inclusive = true
                         }
+                        navController.graph.setStartDestination(route)
                     }
                 }
             ) {
