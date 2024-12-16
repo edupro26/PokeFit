@@ -29,8 +29,32 @@ class Authentication @Inject constructor(
         return signupResponse
     }
 
+    suspend fun signUpWithGoogle(idToken: String): Response<Unit> {
+        val googleResponse = authRepository.continueWithGoogle(idToken)
+        if (googleResponse is Response.Success) {
+            val user = authRepository.currentUser!!
+            val newUser = User(
+                uid = user.uid,
+                email = user.email!!,
+                username = user.email!!.substringBefore('@'),
+                displayName = user.displayName!!,
+                photoUrl = user.photoUrl.toString()
+            )
+            val storeResponse = userRepository.saveUser(newUser)
+            if (storeResponse is Response.Failure) {
+                authRepository.currentUser!!.delete().await()
+                return storeResponse
+            }
+        }
+        return googleResponse
+    }
+
     suspend fun signIn(email: String, password: String): Response<Unit> {
         return authRepository.signIn(email, password)
+    }
+
+    suspend fun signInWithGoogle(idToken: String): Response<Unit> {
+        return authRepository.continueWithGoogle(idToken)
     }
 
     fun isSignedIn(): Boolean = authRepository.currentUser != null

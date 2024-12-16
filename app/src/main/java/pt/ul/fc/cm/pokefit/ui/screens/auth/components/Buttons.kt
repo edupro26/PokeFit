@@ -1,5 +1,7 @@
 package pt.ul.fc.cm.pokefit.ui.screens.auth.components
 
+import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -17,6 +19,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,10 +28,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.credentials.Credential
+import androidx.credentials.CredentialManager
+import androidx.credentials.GetCredentialRequest
 import androidx.navigation.NavController
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import pt.ul.fc.cm.pokefit.ui.navigation.Screen
 import pt.ul.fc.cm.pokefit.ui.theme.Primary
 import pt.ul.fc.cm.pokefit.ui.theme.PrimaryGrey
+import pt.ul.fc.cm.pokefit.utils.Constants.WEB_CLIENT_ID
 import pt.ul.fc.cm.pokefit.utils.Response
 
 @Composable
@@ -39,21 +49,14 @@ fun AuthenticationButton(
     onClick: () -> Unit = {}
 ) {
     Button(
-        modifier = Modifier
-            .fillMaxWidth()
-            .heightIn(42.dp),
+        modifier = Modifier.fillMaxWidth().heightIn(48.dp),
         onClick = { onClick() },
         contentPadding = PaddingValues(0.dp),
         colors = ButtonDefaults.buttonColors(Color.Transparent),
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(48.dp)
-                .background(
-                    Primary,
-                    shape = RoundedCornerShape(10.dp)
-                ),
+            modifier = Modifier.fillMaxWidth().heightIn(48.dp)
+                .background(Primary, shape = RoundedCornerShape(10.dp)),
             contentAlignment = Alignment.Center
         ) {
             Text(
@@ -64,11 +67,50 @@ fun AuthenticationButton(
             )
         }
     }
-    HandleButtonResponse(state, navController)
+    HandleAuthResponse(state, navController)
 }
 
 @Composable
-private fun HandleButtonResponse(
+fun ContinueWithButton(
+    navController: NavController,
+    state: Response<Unit>,
+    labelValue: String,
+    painter: Int,
+    onGetCredential: (Credential) -> Unit
+) {
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    Surface (
+        modifier = Modifier.fillMaxWidth().heightIn(48.dp),
+        onClick = {
+            handleGoogleRequest(coroutineScope, context, onGetCredential)
+        },
+        shape = RoundedCornerShape(15.dp),
+        color = PrimaryGrey,
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                modifier = Modifier.size(36.dp).padding(end = 8.dp),
+                painter = painterResource(id = painter),
+                tint = Color.Unspecified,
+                contentDescription = null
+            )
+            Text(
+                text = labelValue,
+                fontSize = 16.sp,
+                color = Color.Black,
+                fontWeight = FontWeight.Bold
+            )
+        }
+        HandleAuthResponse(state, navController)
+    }
+}
+
+@Composable
+private fun HandleAuthResponse(
     state: Response<Unit>,
     navController: NavController
 ) {
@@ -84,49 +126,35 @@ private fun HandleButtonResponse(
             }
         }
         is Response.Failure -> {
-            Toast.makeText(
-                LocalContext.current,
-                state.error,
-                Toast.LENGTH_LONG
-            ).show()
+            Toast.makeText(LocalContext.current, state.error, Toast.LENGTH_LONG).show()
         }
         else -> {}
     }
 }
 
-@Composable
-fun ContinueWithButton(
-    labelValue: String,
-    painter: Int
+private fun handleGoogleRequest(
+    coroutineScope: CoroutineScope,
+    context: Context,
+    onGetCredential: (Credential) -> Unit
 ) {
-    Surface (
-        modifier = Modifier
-            .fillMaxWidth()
-            .heightIn(48.dp),
-        onClick = { /*TODO*/ },
-        shape = RoundedCornerShape(15.dp),
-        color = PrimaryGrey,
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                modifier = Modifier
-                    .size(36.dp)
-                    .padding(end = 8.dp),
-                painter = painterResource(id = painter),
-                tint = Color.Unspecified,
-                contentDescription = null
+    val credentialManager = CredentialManager.create(context)
+    val googleIdOption = GetGoogleIdOption.Builder()
+        .setFilterByAuthorizedAccounts(false)
+        .setServerClientId(WEB_CLIENT_ID)
+        .build()
+    val request = GetCredentialRequest.Builder()
+        .addCredentialOption(googleIdOption)
+        .build()
+    coroutineScope.launch {
+        try {
+            val result = credentialManager.getCredential(
+                request = request,
+                context = context
             )
-            Text(
-                text = labelValue,
-                fontSize = 16.sp,
-                color = Color.Black,
-                fontWeight = FontWeight.Bold
-            )
+            onGetCredential(result.credential)
+        } catch (e: Exception) {
+            Log.d("GoogleAuthButton", e.message.toString())
+            Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
         }
     }
 }

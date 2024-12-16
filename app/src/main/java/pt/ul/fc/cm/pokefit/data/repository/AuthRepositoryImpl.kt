@@ -1,6 +1,7 @@
 package pt.ul.fc.cm.pokefit.data.repository
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.tasks.await
 import pt.ul.fc.cm.pokefit.domain.repository.AuthRepository
 import pt.ul.fc.cm.pokefit.utils.Response
@@ -29,6 +30,17 @@ class AuthRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             e.printStackTrace()
             Response.Failure("Failed to sign in. Please check your credentials.")
+        }
+    }
+
+    override suspend fun continueWithGoogle(idToken: String): Response<Unit> {
+        return try {
+            val credential = GoogleAuthProvider.getCredential(idToken, null)
+            auth.signInWithCredential(credential).await()
+            Response.Success(Unit)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Response.Failure("Google authentication failed")
         }
     }
 

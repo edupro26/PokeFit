@@ -84,15 +84,14 @@ fun SignupScreen(
             )
             Divider(top = 18.dp, bottom = 16.dp)
             ContinueWithButton(
+                navController = navController,
+                state = state,
                 labelValue = stringResource(R.string.continue_with_google),
                 painter = R.drawable.ic_google_logo
-            )
-            Spacer(modifier = Modifier.size(8.dp))
-            ContinueWithButton(
-                labelValue = stringResource(R.string.continue_with_apple),
-                painter = R.drawable.ic_apple_logo
-            )
-            Spacer(modifier = Modifier.size(76.dp))
+            ) { credential ->
+                viewModel.signUpWithGoogle(credential)
+            }
+            Spacer(modifier = Modifier.size(96.dp))
             NavigateToSignin(navController)
         }
     }

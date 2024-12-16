@@ -2,8 +2,12 @@ package pt.ul.fc.cm.pokefit.ui.screens.auth.signin
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
+import androidx.credentials.Credential
+import androidx.credentials.CustomCredential
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import pt.ul.fc.cm.pokefit.domain.usecase.Authentication
@@ -21,6 +25,17 @@ class SigninViewModel @Inject constructor(
     fun signIn(email: String, password: String) {
         viewModelScope.launch {
             _state.value = authentication.signIn(email, password)
+        }
+    }
+
+    fun signInWithGoogle(credential: Credential) {
+        viewModelScope.launch {
+            if (credential is CustomCredential && credential.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+                val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
+                _state.value = authentication.signInWithGoogle(googleIdTokenCredential.idToken)
+            } else {
+                _state.value = Response.Failure("Unexpected type of credential")
+            }
         }
     }
 
