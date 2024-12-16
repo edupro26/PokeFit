@@ -12,7 +12,6 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
-import pt.ul.fc.cm.pokefit.ui.permissions.PermissionManager
 
 class HomeScreenViewModel(application: Application) : AndroidViewModel(application), SensorEventListener {
     private val context = application.applicationContext

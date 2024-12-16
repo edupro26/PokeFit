@@ -53,7 +53,6 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import pt.ul.fc.cm.pokefit.R
 import pt.ul.fc.cm.pokefit.ui.common.BottomAppBar
-import pt.ul.fc.cm.pokefit.ui.permissions.PermissionManager
 import pt.ul.fc.cm.pokefit.ui.screens.home.components.ScreenTopBar
 import pt.ul.fc.cm.pokefit.ui.screens.home.components.StatsSection
 import pt.ul.fc.cm.pokefit.ui.theme.PrimaryGrey
