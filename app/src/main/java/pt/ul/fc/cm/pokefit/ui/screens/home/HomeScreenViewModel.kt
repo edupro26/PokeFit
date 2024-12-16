@@ -1,15 +1,21 @@
 package pt.ul.fc.cm.pokefit.ui.screens.home
 
+import android.Manifest
 import android.app.Application
 import android.content.Context
+import android.content.pm.PackageManager
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
+import pt.ul.fc.cm.pokefit.ui.permissions.PermissionManager
 
-class HomeViewModel(application: Application) : AndroidViewModel(application), SensorEventListener {
+class HomeScreenViewModel(application: Application) : AndroidViewModel(application), SensorEventListener {
+    private val context = application.applicationContext
     private val sensorManager = application.getSystemService(Context.SENSOR_SERVICE) as SensorManager
     private val stepCounterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
 
@@ -17,9 +23,16 @@ class HomeViewModel(application: Application) : AndroidViewModel(application), S
     private var initialStepCount = -1
 
     init {
-        // Register the sensor listener
-        stepCounterSensor?.let {
-            sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_UI)
+        if (ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACTIVITY_RECOGNITION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            stepCounterSensor?.let {
+                sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_UI)
+            }
+        } else {
+            Log.e("HomeViewModel", "Permission not granted. Step tracking unavailable.")
         }
     }
 
@@ -40,5 +53,4 @@ class HomeViewModel(application: Application) : AndroidViewModel(application), S
         super.onCleared()
         sensorManager.unregisterListener(this) // Unregister the listener
     }
-
 }

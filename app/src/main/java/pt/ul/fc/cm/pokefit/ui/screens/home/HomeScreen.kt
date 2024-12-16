@@ -1,5 +1,11 @@
 package pt.ul.fc.cm.pokefit.ui.screens.home
 
+import androidx.compose.runtime.SideEffect
+import android.Manifest
+import android.app.Activity
+import android.content.pm.PackageManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +20,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -21,7 +28,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,15 +40,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import pt.ul.fc.cm.pokefit.R
 import pt.ul.fc.cm.pokefit.ui.common.BottomAppBar
+import pt.ul.fc.cm.pokefit.ui.permissions.PermissionManager
 import pt.ul.fc.cm.pokefit.ui.screens.home.components.ScreenTopBar
 import pt.ul.fc.cm.pokefit.ui.screens.home.components.StatsSection
 import pt.ul.fc.cm.pokefit.ui.theme.PrimaryGrey
@@ -47,34 +63,70 @@ import pt.ul.fc.cm.pokefit.ui.theme.Transparent
 @Composable
 fun HomeScreen(
     navController: NavController,
-    viewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    viewModel: HomeScreenViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 ) {
-    val steps by viewModel.steps // Observe steps state
-    val stepGoal = 10000 // Set a daily step goal
-    val progress = (steps.toFloat() / stepGoal).coerceIn(0f, 1f)
+    val context = LocalContext.current
+    val activity = context as? Activity
 
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = { ScreenTopBar(scrollBehavior) },
-        bottomBar = { BottomAppBar(navController) }
-    ) { paddingValues ->
-        Column(
+    // State to track if the permission is granted
+    var permissionGranted by remember {
+        mutableStateOf(
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACTIVITY_RECOGNITION
+            ) == PackageManager.PERMISSION_GRANTED
+        )
+    }
+
+    // Check for permission updates when the Composable is recomposed
+    LaunchedEffect(Unit) {
+        if (!permissionGranted) {
+            activity?.let {
+                ActivityCompat.requestPermissions(
+                    it,
+                    arrayOf(Manifest.permission.ACTIVITY_RECOGNITION),
+                    100
+                )
+            }
+        }
+    }
+
+    // Observe permission changes with a SideEffect
+    SideEffect {
+        permissionGranted = ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACTIVITY_RECOGNITION
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    val steps by viewModel.steps
+
+    if (permissionGranted) {
+        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+        Scaffold(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            // Pokemon Stats Section
-            PokemonStatsSection(
-                pokemonImage = painterResource(id = R.drawable.trainer),
-                steps = steps,
-            )
-            Spacer(modifier = Modifier.height(24.dp))
+                .nestedScroll(scrollBehavior.nestedScrollConnection),
+            topBar = { ScreenTopBar(scrollBehavior) },
+            bottomBar = { BottomAppBar(navController) }
+        ) { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                // Pokémon Stats Section
+                PokemonStatsSection(
+                    pokemonImage = painterResource(id = R.drawable.trainer),
+                    steps = steps,
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+            }
         }
+    } else {
+        Text("Permission not granted. Please enable it in settings.")
     }
 }
 
@@ -84,7 +136,7 @@ fun PokemonStatsSection(
     pokemonImage: Painter,
     level: Int = 14,
     xpProgress: Float = 0.75f,
-    steps: Int = 0,
+    steps: Int,
     heartRate: Int = 88,
     sleepDuration: String = "7h 34m",
     caloriesProgress: Float = 0.5f,
