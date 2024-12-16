@@ -79,15 +79,14 @@ fun SigninScreen(
             )
             Divider(top = 18.dp, bottom = 16.dp)
             ContinueWithButton(
+                navController = navController,
+                state = state,
                 labelValue = stringResource(R.string.continue_with_google),
                 painter = R.drawable.ic_google_logo
-            )
-            Spacer(modifier = Modifier.size(8.dp))
-            ContinueWithButton(
-                labelValue = stringResource(R.string.continue_with_apple),
-                painter = R.drawable.ic_apple_logo
-            )
-            Spacer(modifier = Modifier.size(86.dp))
+            ) {credential ->
+                viewModel.signInWithGoogle(credential)
+            }
+            Spacer(modifier = Modifier.size(106.dp))
             NavigateToSignup(navController)
         }
     }
@@ -118,6 +117,7 @@ private fun NavigateToSignup(navController: NavController) {
 
 @Composable
 private fun NavigateToPasswordReset() {
+    /* TODO: implement this functionality */
     Text(
         modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
         text = buildAnnotatedString {

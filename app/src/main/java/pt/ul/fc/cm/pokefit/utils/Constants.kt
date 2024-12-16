@@ -10,4 +10,6 @@ object Constants {
 
     const val POKEMON_COUNT = 15
 
+    const val WEB_CLIENT_ID = "817780719264-m6eukupbabftd0bg5v01l90mf8isf7r8.apps.googleusercontent.com"
+
 }
