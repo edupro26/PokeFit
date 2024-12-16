@@ -2,29 +2,42 @@ package pt.ul.fc.cm.pokefit.ui.screens.profile
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import pt.ul.fc.cm.pokefit.ui.common.BottomAppBar
+import pt.ul.fc.cm.pokefit.ui.navigation.Screen
 import pt.ul.fc.cm.pokefit.ui.screens.profile.components.ScreenTopBar
+import pt.ul.fc.cm.pokefit.ui.screens.profile.components.DisplayName
+import pt.ul.fc.cm.pokefit.ui.screens.profile.components.ProfilePicture
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: ProfileViewModel = hiltViewModel()
 ) {
+    val state = viewModel.state.value
+    val isUserSignedIn = viewModel.isUserSignedIn.value
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    ObserveSignoutEvent(isUserSignedIn, navController)
     Scaffold (
         modifier = Modifier
             .fillMaxSize()
@@ -36,15 +49,44 @@ fun ProfileScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues),
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = "Profile Screen",
-                fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black
-            )
+            if (state.user != null) {
+                ProfilePicture(user = state.user)
+                Spacer(modifier = Modifier.size(16.dp))
+                DisplayName(
+                    displayName = state.user.displayName,
+                    username = state.user.username,
+                    onSignout = { viewModel.signOut() }
+                )
+            }
+            if (state.error.isNotBlank()) {
+                Text(
+                    text = "Error: ${state.error}",
+                    fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+            if (state.isLoading) CircularProgressIndicator()
+        }
+    }
+}
+
+@Composable
+private fun ObserveSignoutEvent(
+    isUserSignedIn: Boolean,
+    navController: NavController
+) {
+    LaunchedEffect(isUserSignedIn) {
+        if (!isUserSignedIn) {
+            navController.navigate(Screen.Signin.route) {
+                popUpTo(navController.graph.startDestinationId) {
+                    inclusive = true
+                }
+                navController.graph.setStartDestination(Screen.Signin.route)
+            }
         }
     }
 }

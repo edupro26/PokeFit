@@ -21,7 +21,6 @@ import pt.ul.fc.cm.pokefit.domain.repository.UserRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
-@Suppress("unused")
 object AppModule {
 
     @Provides
@@ -52,7 +51,6 @@ object AppModule {
     @Singleton
     fun provideUserRepository(): UserRepository {
         return UserRepositoryImpl(
-            Firebase.auth,
             Firebase.firestore
         )
     }

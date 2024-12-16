@@ -7,6 +7,6 @@ interface UserRepository {
 
     suspend fun saveUser(user: User): Response<Unit>
 
-    suspend fun getCurrentUser(): User?
+    suspend fun getUserById(uid: String): Response<User>
 
 }
