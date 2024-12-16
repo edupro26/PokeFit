@@ -48,6 +48,12 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
 
+    // Google Authentication
+    implementation(libs.google.play.services.auth)
+    implementation(libs.android.credentials)
+    implementation(libs.android.credentials.play.services.auth)
+    implementation(libs.identity.googleid)
+
     // Dagger-Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
