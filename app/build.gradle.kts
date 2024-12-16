@@ -2,6 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.ksp)
+    alias(libs.plugins.hilt.android)
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -40,6 +43,17 @@ android {
 }
 
 dependencies {
+    // Firebase Dependencies
+    implementation(platform((libs.firebase.bom)))
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
+
+    // Dagger-Hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+    implementation(libs.hilt.navigation.compose)
+
+    // Compose dependencies
     implementation(libs.glide)
     implementation(libs.retrofit2.retrofit)
     implementation(libs.converter.gson)
@@ -54,6 +68,8 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.runtime.livedata)
+
+    // Test dependencies
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
