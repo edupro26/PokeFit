@@ -18,7 +18,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun StatsSection(steps: String, heartRate: String, sleepDuration: String) {
+fun StatsSection(
+    steps: String,
+    distanceCovered: String,
+    sleepDuration: String
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -54,8 +58,8 @@ fun StatsSection(steps: String, heartRate: String, sleepDuration: String) {
                 .background(MaterialTheme.colorScheme.surface) // Cor de fundo
         ) {
             StatItem(
-                label = "Heart Rate",
-                value = heartRate,
+                label = "Distance",
+                value = distanceCovered,
                 indicatorColor = Color(0xFFFF9800), // Laranja
                 size = 172.dp // Define altura para o StatItem
             )

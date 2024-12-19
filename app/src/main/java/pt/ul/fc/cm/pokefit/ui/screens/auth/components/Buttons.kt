@@ -154,7 +154,6 @@ private fun handleGoogleRequest(
             onGetCredential(result.credential)
         } catch (e: Exception) {
             Log.d("GoogleAuthButton", e.message.toString())
-            Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
         }
     }
 }

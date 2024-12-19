@@ -4,8 +4,6 @@ import androidx.compose.runtime.SideEffect
 import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,7 +18,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -41,17 +38,15 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
-import pt.ul.fc.cm.pokefit.R
+import coil.compose.rememberAsyncImagePainter
 import pt.ul.fc.cm.pokefit.ui.common.BottomAppBar
 import pt.ul.fc.cm.pokefit.ui.screens.home.components.ScreenTopBar
 import pt.ul.fc.cm.pokefit.ui.screens.home.components.StatsSection
@@ -117,8 +112,10 @@ fun HomeScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 // Pokémon Stats Section
+                /* TODO just a example pokemon image */
+                val img = "https://assets.pokemon.com/assets/cms2/img/pokedex/detail/004.png"
                 PokemonStatsSection(
-                    pokemonImage = painterResource(id = R.drawable.trainer),
+                    pokemonImage = rememberAsyncImagePainter(model = img),
                     steps = steps,
                 )
                 Spacer(modifier = Modifier.height(24.dp))
@@ -136,7 +133,7 @@ fun PokemonStatsSection(
     level: Int = 14,
     xpProgress: Float = 0.75f,
     steps: Int,
-    heartRate: Int = 88,
+    distanceCovered: Int = 10,
     sleepDuration: String = "7h 34m",
     caloriesProgress: Float = 0.5f,
     caloriesBurned: Int = 1000,
@@ -224,7 +221,7 @@ fun PokemonStatsSection(
         // Stats Section
         StatsSection(
             steps = steps.toString(),
-            heartRate = "$heartRate bpm",
+            distanceCovered = "$distanceCovered km",
             sleepDuration = sleepDuration
         )
 
