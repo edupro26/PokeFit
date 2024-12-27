@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -16,7 +18,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
 import pt.ul.fc.cm.pokefit.ui.common.BottomAppBar
-import pt.ul.fc.cm.pokefit.ui.screens.leaderboard.components.ScreenTopBar
+import pt.ul.fc.cm.pokefit.ui.common.TopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -28,7 +30,14 @@ fun LeaderboardScreen(
         modifier = Modifier
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = { ScreenTopBar(scrollBehavior) },
+        topBar = {
+            TopAppBar(
+                scrollBehavior = scrollBehavior,
+                firstIcon = Icons.Default.MoreVert,
+                firstDescription = "Filters",
+                onFirstIconClick = { /*TODO*/ }
+            )
+        },
         bottomBar = { BottomAppBar(navController) }
     ) { paddingValues ->
         Column (

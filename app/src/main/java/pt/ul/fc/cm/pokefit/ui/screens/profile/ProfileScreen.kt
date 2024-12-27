@@ -6,6 +6,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -16,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -24,7 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import pt.ul.fc.cm.pokefit.ui.common.BottomAppBar
 import pt.ul.fc.cm.pokefit.ui.navigation.Screen
-import pt.ul.fc.cm.pokefit.ui.screens.profile.components.ScreenTopBar
+import pt.ul.fc.cm.pokefit.ui.common.TopAppBar
 import pt.ul.fc.cm.pokefit.ui.screens.profile.components.DisplayName
 import pt.ul.fc.cm.pokefit.ui.screens.profile.components.ProfilePicture
 
@@ -42,7 +44,17 @@ fun ProfileScreen(
         modifier = Modifier
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = { ScreenTopBar(scrollBehavior) },
+        topBar = {
+            TopAppBar(
+                scrollBehavior = scrollBehavior,
+                firstIcon = Icons.Default.Notifications,
+                firstDescription = "Notifications",
+                onFirstIconClick = { /*TODO*/ },
+                secondIcon = Icons.Default.Settings,
+                secondDescription = "Settings",
+                onSecondIconClick = { /*TODO*/ }
+            )
+        },
         bottomBar = { BottomAppBar(navController) }
     ) { paddingValues ->
         Column (

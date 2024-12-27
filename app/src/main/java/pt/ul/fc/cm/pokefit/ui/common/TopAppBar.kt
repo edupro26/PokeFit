@@ -1,11 +1,8 @@
-package pt.ul.fc.cm.pokefit.ui.screens.pokemon.components
+package pt.ul.fc.cm.pokefit.ui.common
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -17,6 +14,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -28,17 +26,21 @@ import pt.ul.fc.cm.pokefit.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenTopBar(
-    scrollBehavior: TopAppBarScrollBehavior
+fun TopAppBar(
+    scrollBehavior: TopAppBarScrollBehavior,
+    firstIcon: ImageVector,
+    firstDescription: String,
+    onFirstIconClick: () -> Unit,
+    secondIcon: ImageVector? = null,
+    secondDescription: String? = null,
+    onSecondIconClick: () -> Unit = {}
 ) {
     TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
             scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainer
         ),
         title = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
                     modifier = Modifier.size(38.dp),
                     painter = painterResource(id = R.drawable.ic_app_logo),
@@ -48,7 +50,7 @@ fun ScreenTopBar(
                     text = buildAnnotatedString {
                         append(stringResource(id = R.string.poke))
                         withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary)) {
-                            append("FIT")
+                            append(stringResource(id = R.string.fit))
                         }
                     },
                     fontSize = MaterialTheme.typography.titleLarge.fontSize,
@@ -57,21 +59,19 @@ fun ScreenTopBar(
             }
         },
         actions = {
-            IconButton(
-                onClick = { /*TODO*/ }
-            ) {
+            IconButton(onClick = onFirstIconClick) {
                 Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = "Search"
+                    imageVector = firstIcon,
+                    contentDescription = firstDescription
                 )
             }
-            IconButton(
-                onClick = { /*TODO*/ }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.MoreVert,
-                    contentDescription = "Filters"
-                )
+            if (secondIcon != null) {
+                IconButton(onClick = onSecondIconClick) {
+                    Icon(
+                        imageVector = secondIcon,
+                        contentDescription = secondDescription!!
+                    )
+                }
             }
         },
         scrollBehavior = scrollBehavior

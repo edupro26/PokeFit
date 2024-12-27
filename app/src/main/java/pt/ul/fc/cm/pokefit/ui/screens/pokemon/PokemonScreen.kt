@@ -3,6 +3,9 @@ package pt.ul.fc.cm.pokefit.ui.screens.pokemon
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
@@ -14,8 +17,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.hilt.navigation.compose.hiltViewModel
 import pt.ul.fc.cm.pokefit.ui.screens.pokemon.components.PokemonCard
-import pt.ul.fc.cm.pokefit.ui.screens.pokemon.components.ScreenTopBar
 import pt.ul.fc.cm.pokefit.ui.common.BottomAppBar
+import pt.ul.fc.cm.pokefit.ui.common.TopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -29,7 +32,17 @@ fun PokemonScreen(
         modifier = Modifier
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = { ScreenTopBar(scrollBehavior) },
+        topBar = {
+            TopAppBar(
+                scrollBehavior = scrollBehavior,
+                firstIcon = Icons.Default.Search,
+                firstDescription = "Search",
+                onFirstIconClick = { /*TODO*/ },
+                secondIcon = Icons.Default.MoreVert,
+                secondDescription = "Filters",
+                onSecondIconClick = { /*TODO*/ }
+            )
+        },
         bottomBar = { BottomAppBar(navController) }
     ) { paddingValues ->
         Column(

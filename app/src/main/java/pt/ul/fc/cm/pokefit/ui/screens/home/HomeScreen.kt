@@ -18,6 +18,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -48,7 +50,7 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import pt.ul.fc.cm.pokefit.ui.common.BottomAppBar
-import pt.ul.fc.cm.pokefit.ui.screens.home.components.ScreenTopBar
+import pt.ul.fc.cm.pokefit.ui.common.TopAppBar
 import pt.ul.fc.cm.pokefit.ui.screens.home.components.StatsSection
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -99,7 +101,14 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .nestedScroll(scrollBehavior.nestedScrollConnection),
-            topBar = { ScreenTopBar(scrollBehavior) },
+            topBar = {
+                TopAppBar(
+                    scrollBehavior = scrollBehavior,
+                    firstIcon = Icons.Default.DateRange,
+                    firstDescription = "Goals",
+                    onFirstIconClick = { /*TODO*/ }
+                )
+            },
             bottomBar = { BottomAppBar(navController) }
         ) { paddingValues ->
             Column(
