@@ -6,9 +6,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -29,6 +26,7 @@ import pt.ul.fc.cm.pokefit.ui.navigation.Screen
 import pt.ul.fc.cm.pokefit.ui.common.TopAppBar
 import pt.ul.fc.cm.pokefit.ui.screens.profile.components.DisplayName
 import pt.ul.fc.cm.pokefit.ui.screens.profile.components.ProfilePicture
+import pt.ul.fc.cm.pokefit.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,10 +45,10 @@ fun ProfileScreen(
         topBar = {
             TopAppBar(
                 scrollBehavior = scrollBehavior,
-                firstIcon = Icons.Default.Notifications,
+                firstIcon = R.drawable.ic_top_notifications,
                 firstDescription = "Notifications",
                 onFirstIconClick = { /*TODO*/ },
-                secondIcon = Icons.Default.Settings,
+                secondIcon = R.drawable.ic_top_settings,
                 secondDescription = "Settings",
                 onSecondIconClick = { /*TODO*/ }
             )

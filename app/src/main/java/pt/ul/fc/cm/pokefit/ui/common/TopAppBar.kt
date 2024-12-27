@@ -14,7 +14,6 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -28,10 +27,10 @@ import pt.ul.fc.cm.pokefit.R
 @Composable
 fun TopAppBar(
     scrollBehavior: TopAppBarScrollBehavior,
-    firstIcon: ImageVector,
+    firstIcon: Int,
     firstDescription: String,
     onFirstIconClick: () -> Unit,
-    secondIcon: ImageVector? = null,
+    secondIcon: Int? = null,
     secondDescription: String? = null,
     onSecondIconClick: () -> Unit = {}
 ) {
@@ -43,7 +42,7 @@ fun TopAppBar(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
                     modifier = Modifier.size(38.dp),
-                    painter = painterResource(id = R.drawable.ic_app_logo),
+                    painter = painterResource(id = R.drawable.ic_logo_pokefit),
                     contentDescription = "App Logo"
                 )
                 Text(
@@ -61,14 +60,14 @@ fun TopAppBar(
         actions = {
             IconButton(onClick = onFirstIconClick) {
                 Icon(
-                    imageVector = firstIcon,
+                    painter = painterResource(firstIcon),
                     contentDescription = firstDescription
                 )
             }
             if (secondIcon != null) {
                 IconButton(onClick = onSecondIconClick) {
                     Icon(
-                        imageVector = secondIcon,
+                        painter = painterResource(secondIcon),
                         contentDescription = secondDescription!!
                     )
                 }

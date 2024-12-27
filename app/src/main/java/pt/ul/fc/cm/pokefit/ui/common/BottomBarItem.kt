@@ -11,22 +11,22 @@ sealed class BottomBarItem(
     object Home : BottomBarItem(
         route = Screen.Home.route,
         title = "Home",
-        icon = R.drawable.ic_home_icon
+        icon = R.drawable.ic_bottom_home
     )
     object Pokemon : BottomBarItem(
         route = Screen.Pokemon.route,
         title = "Pokemon",
-        icon = R.drawable.ic_grid_icon
+        icon = R.drawable.ic_bottom_pokemon
     )
     object Leaderboards : BottomBarItem(
         route = Screen.Leaderboards.route,
         title = "Leaderboards",
-        icon = R.drawable.ic_leaderboard_icon
+        icon = R.drawable.ic_bottom_leaderboards
     )
     object Profile : BottomBarItem(
         route = Screen.Profile.route,
         title = "Profile",
-        icon = R.drawable.ic_person_icon
+        icon = R.drawable.ic_bottom_profile
     )
 }
 

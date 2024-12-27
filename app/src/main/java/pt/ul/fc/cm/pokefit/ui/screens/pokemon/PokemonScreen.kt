@@ -3,9 +3,6 @@ package pt.ul.fc.cm.pokefit.ui.screens.pokemon
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
@@ -19,6 +16,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import pt.ul.fc.cm.pokefit.ui.screens.pokemon.components.PokemonCard
 import pt.ul.fc.cm.pokefit.ui.common.BottomAppBar
 import pt.ul.fc.cm.pokefit.ui.common.TopAppBar
+import pt.ul.fc.cm.pokefit.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,10 +33,10 @@ fun PokemonScreen(
         topBar = {
             TopAppBar(
                 scrollBehavior = scrollBehavior,
-                firstIcon = Icons.Default.Search,
+                firstIcon = R.drawable.ic_top_search,
                 firstDescription = "Search",
                 onFirstIconClick = { /*TODO*/ },
-                secondIcon = Icons.Default.MoreVert,
+                secondIcon = R.drawable.ic_top_filters,
                 secondDescription = "Filters",
                 onSecondIconClick = { /*TODO*/ }
             )

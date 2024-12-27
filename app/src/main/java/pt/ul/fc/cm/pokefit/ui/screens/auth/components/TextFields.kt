@@ -68,7 +68,7 @@ fun PasswordTextField(
             ) {
                 Icon(
                     painter = painterResource(
-                        id = if (show) R.drawable.ic_visibility else R.drawable.ic_visibility_off
+                        id = if (show) R.drawable.ic_password_show else R.drawable.ic_password_hide
                     ),
                     contentDescription = if (show) "Hide password" else "Show password",
                     tint = Color.Unspecified

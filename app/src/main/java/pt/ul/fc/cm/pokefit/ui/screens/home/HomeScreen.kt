@@ -18,8 +18,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -52,6 +50,7 @@ import coil.compose.rememberAsyncImagePainter
 import pt.ul.fc.cm.pokefit.ui.common.BottomAppBar
 import pt.ul.fc.cm.pokefit.ui.common.TopAppBar
 import pt.ul.fc.cm.pokefit.ui.screens.home.components.StatsSection
+import pt.ul.fc.cm.pokefit.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -104,9 +103,12 @@ fun HomeScreen(
             topBar = {
                 TopAppBar(
                     scrollBehavior = scrollBehavior,
-                    firstIcon = Icons.Default.DateRange,
-                    firstDescription = "Goals",
-                    onFirstIconClick = { /*TODO*/ }
+                    firstIcon = R.drawable.ic_top_map,
+                    firstDescription = "Map",
+                    onFirstIconClick = { /*TODO*/ },
+                    secondIcon = R.drawable.ic_top_tasks,
+                    secondDescription = "Goals",
+                    onSecondIconClick = { /*TODO*/ },
                 )
             },
             bottomBar = { BottomAppBar(navController) }

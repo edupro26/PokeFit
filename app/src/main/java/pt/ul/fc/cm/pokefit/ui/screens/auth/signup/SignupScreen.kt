@@ -83,7 +83,7 @@ fun SignupScreen(
                 navController = navController,
                 state = state,
                 labelValue = stringResource(R.string.continue_with_google),
-                painter = R.drawable.ic_google_logo
+                painter = R.drawable.ic_logo_google
             ) { credential ->
                 viewModel.signUpWithGoogle(credential)
             }
@@ -126,7 +126,7 @@ private fun SignupScreenHeader() {
             .fillMaxWidth()
             .size(100.dp),
         contentDescription = null,
-        painter = painterResource(id = R.drawable.ic_app_logo),
+        painter = painterResource(id = R.drawable.ic_logo_pokefit),
     )
     Spacer(modifier = Modifier.size(32.dp))
     Text(
