@@ -15,7 +15,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import pt.ul.fc.cm.pokefit.R
 
 @Composable
 fun StatsSection(
@@ -38,12 +40,12 @@ fun StatsSection(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             StatItem(
-                label = "Steps",
+                label = stringResource(R.string.steps),
                 value = steps,
                 indicatorColor = Color(0xFF4CAF50) // Green
             )
             StatItem(
-                label = "Sleep",
+                label = stringResource(R.string.sleep),
                 value = sleepDuration,
                 indicatorColor = Color(0xFFE91E63) // Pink
             )
@@ -58,7 +60,7 @@ fun StatsSection(
                 .background(MaterialTheme.colorScheme.surface) // Cor de fundo
         ) {
             StatItem(
-                label = "Distance",
+                label = stringResource(R.string.distance),
                 value = distanceCovered,
                 indicatorColor = Color(0xFFFF9800), // Laranja
                 size = 172.dp // Define altura para o StatItem
