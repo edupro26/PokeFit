@@ -12,19 +12,19 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import pt.ul.fc.cm.pokefit.R
-import pt.ul.fc.cm.pokefit.ui.theme.Primary
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,6 +32,9 @@ fun ScreenTopBar(
     scrollBehavior: TopAppBarScrollBehavior
 ) {
     TopAppBar(
+        colors = TopAppBarDefaults.topAppBarColors(
+            scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainer
+        ),
         title = {
             Row(
                 verticalAlignment = Alignment.CenterVertically
@@ -43,10 +46,8 @@ fun ScreenTopBar(
                 )
                 Text(
                     text = buildAnnotatedString {
-                        withStyle(style = SpanStyle(color = Color.Black)) {
-                            append("POKÉ")
-                        }
-                        withStyle(style = SpanStyle(color = Primary)) {
+                        append(stringResource(id = R.string.poke))
+                        withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary)) {
                             append("FIT")
                         }
                     },

@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -12,7 +13,6 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import pt.ul.fc.cm.pokefit.R
 import pt.ul.fc.cm.pokefit.domain.model.User
-import pt.ul.fc.cm.pokefit.ui.theme.PrimaryGrey
 
 @Composable
 fun ProfilePicture(user: User) {
@@ -21,7 +21,7 @@ fun ProfilePicture(user: User) {
             model = user.photoUrl,
             contentDescription = "Profile picture",
             modifier = Modifier
-                .size(200.dp)
+                .size(180.dp)
                 .clip(CircleShape)
         )
     } else {
@@ -29,9 +29,9 @@ fun ProfilePicture(user: User) {
             painter = painterResource(id = R.drawable.trainer),
             contentDescription = "Profile picture",
             modifier = Modifier
-                .size(200.dp)
+                .size(180.dp)
                 .clip(CircleShape)
-                .border(1.dp, PrimaryGrey, CircleShape)
+                .border(1.dp, MaterialTheme.colorScheme.outline, CircleShape)
         )
     }
 }

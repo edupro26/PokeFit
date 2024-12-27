@@ -17,7 +17,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.LinkAnnotation
@@ -37,7 +36,6 @@ import pt.ul.fc.cm.pokefit.ui.screens.auth.components.GeneralTextField
 import pt.ul.fc.cm.pokefit.ui.screens.auth.components.ContinueWithButton
 import pt.ul.fc.cm.pokefit.ui.screens.auth.components.AuthenticationButton
 import pt.ul.fc.cm.pokefit.ui.screens.auth.components.PasswordTextField
-import pt.ul.fc.cm.pokefit.ui.theme.Primary
 
 @Composable
 fun SigninScreen(
@@ -48,12 +46,12 @@ fun SigninScreen(
     var password by remember { mutableStateOf("") }
     val state = viewModel.state.value
     Surface(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(42.dp)
+        modifier = Modifier.fillMaxSize()
     ) {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(42.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             SigninScreenHeader()
@@ -96,14 +94,12 @@ fun SigninScreen(
 private fun NavigateToSignup(navController: NavController) {
     Text(
         text = buildAnnotatedString {
-            withStyle(style = SpanStyle(color = Color.Black)) {
-                append(stringResource(R.string.dont_have_an_account))
-            }
+            append(stringResource(R.string.dont_have_an_account))
             append(" ")
             withLink(
                 LinkAnnotation.Url(
                     Screen.Signup.route,
-                    TextLinkStyles(style = SpanStyle(color = Primary))
+                    TextLinkStyles(SpanStyle(color = MaterialTheme.colorScheme.primary))
                 ) {
                     val route = (it as LinkAnnotation.Url).url
                     navController.navigate(route)
@@ -117,13 +113,11 @@ private fun NavigateToSignup(navController: NavController) {
 
 @Composable
 private fun NavigateToPasswordReset() {
-    /* TODO: implement this functionality */
     Text(
         modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
         text = buildAnnotatedString {
-            withStyle(style = SpanStyle(color = Color.Black)) {
-                append(stringResource(R.string.forgot_your_password))
-            }
+            /* TODO: implement withLink functionality */
+            append(stringResource(R.string.forgot_your_password))
         },
     )
 }
@@ -140,10 +134,8 @@ private fun SigninScreenHeader() {
     Spacer(modifier = Modifier.size(32.dp))
     Text(
         text = buildAnnotatedString {
-            withStyle(style = SpanStyle(color = Color.Black)) {
-                append(stringResource(R.string.poke))
-            }
-            withStyle(style = SpanStyle(color = Primary)) {
+            append(stringResource(R.string.poke))
+            withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary)) {
                 append(stringResource(R.string.fit))
             }
         },

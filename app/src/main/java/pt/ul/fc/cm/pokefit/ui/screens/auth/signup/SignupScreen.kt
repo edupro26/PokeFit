@@ -17,7 +17,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.LinkAnnotation
@@ -26,7 +25,6 @@ import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withLink
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -37,7 +35,6 @@ import pt.ul.fc.cm.pokefit.ui.screens.auth.components.Divider
 import pt.ul.fc.cm.pokefit.ui.screens.auth.components.GeneralTextField
 import pt.ul.fc.cm.pokefit.ui.screens.auth.components.AuthenticationButton
 import pt.ul.fc.cm.pokefit.ui.screens.auth.components.PasswordTextField
-import pt.ul.fc.cm.pokefit.ui.theme.Primary
 
 @Composable
 fun SignupScreen(
@@ -47,15 +44,14 @@ fun SignupScreen(
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-
     val state = viewModel.state.value
     Surface(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(42.dp)
+        modifier = Modifier.fillMaxSize()
     ) {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(42.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             SignupScreenHeader()
@@ -101,14 +97,12 @@ fun SignupScreen(
 private fun NavigateToSignin(navController: NavController) {
     Text(
         text = buildAnnotatedString {
-            withStyle(style = SpanStyle(color = Color.Black)) {
-                append(stringResource(R.string.already_have_an_account))
-            }
+            append(stringResource(R.string.already_have_an_account))
             append(" ")
             withLink(
                 LinkAnnotation.Url(
                     Screen.Signin.route,
-                    TextLinkStyles(style = SpanStyle(color = Primary))
+                    TextLinkStyles(SpanStyle(color = MaterialTheme.colorScheme.primary))
                 ) {
                     val route = (it as LinkAnnotation.Url).url
                     navController.navigate(route) {
@@ -137,9 +131,7 @@ private fun SignupScreenHeader() {
     Spacer(modifier = Modifier.size(32.dp))
     Text(
         text = buildAnnotatedString {
-            withStyle(style = SpanStyle(color = Color.Black)) {
-                append(stringResource(R.string.create_an_account))
-            }
+            append(stringResource(R.string.create_an_account))
         },
         fontSize = MaterialTheme.typography.titleLarge.fontSize,
         fontWeight = FontWeight.Bold

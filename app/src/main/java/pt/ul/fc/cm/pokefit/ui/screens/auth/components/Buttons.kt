@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,8 +37,6 @@ import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import pt.ul.fc.cm.pokefit.ui.navigation.Screen
-import pt.ul.fc.cm.pokefit.ui.theme.Primary
-import pt.ul.fc.cm.pokefit.ui.theme.PrimaryGrey
 import pt.ul.fc.cm.pokefit.utils.Constants.WEB_CLIENT_ID
 import pt.ul.fc.cm.pokefit.utils.Response
 
@@ -55,14 +54,19 @@ fun AuthenticationButton(
         colors = ButtonDefaults.buttonColors(Color.Transparent),
     ) {
         Box(
-            modifier = Modifier.fillMaxWidth().heightIn(48.dp)
-                .background(Primary, shape = RoundedCornerShape(10.dp)),
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(48.dp)
+                .background(
+                    MaterialTheme.colorScheme.primary,
+                    shape = RoundedCornerShape(10.dp)
+                ),
             contentAlignment = Alignment.Center
         ) {
             Text(
                 text = labelValue,
                 fontSize = 18.sp,
-                color = Color.White,
+                color = MaterialTheme.colorScheme.onPrimary,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -86,7 +90,7 @@ fun ContinueWithButton(
             handleGoogleRequest(coroutineScope, context, onGetCredential)
         },
         shape = RoundedCornerShape(15.dp),
-        color = PrimaryGrey,
+        color = MaterialTheme.colorScheme.surfaceContainer,
     ) {
         Row(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
@@ -101,7 +105,6 @@ fun ContinueWithButton(
             Text(
                 text = labelValue,
                 fontSize = 16.sp,
-                color = Color.Black,
                 fontWeight = FontWeight.Bold
             )
         }

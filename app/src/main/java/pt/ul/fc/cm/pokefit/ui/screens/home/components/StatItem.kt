@@ -19,7 +19,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import pt.ul.fc.cm.pokefit.ui.theme.PrimaryGrey
 
 @Composable
 fun StatItem(
@@ -33,7 +32,7 @@ fun StatItem(
             .fillMaxWidth()
             .height(size)
             .clip(RoundedCornerShape(12.dp))
-            .background(PrimaryGrey)
+            .background(MaterialTheme.colorScheme.surfaceContainer)
             .padding(vertical = 8.dp)
     ) {
         Column(
@@ -47,15 +46,13 @@ fun StatItem(
             Text(
                 text = label,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Medium
             )
             // Value
             Text(
                 text = value,
                 style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
+                fontWeight = FontWeight.Bold
             )
             // Indicator
             Box(

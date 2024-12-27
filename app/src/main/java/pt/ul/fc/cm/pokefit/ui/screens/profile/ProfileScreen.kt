@@ -66,7 +66,6 @@ fun ProfileScreen(
                     text = "Error: ${state.error}",
                     fontSize = MaterialTheme.typography.titleMedium.fontSize,
                     fontWeight = FontWeight.Bold,
-                    color = Color.Black
                 )
             }
             if (state.isLoading) CircularProgressIndicator()

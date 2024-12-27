@@ -50,8 +50,6 @@ import coil.compose.rememberAsyncImagePainter
 import pt.ul.fc.cm.pokefit.ui.common.BottomAppBar
 import pt.ul.fc.cm.pokefit.ui.screens.home.components.ScreenTopBar
 import pt.ul.fc.cm.pokefit.ui.screens.home.components.StatsSection
-import pt.ul.fc.cm.pokefit.ui.theme.PrimaryGrey
-import pt.ul.fc.cm.pokefit.ui.theme.Transparent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -159,7 +157,7 @@ fun PokemonStatsSection(
                     .padding(horizontal = 20.dp)
                     .aspectRatio(1.5f)
                     .clip(RoundedCornerShape(20.dp))
-                    .background(Transparent),
+                    .background(MaterialTheme.colorScheme.secondary),
                 contentScale = ContentScale.Fit
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -178,7 +176,7 @@ fun PokemonStatsSection(
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp)
                 .clip(RoundedCornerShape(12.dp))
-                .background(PrimaryGrey)
+                .background(MaterialTheme.colorScheme.surfaceContainer)
                 .padding(8.dp)
         ) {
             Row(
@@ -199,19 +197,18 @@ fun PokemonStatsSection(
                 Spacer(modifier = Modifier.width(16.dp))
                 Text(
                     text = buildAnnotatedString {
-                        withStyle(style = SpanStyle(fontSize = MaterialTheme.typography.bodyLarge.fontSize)) {
+                        withStyle(SpanStyle(fontSize = MaterialTheme.typography.bodyLarge.fontSize)) {
                             append("Level ")
                         }
                         withStyle(
-                            style = SpanStyle(
+                            SpanStyle(
                                 fontSize = MaterialTheme.typography.headlineMedium.fontSize,
                                 fontWeight = FontWeight.Bold
                             )
                         ) {
                             append("$level")
                         }
-                    },
-                    color = Color.Black
+                    }
                 )
             }
         }
@@ -232,7 +229,7 @@ fun PokemonStatsSection(
                 .height(60.dp)
                 .padding(horizontal = 20.dp)
                 .clip(RoundedCornerShape(12.dp))
-                .background(PrimaryGrey)
+                .background(MaterialTheme.colorScheme.surfaceContainer)
                 .padding(14.dp)
         ) {
             Column(
@@ -256,8 +253,7 @@ fun PokemonStatsSection(
                         withStyle(style = SpanStyle(fontSize = MaterialTheme.typography.bodySmall.fontSize)) { // Tamanho menor para o texto
                             append(" out of $calorieGoal cal")
                         }
-                    },
-                    color = Color.Black
+                    }
                 )
                 LinearProgressIndicator(
                     progress = { caloriesProgress },

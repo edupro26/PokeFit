@@ -17,8 +17,6 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import pt.ul.fc.cm.pokefit.ui.navigation.Screen
-import pt.ul.fc.cm.pokefit.ui.theme.Primary
-import pt.ul.fc.cm.pokefit.ui.theme.Transparent
 
 @Composable
 fun BottomAppBar(navController: NavController) {
@@ -31,7 +29,8 @@ fun BottomAppBar(navController: NavController) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination
     NavigationBar (
-        modifier = Modifier.clip(MaterialTheme.shapes.medium)
+        modifier = Modifier.clip(MaterialTheme.shapes.medium),
+        containerColor = MaterialTheme.colorScheme.surfaceContainer
     ) {
         items.forEach {
             item -> AddItem(item, currentRoute, navController)
@@ -59,9 +58,9 @@ private fun RowScope.AddItem(
             )
         },
         colors =  NavigationBarItemDefaults.colors(
-            selectedIconColor = Primary,
-            selectedTextColor = Primary,
-            indicatorColor = Transparent
+            selectedIconColor = MaterialTheme.colorScheme.primary,
+            selectedTextColor = MaterialTheme.colorScheme.primary,
+            indicatorColor = MaterialTheme.colorScheme.secondary
         ),
         selected = currentRoute?.hierarchy?.any {
             it.route == item.route
