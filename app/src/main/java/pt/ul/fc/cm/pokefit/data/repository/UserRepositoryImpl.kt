@@ -1,5 +1,6 @@
 package pt.ul.fc.cm.pokefit.data.repository
 
+import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import pt.ul.fc.cm.pokefit.domain.model.User
@@ -19,7 +20,7 @@ class UserRepositoryImpl @Inject constructor(
                 .await()
             Response.Success(Unit)
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("UserRepository", "Failed to save user (${e::class.java.simpleName})")
             Response.Failure("Failed to save user")
         }
     }
@@ -34,7 +35,7 @@ class UserRepositoryImpl @Inject constructor(
                     .toObject(User::class.java)!!
             )
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("UserRepository", "Failed to get user (${e::class.java.simpleName})")
             Response.Failure("Failed to get user data")
         }
     }
