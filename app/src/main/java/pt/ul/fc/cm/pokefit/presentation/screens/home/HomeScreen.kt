@@ -58,6 +58,7 @@ import pt.ul.fc.cm.pokefit.R
 @Composable
 fun HomeScreen(
     navController: NavController,
+    navigate: (String, Boolean) -> Unit,
     viewModel: HomeScreenViewModel = viewModel()
 ) {
     val context = LocalContext.current
@@ -113,7 +114,7 @@ fun HomeScreen(
                     onSecondIconClick = { /*TODO*/ },
                 )
             },
-            bottomBar = { BottomAppBar(navController) }
+            bottomBar = { BottomAppBar(navController, navigate) }
         ) { paddingValues ->
             Column(
                 modifier = Modifier

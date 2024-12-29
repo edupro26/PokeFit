@@ -1,6 +1,5 @@
 package pt.ul.fc.cm.pokefit.presentation.common
 
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -14,13 +13,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
-import androidx.navigation.NavDestination
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
-import pt.ul.fc.cm.pokefit.presentation.navigation.Screen
 
 @Composable
-fun BottomAppBar(navController: NavController) {
+fun BottomAppBar(
+    navController: NavController,
+    navigate: (String, Boolean) -> Unit
+) {
     val items = listOf(
         BottomBarItem.Home,
         BottomBarItem.Pokemon,
@@ -28,49 +27,33 @@ fun BottomAppBar(navController: NavController) {
         BottomBarItem.Profile
     )
     val backStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = backStackEntry?.destination
+    val currentRoute = backStackEntry?.destination?.route
     NavigationBar (
         modifier = Modifier.clip(MaterialTheme.shapes.medium),
         containerColor = MaterialTheme.colorScheme.surfaceContainer
     ) {
-        items.forEach {
-            item -> AddItem(item, currentRoute, navController)
+        items.forEachIndexed { index, item ->
+            NavigationBarItem (
+                label = {
+                    Text(
+                        text = stringResource(item.title),
+                        style = MaterialTheme.typography.labelSmall
+                    )
+                },
+                icon = {
+                    Icon(
+                        painter = painterResource(item.icon),
+                        contentDescription = "Icon"
+                    )
+                },
+                colors =  NavigationBarItemDefaults.colors(
+                    selectedIconColor = MaterialTheme.colorScheme.primary,
+                    selectedTextColor = MaterialTheme.colorScheme.primary,
+                    indicatorColor = MaterialTheme.colorScheme.secondary
+                ),
+                onClick = { navigate(item.route, false) },
+                selected = item.route == currentRoute
+            )
         }
     }
-}
-
-@Composable
-private fun RowScope.AddItem(
-    item: BottomBarItem,
-    currentRoute: NavDestination?,
-    navController: NavController
-) {
-    NavigationBarItem (
-        label = {
-            Text(
-                text = stringResource(item.title),
-                style = MaterialTheme.typography.labelSmall
-            )
-        },
-        icon = {
-            Icon(
-                painter = painterResource(item.icon),
-                contentDescription = "Icon"
-            )
-        },
-        colors =  NavigationBarItemDefaults.colors(
-            selectedIconColor = MaterialTheme.colorScheme.primary,
-            selectedTextColor = MaterialTheme.colorScheme.primary,
-            indicatorColor = MaterialTheme.colorScheme.secondary
-        ),
-        selected = currentRoute?.hierarchy?.any {
-            it.route == item.route
-        } == true,
-        onClick = {
-            navController.navigate(item.route) {
-                popUpTo(Screen.Home.route)
-                launchSingleTop = true
-            }
-        }
-    )
 }

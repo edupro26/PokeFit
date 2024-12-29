@@ -28,7 +28,6 @@ import androidx.compose.ui.text.withLink
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import pt.ul.fc.cm.pokefit.R
 import pt.ul.fc.cm.pokefit.presentation.navigation.Screen
 import pt.ul.fc.cm.pokefit.presentation.screens.auth.components.Divider
@@ -39,7 +38,7 @@ import pt.ul.fc.cm.pokefit.presentation.screens.auth.components.PasswordTextFiel
 
 @Composable
 fun SigninScreen(
-    navController: NavController,
+    navigate: (String, Boolean) -> Unit,
     viewModel: SigninViewModel = hiltViewModel()
 ) {
     var email by remember { mutableStateOf("") }
@@ -70,39 +69,38 @@ fun SigninScreen(
             NavigateToPasswordReset()
             Spacer(modifier = Modifier.size(8.dp))
             AuthenticationButton(
-                navController = navController,
                 state = state,
                 labelValue = stringResource(R.string.sign_in),
+                navigate = navigate,
                 onClick = { viewModel.signIn(email, password) }
             )
             Divider(top = 18.dp, bottom = 16.dp)
             ContinueWithButton(
-                navController = navController,
                 state = state,
                 labelValue = stringResource(R.string.continue_with_google),
-                painter = R.drawable.ic_logo_google
-            ) {credential ->
-                viewModel.signInWithGoogle(credential)
+                painter = R.drawable.ic_logo_google,
+                navigate = navigate,
+            ) {
+                credential -> viewModel.signInWithGoogle(credential)
             }
             Spacer(modifier = Modifier.size(106.dp))
-            NavigateToSignup(navController)
+            NavigateToSignup(navigate)
         }
     }
 }
 
 @Composable
-private fun NavigateToSignup(navController: NavController) {
+private fun NavigateToSignup(navigate: (String, Boolean) -> Unit) {
     Text(
         text = buildAnnotatedString {
             append(stringResource(R.string.dont_have_an_account))
             append(" ")
             withLink(
-                LinkAnnotation.Url(
-                    Screen.Signup.route,
-                    TextLinkStyles(SpanStyle(color = MaterialTheme.colorScheme.primary))
+                LinkAnnotation.Clickable(
+                    tag = stringResource(R.string.sign_up),
+                    styles = TextLinkStyles(SpanStyle(MaterialTheme.colorScheme.primary))
                 ) {
-                    val route = (it as LinkAnnotation.Url).url
-                    navController.navigate(route)
+                    navigate(Screen.Signup.route, false)
                 }
             ) {
                 append(stringResource(R.string.sign_up))

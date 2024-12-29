@@ -1,4 +1,4 @@
-package pt.ul.fc.cm.pokefit.presentation.screens.auth.splash
+package pt.ul.fc.cm.pokefit.presentation.screens.initial
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -6,7 +6,7 @@ import pt.ul.fc.cm.pokefit.domain.usecase.Authentication
 import javax.inject.Inject
 
 @HiltViewModel
-class SplashViewModel @Inject constructor(
+class InitialViewModel @Inject constructor(
     private val authentication: Authentication
 ) : ViewModel() {
 

@@ -22,22 +22,23 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import pt.ul.fc.cm.pokefit.presentation.common.BottomAppBar
-import pt.ul.fc.cm.pokefit.presentation.navigation.Screen
 import pt.ul.fc.cm.pokefit.presentation.common.TopAppBar
 import pt.ul.fc.cm.pokefit.presentation.screens.profile.components.DisplayName
 import pt.ul.fc.cm.pokefit.presentation.screens.profile.components.ProfilePicture
 import pt.ul.fc.cm.pokefit.R
+import pt.ul.fc.cm.pokefit.presentation.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     navController: NavController,
+    navigate: (String, Boolean) -> Unit,
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value
     val isUserSignedIn = viewModel.isUserSignedIn.value
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    ObserveSignoutEvent(isUserSignedIn, navController)
+    ObserveSignoutEvent(isUserSignedIn, navigate)
     Scaffold (
         modifier = Modifier
             .fillMaxSize()
@@ -53,7 +54,7 @@ fun ProfileScreen(
                 onSecondIconClick = { /*TODO*/ }
             )
         },
-        bottomBar = { BottomAppBar(navController) }
+        bottomBar = { BottomAppBar(navController, navigate) }
     ) { paddingValues ->
         Column (
             modifier = Modifier
@@ -86,16 +87,11 @@ fun ProfileScreen(
 @Composable
 private fun ObserveSignoutEvent(
     isUserSignedIn: Boolean,
-    navController: NavController
+    navigate: (String, Boolean) -> Unit
 ) {
     LaunchedEffect(isUserSignedIn) {
         if (!isUserSignedIn) {
-            navController.navigate(Screen.Signin.route) {
-                popUpTo(navController.graph.startDestinationId) {
-                    inclusive = true
-                }
-                navController.graph.setStartDestination(Screen.Signin.route)
-            }
+            navigate(Screen.Signin.route, true)
         }
     }
 }

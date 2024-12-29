@@ -11,8 +11,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.components.PokemonCard
 import pt.ul.fc.cm.pokefit.presentation.common.BottomAppBar
 import pt.ul.fc.cm.pokefit.presentation.common.TopAppBar
@@ -22,6 +22,7 @@ import pt.ul.fc.cm.pokefit.R
 @Composable
 fun PokemonScreen(
     navController: NavController,
+    navigate: (String, Boolean) -> Unit,
     viewModel: PokemonViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value
@@ -41,7 +42,7 @@ fun PokemonScreen(
                 onSecondIconClick = { /*TODO*/ }
             )
         },
-        bottomBar = { BottomAppBar(navController) }
+        bottomBar = { BottomAppBar(navController, navigate) }
     ) { paddingValues ->
         Column(
             modifier = Modifier

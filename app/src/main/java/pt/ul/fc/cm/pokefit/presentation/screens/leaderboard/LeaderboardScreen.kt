@@ -22,7 +22,8 @@ import pt.ul.fc.cm.pokefit.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LeaderboardScreen(
-    navController: NavController
+    navController: NavController,
+    navigate: (String, Boolean) -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold (
@@ -37,7 +38,7 @@ fun LeaderboardScreen(
                 onFirstIconClick = { /*TODO*/ }
             )
         },
-        bottomBar = { BottomAppBar(navController) }
+        bottomBar = { BottomAppBar(navController, navigate) }
     ) { paddingValues ->
         Column (
             modifier = Modifier

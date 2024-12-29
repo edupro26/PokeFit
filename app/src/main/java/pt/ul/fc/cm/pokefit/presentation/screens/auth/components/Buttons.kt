@@ -19,7 +19,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,7 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.credentials.Credential
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
-import androidx.navigation.NavController
+import androidx.credentials.exceptions.GetCredentialCancellationException
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -42,9 +41,9 @@ import pt.ul.fc.cm.pokefit.utils.Response
 
 @Composable
 fun AuthenticationButton(
-    navController: NavController,
     state: Response<Unit>,
     labelValue: String,
+    navigate: (String, Boolean) -> Unit,
     onClick: () -> Unit = {}
 ) {
     Button(
@@ -71,15 +70,15 @@ fun AuthenticationButton(
             )
         }
     }
-    HandleAuthResponse(state, navController)
+    HandleAuthResponse(state, navigate)
 }
 
 @Composable
 fun ContinueWithButton(
-    navController: NavController,
     state: Response<Unit>,
     labelValue: String,
     painter: Int,
+    navigate: (String, Boolean) -> Unit,
     onGetCredential: (Credential) -> Unit
 ) {
     val context = LocalContext.current
@@ -108,28 +107,19 @@ fun ContinueWithButton(
                 fontWeight = FontWeight.Bold
             )
         }
-        HandleAuthResponse(state, navController)
+        HandleAuthResponse(state, navigate)
     }
 }
 
 @Composable
 private fun HandleAuthResponse(
     state: Response<Unit>,
-    navController: NavController
+    navigate: (String, Boolean) -> Unit
 ) {
     when (state) {
-        is Response.Success -> {
-            LaunchedEffect(Unit) {
-                navController.navigate(Screen.Home.route) {
-                    popUpTo(navController.graph.startDestinationId) {
-                        inclusive = true
-                    }
-                    navController.graph.setStartDestination(Screen.Home.route)
-                }
-            }
-        }
+        is Response.Success -> { navigate(Screen.Home.route, true) }
         is Response.Failure -> {
-            Toast.makeText(LocalContext.current, state.error, Toast.LENGTH_LONG).show()
+            Toast.makeText(LocalContext.current, state.error, Toast.LENGTH_SHORT).show()
         }
         else -> {}
     }
@@ -156,6 +146,9 @@ private fun handleGoogleRequest(
             )
             onGetCredential(result.credential)
         } catch (e: Exception) {
+            if (e !is GetCredentialCancellationException) {
+                Toast.makeText(context, "Error getting credential", Toast.LENGTH_LONG).show()
+            }
             Log.d("GoogleAuthButton", e.message.toString())
         }
     }
