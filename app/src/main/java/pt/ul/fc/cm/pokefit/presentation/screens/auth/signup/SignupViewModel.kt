@@ -32,7 +32,7 @@ class SignupViewModel @Inject constructor(
         viewModelScope.launch {
             if (credential is CustomCredential && credential.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
                 val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
-                _state.value = authentication.signUpWithGoogle(googleIdTokenCredential.idToken)
+                _state.value = authentication.continueWithGoogle(googleIdTokenCredential.idToken)
             } else {
                 _state.value = Response.Failure("Unexpected type of credential")
             }
