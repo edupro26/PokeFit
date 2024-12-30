@@ -44,9 +44,9 @@ class Authentication @Inject constructor(
         return authResponse
     }
 
-    fun isSignedIn(): Boolean = authRepository.currentUser != null
-
     fun signOut() = authRepository.signOut()
+
+    fun refreshAuthState() = authRepository.getAuthState()
 
     fun getCurrentUser() = authRepository.currentUser
 
