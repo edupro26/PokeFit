@@ -1,5 +1,6 @@
 package pt.ul.fc.cm.pokefit.di
 
+import android.app.Application
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
@@ -18,6 +19,8 @@ import pt.ul.fc.cm.pokefit.data.repository.PokemonRepositoryImpl
 import pt.ul.fc.cm.pokefit.data.repository.UserRepositoryImpl
 import pt.ul.fc.cm.pokefit.domain.repository.AuthRepository
 import pt.ul.fc.cm.pokefit.domain.repository.UserRepository
+import pt.ul.fc.cm.pokefit.domain.sensor.MeasurableSensor
+import pt.ul.fc.cm.pokefit.domain.sensor.StepCounter
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -42,17 +45,19 @@ object AppModule {
     @Provides
     @Singleton
     fun provideAuthRepository(): AuthRepository {
-        return AuthRepositoryImpl(
-            Firebase.auth
-        )
+        return AuthRepositoryImpl(Firebase.auth)
     }
 
     @Provides
     @Singleton
     fun provideUserRepository(): UserRepository {
-        return UserRepositoryImpl(
-            Firebase.firestore
-        )
+        return UserRepositoryImpl(Firebase.firestore)
+    }
+
+    @Provides
+    @Singleton
+    fun provideStepCounter(app: Application): MeasurableSensor {
+        return StepCounter(app)
     }
 
 }

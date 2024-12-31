@@ -11,31 +11,53 @@ class Authentication @Inject constructor(
     private val authRepository: AuthRepository,
     private val userRepository: UserRepository
 ) {
+    suspend fun signIn(email: String, password: String): Response<Unit> {
+        return authRepository.signIn(email, password)
+    }
+
     suspend fun signUp(email: String, password: String, name: String): Response<Unit> {
-        val signupResponse = authRepository.signUp(email, password)
-        if (signupResponse is Response.Success) {
-            val newUser = User(
-                uid = authRepository.currentUser!!.uid,
-                email = email,
-                username = email.substringBefore('@'),
-                displayName = name
-            )
-            val storeResponse = userRepository.saveUser(newUser)
+        val authResponse = authRepository.signUp(email, password)
+        if (authResponse is Response.Success) {
+            val user = buildNewUser(name)
+            val storeResponse = userRepository.saveUser(user)
             if (storeResponse is Response.Failure) {
                 authRepository.currentUser!!.delete().await()
                 return storeResponse
             }
         }
-        return signupResponse
+        return authResponse
     }
 
-    suspend fun signIn(email: String, password: String): Response<Unit> {
-        return authRepository.signIn(email, password)
+    suspend fun continueWithGoogle(idToken: String): Response<Unit> {
+        val authResponse = authRepository.continueWithGoogle(idToken)
+        if (authResponse is Response.Success) {
+            val uid = authRepository.currentUser!!.uid
+            if (userRepository.getUserById(uid) is Response.Failure) {
+                val user = buildNewUser()
+                val storeResponse = userRepository.saveUser(user)
+                if (storeResponse is Response.Failure) {
+                    authRepository.currentUser!!.delete().await()
+                    return storeResponse
+                }
+            }
+        }
+        return authResponse
     }
-
-    fun isSignedIn(): Boolean = authRepository.currentUser != null
 
     fun signOut() = authRepository.signOut()
 
+    fun refreshAuthState() = authRepository.getAuthState()
+
     fun getCurrentUser() = authRepository.currentUser
+
+    private fun buildNewUser(name: String? = null): User {
+        val firebaseUser = authRepository.currentUser!!
+        return User(
+            uid = firebaseUser.uid,
+            email = firebaseUser.email!!,
+            username = firebaseUser.email!!.substringBefore('@'),
+            displayName = name ?: firebaseUser.displayName!!,
+            photoUrl = firebaseUser.photoUrl?.toString()
+        )
+    }
 }

@@ -1,6 +1,10 @@
 package pt.ul.fc.cm.pokefit.data.repository
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuth.AuthStateListener
+import com.google.firebase.auth.GoogleAuthProvider
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import pt.ul.fc.cm.pokefit.domain.repository.AuthRepository
 import pt.ul.fc.cm.pokefit.utils.Response
@@ -30,6 +34,27 @@ class AuthRepositoryImpl @Inject constructor(
             e.printStackTrace()
             Response.Failure("Failed to sign in. Please check your credentials.")
         }
+    }
+
+    override suspend fun continueWithGoogle(idToken: String): Response<Unit> {
+        return try {
+            val credential = GoogleAuthProvider.getCredential(idToken, null)
+            auth.signInWithCredential(credential).await()
+            Response.Success(Unit)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Response.Failure("Google authentication failed")
+        }
+    }
+
+    override fun getAuthState() = callbackFlow {
+        val initialState = auth.currentUser != null
+        trySend(initialState)
+        val authStateListener = AuthStateListener { auth ->
+            trySend(auth.currentUser != null)
+        }
+        auth.addAuthStateListener(authStateListener)
+        awaitClose { auth.removeAuthStateListener(authStateListener) }
     }
 
     override fun signOut() = auth.signOut()
