@@ -22,4 +22,7 @@
     <string name="distance">Distance</string>
     <string name="sleep">Sleep</string>
     <string name="level">Level</string>
+    <string name="activity_permission">We need permission to track your physical activity. To use this feature, please grant the permission in the phone settings</string>
+    <string name="permission_required">Permission Required</string>
+    <string name="go_to_settings">Go to Settings</string>
 </resources>
