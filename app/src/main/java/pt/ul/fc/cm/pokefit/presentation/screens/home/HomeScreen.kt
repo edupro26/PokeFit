@@ -1,9 +1,5 @@
 package pt.ul.fc.cm.pokefit.presentation.screens.home
 
-import androidx.compose.runtime.SideEffect
-import android.Manifest
-import android.app.Activity
-import android.content.pm.PackageManager
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -25,11 +21,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,97 +36,61 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import pt.ul.fc.cm.pokefit.presentation.common.BottomAppBar
 import pt.ul.fc.cm.pokefit.presentation.common.TopAppBar
 import pt.ul.fc.cm.pokefit.presentation.screens.home.components.StatsSection
 import pt.ul.fc.cm.pokefit.R
+import pt.ul.fc.cm.pokefit.presentation.screens.home.components.PermissionHandler
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navController: NavController,
     navigate: (String, Boolean) -> Unit,
-    viewModel: HomeScreenViewModel = viewModel()
+    viewModel: HomeScreenViewModel = hiltViewModel()
 ) {
-    val context = LocalContext.current
-    val activity = context as? Activity
-
-    // State to track if the permission is granted
-    var permissionGranted by remember {
-        mutableStateOf(
-            ContextCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACTIVITY_RECOGNITION
-            ) == PackageManager.PERMISSION_GRANTED
-        )
-    }
-
-    // Check for permission updates when the Composable is recomposed
-    LaunchedEffect(Unit) {
-        if (!permissionGranted) {
-            activity?.let {
-                ActivityCompat.requestPermissions(
-                    it,
-                    arrayOf(Manifest.permission.ACTIVITY_RECOGNITION),
-                    100
-                )
-            }
-        }
-    }
-
-    // Observe permission changes with a SideEffect
-    SideEffect {
-        permissionGranted = ContextCompat.checkSelfPermission(
-            context,
-            Manifest.permission.ACTIVITY_RECOGNITION
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
     val steps by viewModel.steps
-
-    if (permissionGranted) {
-        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-        Scaffold(
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    PermissionHandler(
+        context = LocalContext.current,
+        countSteps = { viewModel.countSteps() }
+    )
+    Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            TopAppBar(
+                scrollBehavior = scrollBehavior,
+                firstIcon = R.drawable.ic_top_map,
+                firstDescription = "Map",
+                onFirstIconClick = { /*TODO*/ },
+                secondIcon = R.drawable.ic_top_tasks,
+                secondDescription = "Goals",
+                onSecondIconClick = { /*TODO*/ },
+            )
+        },
+        bottomBar = { BottomAppBar(navController, navigate) }
+    ) { paddingValues ->
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .nestedScroll(scrollBehavior.nestedScrollConnection),
-            topBar = {
-                TopAppBar(
-                    scrollBehavior = scrollBehavior,
-                    firstIcon = R.drawable.ic_top_map,
-                    firstDescription = "Map",
-                    onFirstIconClick = { /*TODO*/ },
-                    secondIcon = R.drawable.ic_top_tasks,
-                    secondDescription = "Goals",
-                    onSecondIconClick = { /*TODO*/ },
-                )
-            },
-            bottomBar = { BottomAppBar(navController, navigate) }
-        ) { paddingValues ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                // Pokémon Stats Section
-                /* TODO just a example pokemon image */
-                val img = "https://assets.pokemon.com/assets/cms2/img/pokedex/detail/004.png"
-                PokemonStatsSection(
-                    pokemonImage = rememberAsyncImagePainter(model = img),
-                    steps = steps,
-                )
-                Spacer(modifier = Modifier.height(24.dp))
-            }
+                .padding(paddingValues),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // Pokémon Stats Section
+            /* TODO just a example pokemon image */
+            val img = "https://assets.pokemon.com/assets/cms2/img/pokedex/detail/004.png"
+            PokemonStatsSection(
+                pokemonImage = rememberAsyncImagePainter(model = img),
+                steps = steps,
+            )
+            Spacer(modifier = Modifier.height(24.dp))
         }
-    } else {
-        Text("Permission not granted. Please enable it in settings.")
     }
 }
 
