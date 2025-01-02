@@ -41,7 +41,7 @@ fun HomeScreen(
     val calories = 0 // TODO
     val distance = 0 // TODO
     val timeActive = 0 // TODO
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     PermissionHandler(
         context = LocalContext.current,
         countSteps = { viewModel.countSteps() }

@@ -26,7 +26,7 @@ fun PokemonScreen(
     viewModel: PokemonViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold (
         modifier = Modifier
             .fillMaxSize()

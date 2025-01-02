@@ -25,7 +25,7 @@ fun LeaderboardScreen(
     navController: NavController,
     navigate: (String, Boolean) -> Unit
 ) {
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold (
         modifier = Modifier
             .fillMaxSize()

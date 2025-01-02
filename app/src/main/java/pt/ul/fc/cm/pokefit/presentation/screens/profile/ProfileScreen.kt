@@ -37,7 +37,7 @@ fun ProfileScreen(
 ) {
     val state = viewModel.state.value
     val isUserSignedIn = viewModel.isUserSignedIn.value
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     ObserveSignoutEvent(isUserSignedIn, navigate)
     Scaffold (
         modifier = Modifier
