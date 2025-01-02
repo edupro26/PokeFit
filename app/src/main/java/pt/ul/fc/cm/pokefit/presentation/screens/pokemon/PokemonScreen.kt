@@ -54,10 +54,9 @@ fun PokemonScreen(
             if (state.isLoading) {
                 // TODO: Display a loading indicator
             } else {
-                // Display Pokémon in a scrollable list
                 LazyColumn(
-                    contentPadding = PaddingValues(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                    modifier = Modifier
+                        .padding(start = 18.dp, end = 18.dp)
                 ) {
                     items(state.pokemon) { pokemon ->
                         PokemonCard(pokemon)
