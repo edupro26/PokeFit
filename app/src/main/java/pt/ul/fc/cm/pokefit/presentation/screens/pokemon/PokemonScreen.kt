@@ -4,8 +4,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,22 +28,13 @@ fun PokemonScreen(
     viewModel: PokemonViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold (
         modifier = Modifier
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = {
-            TopAppBar(
-                scrollBehavior = scrollBehavior,
-                firstIcon = R.drawable.ic_top_search,
-                firstDescription = "Search",
-                onFirstIconClick = { /*TODO*/ },
-                secondIcon = R.drawable.ic_top_filters,
-                secondDescription = "Filters",
-                onSecondIconClick = { /*TODO*/ }
-            )
-        },
+        containerColor = MaterialTheme.colorScheme.surface,
+        topBar = { PokemonTopBar(scrollBehavior) },
         bottomBar = { BottomAppBar(navController, navigate) }
     ) { paddingValues ->
         Column(
@@ -54,10 +47,9 @@ fun PokemonScreen(
             if (state.isLoading) {
                 // TODO: Display a loading indicator
             } else {
-                // Display Pokémon in a scrollable list
                 LazyColumn(
-                    contentPadding = PaddingValues(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                    modifier = Modifier
+                        .padding(start = 18.dp, end = 18.dp)
                 ) {
                     items(state.pokemon) { pokemon ->
                         PokemonCard(pokemon)
@@ -66,4 +58,18 @@ fun PokemonScreen(
             }
         }
     }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun PokemonTopBar(scrollBehavior: TopAppBarScrollBehavior) {
+    TopAppBar(
+        scrollBehavior = scrollBehavior,
+        firstIcon = R.drawable.ic_top_search,
+        firstDescription = "Search",
+        onFirstIconClick = { /*TODO*/ },
+        secondIcon = R.drawable.ic_top_filters,
+        secondDescription = "Filters",
+        onSecondIconClick = { /*TODO*/ }
+    )
 }

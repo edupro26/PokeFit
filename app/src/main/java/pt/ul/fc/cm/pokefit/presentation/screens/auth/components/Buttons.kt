@@ -89,7 +89,7 @@ fun ContinueWithButton(
             handleGoogleRequest(coroutineScope, context, onGetCredential)
         },
         shape = RoundedCornerShape(15.dp),
-        color = MaterialTheme.colorScheme.surfaceContainer,
+        color = MaterialTheme.colorScheme.primaryContainer,
     ) {
         Row(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
@@ -104,7 +104,8 @@ fun ContinueWithButton(
             Text(
                 text = labelValue,
                 fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onPrimaryContainer
             )
         }
         HandleAuthResponse(state, navigate)

@@ -33,7 +33,7 @@ fun PermissionDialog(
                 Text(buttonText)
             }
         },
-        containerColor = MaterialTheme.colorScheme.surfaceContainer,
+        containerColor = MaterialTheme.colorScheme.primaryContainer,
         tonalElevation = 8.dp
     )
 }

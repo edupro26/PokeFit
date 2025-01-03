@@ -31,7 +31,7 @@ fun ProfilePicture(user: User) {
             modifier = Modifier
                 .size(180.dp)
                 .clip(CircleShape)
-                .border(1.dp, MaterialTheme.colorScheme.outline, CircleShape)
+                .border(1.dp, MaterialTheme.colorScheme.outlineVariant, CircleShape)
         )
     }
 }
