@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -43,17 +44,8 @@ fun ProfileScreen(
         modifier = Modifier
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = {
-            TopAppBar(
-                scrollBehavior = scrollBehavior,
-                firstIcon = R.drawable.ic_top_notifications,
-                firstDescription = "Notifications",
-                onFirstIconClick = { /*TODO*/ },
-                secondIcon = R.drawable.ic_top_settings,
-                secondDescription = "Settings",
-                onSecondIconClick = { /*TODO*/ }
-            )
-        },
+        containerColor = MaterialTheme.colorScheme.surface,
+        topBar = { ProfileTopBar(scrollBehavior) },
         bottomBar = { BottomAppBar(navController, navigate) }
     ) { paddingValues ->
         Column (
@@ -82,6 +74,20 @@ fun ProfileScreen(
             if (state.isLoading) CircularProgressIndicator()
         }
     }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun ProfileTopBar(scrollBehavior: TopAppBarScrollBehavior) {
+    TopAppBar(
+        scrollBehavior = scrollBehavior,
+        firstIcon = R.drawable.ic_top_notifications,
+        firstDescription = "Notifications",
+        onFirstIconClick = { /*TODO*/ },
+        secondIcon = R.drawable.ic_top_settings,
+        secondDescription = "Settings",
+        onSecondIconClick = { /*TODO*/ }
+    )
 }
 
 @Composable

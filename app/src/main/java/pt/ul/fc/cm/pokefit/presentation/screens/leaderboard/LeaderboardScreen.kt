@@ -9,6 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,14 +31,8 @@ fun LeaderboardScreen(
         modifier = Modifier
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = {
-            TopAppBar(
-                scrollBehavior = scrollBehavior,
-                firstIcon = R.drawable.ic_top_filters,
-                firstDescription = "Filters",
-                onFirstIconClick = { /*TODO*/ }
-            )
-        },
+        containerColor = MaterialTheme.colorScheme.surface,
+        topBar = { LeaderboardTopBar(scrollBehavior) },
         bottomBar = { BottomAppBar(navController, navigate) }
     ) { paddingValues ->
         Column (
@@ -54,4 +49,15 @@ fun LeaderboardScreen(
             )
         }
     }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun LeaderboardTopBar(scrollBehavior: TopAppBarScrollBehavior) {
+    TopAppBar(
+        scrollBehavior = scrollBehavior,
+        firstIcon = R.drawable.ic_top_filters,
+        firstDescription = "Filters",
+        onFirstIconClick = { /*TODO*/ }
+    )
 }

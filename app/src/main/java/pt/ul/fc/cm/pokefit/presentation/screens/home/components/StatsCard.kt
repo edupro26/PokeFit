@@ -38,7 +38,7 @@ fun StatsCard(
         onClick = { /* TODO */ },
         shape = RoundedCornerShape(15.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer
+            containerColor = MaterialTheme.colorScheme.primaryContainer
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 3.dp,
@@ -59,6 +59,7 @@ fun StatsCard(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
                 StatIcon(iconTint, icon, title)
             }
@@ -70,10 +71,12 @@ fun StatsCard(
                 Text(
                     text = value,
                     style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
                 Text(
                     text = " / $goal $unit",
                     style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                     modifier = Modifier
                         .alpha(0.4f)
                         .align(Alignment.Bottom)

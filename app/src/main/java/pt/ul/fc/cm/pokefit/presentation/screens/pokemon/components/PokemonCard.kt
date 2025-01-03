@@ -27,7 +27,7 @@ fun PokemonCard(pokemon: Pokemon) {
         onClick = { /* TODO */ },
         shape = RoundedCornerShape(15.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer
+            containerColor = MaterialTheme.colorScheme.primaryContainer
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 3.dp,
@@ -35,7 +35,7 @@ fun PokemonCard(pokemon: Pokemon) {
         ),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 24.dp)
+            .padding(top = 8.dp, bottom = 16.dp)
     ) {
         Row(
             modifier = Modifier
@@ -54,7 +54,8 @@ fun PokemonCard(pokemon: Pokemon) {
                 Text(
                     text = pokemon.name.replaceFirstChar { it.uppercase() },
                     fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
             /* TODO: Add a pokemon level indicator */

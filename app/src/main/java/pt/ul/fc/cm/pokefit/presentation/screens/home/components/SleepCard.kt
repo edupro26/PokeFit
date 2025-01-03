@@ -24,7 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import pt.ul.fc.cm.pokefit.R
@@ -35,7 +34,7 @@ fun SleepCard() {
         onClick = { /* TODO */ },
         shape = RoundedCornerShape(15.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer
+            containerColor = MaterialTheme.colorScheme.primaryContainer
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 3.dp,
@@ -54,6 +53,7 @@ fun SleepCard() {
                 Text(
                     text = "Sleep",
                     style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
                 Spacer(modifier = Modifier.size(16.dp))
                 Row (
@@ -71,15 +71,18 @@ fun SleepCard() {
                 Text(
                     text = "00:00 - 08:30",
                     style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier.alpha(0.4f)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 LinearProgressIndicator(
                     progress = { 1f },
                     modifier = Modifier
-                        .height(10.dp)
-                        .clip(RoundedCornerShape(5.dp))
+                        .height(8.dp)
+                        .clip(RoundedCornerShape(8.dp))
                         .fillMaxWidth(),
                     color = MaterialTheme.colorScheme.secondary
+                        .copy(alpha = 0.6f),
                 )
             }
         }
@@ -92,10 +95,12 @@ private fun SleepValue() {
         Text(
             text = "8",
             style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onPrimaryContainer
         )
         Text(
             text = "h ",
             style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
             modifier = Modifier
                 .alpha(0.4f)
                 .align(Alignment.Bottom)
@@ -103,10 +108,12 @@ private fun SleepValue() {
         Text(
             text = "30",
             style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onPrimaryContainer
         )
         Text(
             text = "m",
             style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
             modifier = Modifier
                 .alpha(0.4f)
                 .align(Alignment.Bottom)
@@ -118,7 +125,7 @@ private fun SleepValue() {
 private fun SleepIcon() {
     Surface(
         shape = CircleShape,
-        color = Color.LightGray,
+        color = MaterialTheme.colorScheme.secondary,
     ) {
         Box(
             contentAlignment = Alignment.Center,
@@ -129,7 +136,7 @@ private fun SleepIcon() {
                     .padding(4.dp),
                 painter = painterResource(R.drawable.ic_stats_sleep),
                 contentDescription = "Sleep",
-                tint = Color.Black
+                tint = MaterialTheme.colorScheme.onSecondary
             )
         }
     }

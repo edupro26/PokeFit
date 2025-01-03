@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -16,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -29,6 +29,10 @@ import pt.ul.fc.cm.pokefit.presentation.screens.home.components.PermissionHandle
 import pt.ul.fc.cm.pokefit.presentation.screens.home.components.SelectedPokemon
 import pt.ul.fc.cm.pokefit.presentation.screens.home.components.SleepCard
 import pt.ul.fc.cm.pokefit.presentation.screens.home.components.StatsCard
+import pt.ul.fc.cm.pokefit.presentation.ui.theme.CaloriesIconBackground
+import pt.ul.fc.cm.pokefit.presentation.ui.theme.DistanceIconBackground
+import pt.ul.fc.cm.pokefit.presentation.ui.theme.StepsIconBackground
+import pt.ul.fc.cm.pokefit.presentation.ui.theme.TimeActiveIconBackground
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,6 +54,7 @@ fun HomeScreen(
         modifier = Modifier
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
+        containerColor = MaterialTheme.colorScheme.surface,
         topBar = { HomeTopBar(scrollBehavior) },
         bottomBar = { BottomAppBar(navController, navigate) }
     ) { paddingValues ->
@@ -64,6 +69,7 @@ fun HomeScreen(
                 modifier = Modifier
                     .padding(start = 18.dp, end = 18.dp)
             ) {
+                Spacer(modifier = Modifier.size(4.dp))
                 SelectedPokemon()
                 Spacer(modifier = Modifier.size(24.dp))
                 StatsSection(steps, calories, distance, timeActive)
@@ -91,7 +97,7 @@ private fun StatsSection(
             unit = "steps",
             title = "Steps",
             icon = R.drawable.ic_stats_steps,
-            iconTint = Color(0xFF4CAF50),
+            iconTint = StepsIconBackground,
             modifier = Modifier.weight(1f)
         )
         StatsCard(
@@ -100,7 +106,7 @@ private fun StatsSection(
             unit = "kcal",
             title = "Calories",
             icon = R.drawable.ic_stats_calories,
-            iconTint = Color(0xFFE91E63),
+            iconTint = CaloriesIconBackground,
             modifier = Modifier.weight(1f)
         )
     }
@@ -115,7 +121,7 @@ private fun StatsSection(
             unit = "km",
             title = "Distance",
             icon = R.drawable.ic_stats_distance,
-            iconTint = Color(0xFFFF5722),
+            iconTint = DistanceIconBackground,
             modifier = Modifier.weight(1f)
         )
         StatsCard(
@@ -124,7 +130,7 @@ private fun StatsSection(
             unit = "min",
             title = "Time Active",
             icon = R.drawable.ic_stats_time,
-            iconTint = Color(0xFF2196F3),
+            iconTint = TimeActiveIconBackground,
             modifier = Modifier.weight(1f)
         )
     }
