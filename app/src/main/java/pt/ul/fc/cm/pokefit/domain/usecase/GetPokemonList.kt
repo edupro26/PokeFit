@@ -3,7 +3,7 @@ package pt.ul.fc.cm.pokefit.domain.usecase
 import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import pt.ul.fc.cm.pokefit.domain.model.Pokemon
+import pt.ul.fc.cm.pokefit.domain.model.pokemon.Pokemon
 import pt.ul.fc.cm.pokefit.domain.repository.PokemonRepository
 import pt.ul.fc.cm.pokefit.utils.Constants.POKEMON_COUNT
 import retrofit2.HttpException

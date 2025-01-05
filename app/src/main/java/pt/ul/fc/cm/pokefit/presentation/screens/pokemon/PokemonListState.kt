@@ -1,6 +1,6 @@
 package pt.ul.fc.cm.pokefit.presentation.screens.pokemon
 
-import pt.ul.fc.cm.pokefit.domain.model.Pokemon
+import pt.ul.fc.cm.pokefit.domain.model.pokemon.Pokemon
 
 data class PokemonListState(
     val isLoading: Boolean = false,

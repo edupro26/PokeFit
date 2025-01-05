@@ -19,7 +19,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
-import pt.ul.fc.cm.pokefit.domain.model.Pokemon
+import pt.ul.fc.cm.pokefit.domain.model.pokemon.Pokemon
 
 @Composable
 fun PokemonCard(pokemon: Pokemon) {
