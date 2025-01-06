@@ -10,14 +10,14 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import pt.ul.fc.cm.pokefit.domain.usecase.Authentication
+import pt.ul.fc.cm.pokefit.domain.usecase.UserAccount
 import pt.ul.fc.cm.pokefit.presentation.screens.auth.AuthState
 import pt.ul.fc.cm.pokefit.utils.Response
 import javax.inject.Inject
 
 @HiltViewModel
 class SignupViewModel @Inject constructor(
-    private val authentication: Authentication
+    private val userAccount: UserAccount
 ) : ViewModel() {
 
     private val _state = mutableStateOf(AuthState())
@@ -29,7 +29,7 @@ class SignupViewModel @Inject constructor(
         name: String
     ) = viewModelScope.launch {
         _state.value = AuthState(isLoading = true)
-        val response = authentication.signUp(email, password, name)
+        val response = userAccount.signUp(email, password, name)
         when (response) {
             is Response.Success -> {
                 _state.value = _state.value.copy(success = true)
@@ -44,7 +44,7 @@ class SignupViewModel @Inject constructor(
         if (credential is CustomCredential && credential.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
             val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
             _state.value = AuthState(isLoading = true)
-            val response = authentication.continueWithGoogle(googleIdTokenCredential.idToken)
+            val response = userAccount.continueWithGoogle(googleIdTokenCredential.idToken)
             when (response) {
                 is Response.Success -> {
                     _state.value = _state.value.copy(success = true)

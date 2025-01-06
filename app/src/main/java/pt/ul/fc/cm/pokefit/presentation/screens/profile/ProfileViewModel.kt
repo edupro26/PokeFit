@@ -7,14 +7,14 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import pt.ul.fc.cm.pokefit.domain.usecase.Authentication
+import pt.ul.fc.cm.pokefit.domain.usecase.UserAccount
 import pt.ul.fc.cm.pokefit.domain.usecase.UserProfile
 import pt.ul.fc.cm.pokefit.utils.Resource
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val authentication: Authentication,
+    private val userAccount: UserAccount,
     private val userProfile: UserProfile
 ) : ViewModel() {
 
@@ -26,11 +26,11 @@ class ProfileViewModel @Inject constructor(
 
     init {
         _isUserSignedIn.value = true
-        loadUserProfile(authentication.getCurrentUser()!!.uid)
+        loadUserProfile(userAccount.getCurrentUser()!!.uid)
     }
 
     fun signOut() {
-        authentication.signOut()
+        userAccount.signOut()
         _isUserSignedIn.value = false
     }
 
