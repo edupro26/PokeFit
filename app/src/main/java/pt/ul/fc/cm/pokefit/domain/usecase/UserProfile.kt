@@ -18,7 +18,6 @@ class UserProfile @Inject constructor(
         when (response) {
             is Response.Success -> emit(Resource.Success(response.data))
             is Response.Failure -> emit(Resource.Failure(response.error))
-            is Response.Loading -> {}
         }
     }
 

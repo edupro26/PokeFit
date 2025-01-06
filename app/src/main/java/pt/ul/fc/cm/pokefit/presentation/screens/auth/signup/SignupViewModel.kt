@@ -37,7 +37,6 @@ class SignupViewModel @Inject constructor(
             is Response.Failure -> {
                 _state.value = AuthState(error = response.error)
             }
-            is Response.Loading -> {}
         }
     }
 
@@ -53,7 +52,6 @@ class SignupViewModel @Inject constructor(
                 is Response.Failure -> {
                     _state.value = AuthState(error = response.error)
                 }
-                is Response.Loading -> {}
             }
         } else {
             _state.value = AuthState(error = "Unexpected type of credential")
