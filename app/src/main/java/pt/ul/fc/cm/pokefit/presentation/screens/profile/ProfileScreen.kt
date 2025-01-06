@@ -1,6 +1,7 @@
 package pt.ul.fc.cm.pokefit.presentation.screens.profile
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -55,6 +56,14 @@ fun ProfileScreen(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            if (state.isLoading) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
             if (state.user != null) {
                 ProfilePicture(user = state.user)
                 Spacer(modifier = Modifier.size(16.dp))
@@ -64,14 +73,18 @@ fun ProfileScreen(
                     onSignout = { viewModel.signOut() }
                 )
             }
-            if (state.error.isNotBlank()) {
-                Text(
-                    text = "Error: ${state.error}",
-                    fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                    fontWeight = FontWeight.Bold,
-                )
+            if (!state.error.isNullOrBlank()) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Error: ${state.error}",
+                        fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
             }
-            if (state.isLoading) CircularProgressIndicator()
         }
     }
 }
