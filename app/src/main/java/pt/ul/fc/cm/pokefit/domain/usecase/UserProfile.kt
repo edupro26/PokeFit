@@ -16,7 +16,7 @@ class UserProfile @Inject constructor(
         emit(Resource.Loading)
         val response = userRepository.getUserById(uid)
         when (response) {
-            is Response.Success -> emit(Resource.Success(response.data))
+            is Response.Success -> emit(Resource.Success(response.data!!))
             is Response.Failure -> emit(Resource.Failure(response.error))
         }
     }
