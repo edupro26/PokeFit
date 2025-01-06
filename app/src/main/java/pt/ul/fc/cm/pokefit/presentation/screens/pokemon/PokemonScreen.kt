@@ -1,24 +1,34 @@
 package pt.ul.fc.cm.pokefit.presentation.screens.pokemon
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.components.PokemonCard
+import pt.ul.fc.cm.pokefit.R
 import pt.ul.fc.cm.pokefit.presentation.common.BottomAppBar
 import pt.ul.fc.cm.pokefit.presentation.common.TopAppBar
-import pt.ul.fc.cm.pokefit.R
+import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.components.PokemonCard
+import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.components.SelectStarterButton
+import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.components.StarterCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,9 +54,7 @@ fun PokemonScreen(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (state.isLoading) {
-                // TODO: Display a loading indicator
-            } else {
+            if (!state.isChoosing) {
                 LazyColumn(
                     modifier = Modifier
                         .padding(start = 18.dp, end = 18.dp)
@@ -55,7 +63,64 @@ fun PokemonScreen(
                         PokemonCard(pokemon)
                     }
                 }
+            } else {
+                ShowStarterPokemon(state, viewModel)
             }
+            if (state.isLoading) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+            if (!state.error.isNullOrBlank()) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Error: ${state.error}",
+                        fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ShowStarterPokemon(
+    state: PokemonListState,
+    viewModel: PokemonViewModel
+) {
+    Column(
+        modifier = Modifier
+            .padding(start = 32.dp, end = 32.dp)
+    ) {
+        Spacer(modifier = Modifier.size(16.dp))
+        Text(
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            text = "Choose your starter Pokemon",
+            style = MaterialTheme.typography.titleMedium
+        )
+        Spacer(modifier = Modifier.size(24.dp))
+        if (state.pokemon.isNotEmpty()) {
+            var selected by remember { mutableIntStateOf(-1) }
+            StarterCard(0, selected, state) {
+                selected = if (selected != 0) 0 else -1
+            }
+            Spacer(modifier = Modifier.size(16.dp))
+            StarterCard(1, selected, state) {
+                selected = if (selected != 1) 1 else -1
+            }
+            Spacer(modifier = Modifier.size(16.dp))
+            StarterCard(2, selected, state) {
+                selected = if (selected != 2) 2 else -1
+            }
+            Spacer(modifier = Modifier.size(24.dp))
+            SelectStarterButton(selected, state, viewModel)
         }
     }
 }
