@@ -15,8 +15,8 @@ class InitialViewModel @Inject constructor(
     private val authentication: Authentication
 ) : ViewModel() {
 
-    private val _authState = mutableStateOf(AuthState(isLoading = true))
-    val authState: State<AuthState> = _authState
+    private val _state = mutableStateOf(InitialState(isLoading = true))
+    val state: State<InitialState> = _state
 
     init {
         getAuthState()
@@ -26,7 +26,7 @@ class InitialViewModel @Inject constructor(
         delay(500) // Wait for all app resources to load
         authentication.refreshAuthState()
             .collect { isSignedIn  ->
-                _authState.value = AuthState(
+                _state.value = InitialState(
                     isLoading = false,
                     isSignedIn = isSignedIn
                 )

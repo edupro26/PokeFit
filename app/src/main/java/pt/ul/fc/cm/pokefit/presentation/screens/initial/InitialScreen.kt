@@ -18,15 +18,15 @@ fun InitialScreen(
     Surface(
         modifier = Modifier.fillMaxSize()
     ) {
-        val authState = viewModel.authState.value
-        if (authState.isLoading) {
+        val state = viewModel.state.value
+        if (state.isLoading) {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator()
             }
-        } else if (!authState.isSignedIn) {
+        } else if (!state.isSignedIn) {
             /**
              * TODO small app description and greetings
              * TODO continue to signin ou signout

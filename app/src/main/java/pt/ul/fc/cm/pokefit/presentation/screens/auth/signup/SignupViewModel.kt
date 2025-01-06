@@ -11,6 +11,7 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Co
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import pt.ul.fc.cm.pokefit.domain.usecase.Authentication
+import pt.ul.fc.cm.pokefit.presentation.screens.auth.AuthState
 import pt.ul.fc.cm.pokefit.utils.Response
 import javax.inject.Inject
 
@@ -19,23 +20,43 @@ class SignupViewModel @Inject constructor(
     private val authentication: Authentication
 ) : ViewModel() {
 
-    private val _state = mutableStateOf<Response<Unit>>(Response.Loading)
-    val state: State<Response<Unit>> get() = _state
+    private val _state = mutableStateOf(AuthState())
+    val state: State<AuthState> = _state
 
-    fun signUp(email: String, password: String, name: String) {
-        viewModelScope.launch {
-            _state.value = authentication.signUp(email, password, name)
+    fun signUp(
+        email: String,
+        password: String,
+        name: String
+    ) = viewModelScope.launch {
+        _state.value = AuthState(isLoading = true)
+        val response = authentication.signUp(email, password, name)
+        when (response) {
+            is Response.Success -> {
+                _state.value = _state.value.copy(success = true)
+            }
+            is Response.Failure -> {
+                _state.value = AuthState(error = response.error)
+            }
+            is Response.Loading -> {}
         }
     }
 
-    fun signUpWithGoogle(credential: Credential) {
-        viewModelScope.launch {
-            if (credential is CustomCredential && credential.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
-                val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
-                _state.value = authentication.continueWithGoogle(googleIdTokenCredential.idToken)
-            } else {
-                _state.value = Response.Failure("Unexpected type of credential")
+    fun signUpWithGoogle(credential: Credential) = viewModelScope.launch {
+        if (credential is CustomCredential && credential.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+            val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
+            _state.value = AuthState(isLoading = true)
+            val response = authentication.continueWithGoogle(googleIdTokenCredential.idToken)
+            when (response) {
+                is Response.Success -> {
+                    _state.value = _state.value.copy(success = true)
+                }
+                is Response.Failure -> {
+                    _state.value = AuthState(error = response.error)
+                }
+                is Response.Loading -> {}
             }
+        } else {
+            _state.value = AuthState(error = "Unexpected type of credential")
         }
     }
 
