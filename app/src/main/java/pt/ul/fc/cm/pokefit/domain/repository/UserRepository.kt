@@ -7,6 +7,8 @@ interface UserRepository {
 
     suspend fun saveUser(user: User): Response<Unit>
 
+    suspend fun incrementPokemonCount(uid: String): Response<Unit>
+
     suspend fun getUserById(uid: String): Response<User>
 
 }

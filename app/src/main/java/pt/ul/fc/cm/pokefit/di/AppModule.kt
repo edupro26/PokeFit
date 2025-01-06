@@ -39,7 +39,7 @@ object AppModule {
     @Provides
     @Singleton
     fun providePokemonRepository(api: PokeApi): PokemonRepository {
-        return PokemonRepositoryImpl(api)
+        return PokemonRepositoryImpl(api, Firebase.firestore)
     }
 
     @Provides

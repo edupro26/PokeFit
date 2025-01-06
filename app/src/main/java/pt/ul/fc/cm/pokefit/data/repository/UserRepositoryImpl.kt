@@ -1,6 +1,7 @@
 package pt.ul.fc.cm.pokefit.data.repository
 
 import android.util.Log
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import pt.ul.fc.cm.pokefit.domain.model.User
@@ -22,6 +23,18 @@ class UserRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             Log.e("UserRepository", "Failed to save user (${e::class.java.simpleName})")
             Response.Failure("Failed to save user")
+        }
+    }
+
+    override suspend fun incrementPokemonCount(uid: String): Response<Unit> {
+        return try {
+            store.collection("users").document(uid)
+                .update("pokemonCount", FieldValue.increment(1))
+                .await()
+            Response.Success(Unit)
+        } catch (e: Exception) {
+            Log.e("UserRepository", "Failed to increment pokemon count (${e::class.java.simpleName})")
+            Response.Failure("Failed to increment pokemon count")
         }
     }
 
