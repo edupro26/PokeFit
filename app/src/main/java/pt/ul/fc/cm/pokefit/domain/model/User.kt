@@ -6,4 +6,5 @@ data class User(
     val username: String = "",
     val displayName: String = "",
     val photoUrl: String? = null,
+    val pokemonCount: Int = 0
 )

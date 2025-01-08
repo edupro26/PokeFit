@@ -1,12 +1,15 @@
 package pt.ul.fc.cm.pokefit.presentation.screens.auth.signup
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -17,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.LinkAnnotation
@@ -29,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import pt.ul.fc.cm.pokefit.R
 import pt.ul.fc.cm.pokefit.presentation.navigation.Screen
-import pt.ul.fc.cm.pokefit.presentation.screens.auth.components.ContinueWithButton
+import pt.ul.fc.cm.pokefit.presentation.screens.auth.components.ContinueWithGoogle
 import pt.ul.fc.cm.pokefit.presentation.screens.auth.components.Divider
 import pt.ul.fc.cm.pokefit.presentation.screens.auth.components.GeneralTextField
 import pt.ul.fc.cm.pokefit.presentation.screens.auth.components.AuthenticationButton
@@ -40,9 +44,6 @@ fun SignupScreen(
     navigate: (String, Boolean) -> Unit,
     viewModel: SignupViewModel = hiltViewModel()
 ) {
-    var name by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
     val state = viewModel.state.value
     Surface(
         modifier = Modifier.fillMaxSize()
@@ -53,43 +54,69 @@ fun SignupScreen(
                 .padding(42.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            SignupScreenHeader()
-            Spacer(modifier = Modifier.size(24.dp))
-            GeneralTextField(
-                value = name,
-                labelValue = stringResource(R.string.name),
-                onValueChange = { value -> name = value }
-            )
-            GeneralTextField(
-                value = email,
-                labelValue = stringResource(R.string.email),
-                onValueChange = { value -> email = value }
-            )
-            PasswordTextField(
-                value = password,
-                labelValue = stringResource(R.string.password),
-                onValueChange = { value -> password = value }
-            )
-            Spacer(modifier = Modifier.size(12.dp))
-            AuthenticationButton(
-                state = state,
-                labelValue = stringResource(R.string.sign_up),
-                navigate = navigate,
-                onClick = { viewModel.signUp(email, password, name) }
-            )
-            Divider(top = 18.dp, bottom = 16.dp)
-            ContinueWithButton(
-                state = state,
-                labelValue = stringResource(R.string.continue_with_google),
-                painter = R.drawable.ic_logo_google,
-                navigate = navigate
-            ) { credential ->
-                viewModel.signUpWithGoogle(credential)
+            val context = LocalContext.current
+            if (state.isLoading) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            } else {
+                SignupContent(navigate, viewModel)
             }
-            Spacer(modifier = Modifier.size(96.dp))
-            NavigateToSignin(navigate)
+            if (state.success) {
+                navigate(Screen.Home.route, true)
+            }
+            if (!state.error.isNullOrBlank()) {
+                Toast.makeText(
+                    context,
+                    state.error,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
+}
+
+@Composable
+private fun SignupContent(
+    navigate: (String, Boolean) -> Unit,
+    viewModel: SignupViewModel
+) {
+    var name by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    SignupScreenHeader()
+    Spacer(modifier = Modifier.size(24.dp))
+    GeneralTextField(
+        value = name,
+        labelValue = stringResource(R.string.name),
+        onValueChange = { value -> name = value }
+    )
+    GeneralTextField(
+        value = email,
+        labelValue = stringResource(R.string.email),
+        onValueChange = { value -> email = value }
+    )
+    PasswordTextField(
+        value = password,
+        labelValue = stringResource(R.string.password),
+        onValueChange = { value -> password = value }
+    )
+    Spacer(modifier = Modifier.size(12.dp))
+    AuthenticationButton(
+        labelValue = stringResource(R.string.sign_up),
+        onClick = { viewModel.signUp(email, password, name) }
+    )
+    Divider(top = 18.dp, bottom = 16.dp)
+    ContinueWithGoogle(
+        labelValue = stringResource(R.string.continue_with_google),
+    ) {
+        credential -> viewModel.signUpWithGoogle(credential)
+    }
+    Spacer(modifier = Modifier.size(96.dp))
+    NavigateToSignin(navigate)
 }
 
 @Composable
