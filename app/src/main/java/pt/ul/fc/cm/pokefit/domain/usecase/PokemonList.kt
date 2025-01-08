@@ -5,7 +5,6 @@ import kotlinx.coroutines.flow.flow
 import pt.ul.fc.cm.pokefit.domain.model.pokemon.Pokemon
 import pt.ul.fc.cm.pokefit.domain.repository.PokemonRepository
 import pt.ul.fc.cm.pokefit.domain.repository.UserRepository
-import pt.ul.fc.cm.pokefit.utils.Constants.POKEMON_COUNT
 import pt.ul.fc.cm.pokefit.utils.Constants.STARTER_1
 import pt.ul.fc.cm.pokefit.utils.Constants.STARTER_2
 import pt.ul.fc.cm.pokefit.utils.Constants.STARTER_3
@@ -22,8 +21,8 @@ class PokemonList @Inject constructor(
 
     suspend fun saveStarterPokemon(uid: String, pokemon: Pokemon): Response<Unit> {
         val starterPokemon = pokemon.copy(
-            isLocked = false,
-            isSelected = true
+            locked = false,
+            selected = true
         )
         var response = pokemonRepository.savePokemon(uid, starterPokemon)
         if (response is Response.Success) {
@@ -33,10 +32,23 @@ class PokemonList @Inject constructor(
         return response
     }
 
-    fun loadPokemonList(): Flow<Resource<List<Pokemon>>> = flow {
+    fun loadUserPokemon(uid: String): Flow<Resource<List<Pokemon>>> = flow {
+        emit(Resource.Loading)
+        var response = pokemonRepository.getUserPokemon(uid)
+        when (response) {
+            is Response.Success -> {
+                emit(Resource.Success(response.data!!))
+            }
+            is Response.Failure -> {
+                emit(Resource.Failure(response.error))
+            }
+        }
+    }
+
+    fun loadLockedPokemon(limit: Int): Flow<Resource<List<Pokemon>>> = flow {
         try {
             emit(Resource.Loading)
-            val list = pokemonRepository.getPokemonList(POKEMON_COUNT)
+            val list = pokemonRepository.getPokemonListApi(limit)
             emit(Resource.Success(list))
         } catch (e: HttpException) {
             emit(Resource.Failure(e.localizedMessage ?: "An unexpected error occurred"))
@@ -48,9 +60,9 @@ class PokemonList @Inject constructor(
     fun loadStarterPokemon(): Flow<Resource<List<Pokemon>>> = flow {
         try {
             emit(Resource.Loading)
-            val p1 = pokemonRepository.getPokemonInfo(STARTER_1)
-            val p2 = pokemonRepository.getPokemonInfo(STARTER_2)
-            val p3 = pokemonRepository.getPokemonInfo(STARTER_3)
+            val p1 = pokemonRepository.getPokemonInfoApi(STARTER_1)
+            val p2 = pokemonRepository.getPokemonInfoApi(STARTER_2)
+            val p3 = pokemonRepository.getPokemonInfoApi(STARTER_3)
             emit(Resource.Success(listOf(p1, p2, p3)))
         } catch (e: HttpException) {
             emit(Resource.Failure(e.localizedMessage ?: "An unexpected error occurred"))
@@ -64,8 +76,7 @@ class PokemonList @Inject constructor(
         val user = userRepository.getUserById(uid)
         when (user) {
             is Response.Success -> {
-                val count = user.data?.pokemonCount!!
-                emit(Resource.Success(count))
+                emit(Resource.Success(user.data?.pokemonCount!!))
             }
             is Response.Failure -> {
                 emit(Resource.Failure(user.error))

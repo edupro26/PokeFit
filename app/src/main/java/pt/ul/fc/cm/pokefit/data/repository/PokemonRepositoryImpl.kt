@@ -28,11 +28,25 @@ class PokemonRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getPokemonList(limit: Int): List<Pokemon> {
+    override suspend fun getUserPokemon(uid: String): Response<List<Pokemon>> {
+        return try {
+            val pokemonList = store.collection("users")
+                .document(uid).collection("pokemon")
+                .get().await().documents
+                .map { it.toObject(Pokemon::class.java)!! }
+                .sortedByDescending { it.selected }
+            Response.Success(pokemonList)
+        } catch (e: Exception) {
+            Log.e("PokemonRepository", "Failed to get all pokemon (${e::class.java.simpleName})")
+            Response.Failure("Failed to get all pokemon")
+        }
+    }
+
+    override suspend fun getPokemonListApi(limit: Int): List<Pokemon> {
         return pokeApi.getPokemonList(limit).fromDto()
     }
 
-    override suspend fun getPokemonInfo(name: String): Pokemon {
+    override suspend fun getPokemonInfoApi(name: String): Pokemon {
         return pokeApi.getPokemonInfo(name).fromDto()
     }
 

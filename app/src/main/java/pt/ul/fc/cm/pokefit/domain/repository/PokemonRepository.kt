@@ -7,8 +7,10 @@ interface PokemonRepository {
 
     suspend fun savePokemon(uid: String, pokemon: Pokemon): Response<Unit>
 
-    suspend fun getPokemonList(limit: Int): List<Pokemon>
+    suspend fun getUserPokemon(uid: String): Response<List<Pokemon>>
 
-    suspend fun getPokemonInfo(name: String): Pokemon
+    suspend fun getPokemonListApi(limit: Int): List<Pokemon>
+
+    suspend fun getPokemonInfoApi(name: String): Pokemon
 
 }

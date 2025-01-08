@@ -9,6 +9,7 @@ import pt.ul.fc.cm.pokefit.domain.usecase.PokemonList
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import pt.ul.fc.cm.pokefit.utils.Constants.POKEMON_COUNT
 import pt.ul.fc.cm.pokefit.domain.model.pokemon.Pokemon
 import pt.ul.fc.cm.pokefit.domain.usecase.UserAccount
 import pt.ul.fc.cm.pokefit.utils.Resource
@@ -17,21 +18,21 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PokemonViewModel @Inject constructor(
-    private val userAccount: UserAccount,
+    userAccount: UserAccount,
     private val pokemonList: PokemonList
 ) : ViewModel() {
 
     private val _state = mutableStateOf(PokemonListState())
     val state: State<PokemonListState> = _state
 
-    init {
-        val uid = userAccount.getCurrentUser()!!.uid
-        initListState(uid)
-    }
+    private val uid = userAccount.getCurrentUser()!!.uid
+
+    private val listSize = POKEMON_COUNT
+
+    init { initListState() }
 
     fun chooseStarterPokemon(pokemon: Pokemon) = viewModelScope.launch {
         _state.value = PokemonListState(isLoading = true)
-        val uid = userAccount.getCurrentUser()!!.uid
         val response = pokemonList.saveStarterPokemon(uid, pokemon)
         when (response) {
             is Response.Success -> { loadPokemonList() }
@@ -42,13 +43,37 @@ class PokemonViewModel @Inject constructor(
     }
 
     private fun loadPokemonList() {
-        pokemonList.loadPokemonList().onEach { resource ->
+        pokemonList.loadUserPokemon(uid).onEach { resource ->
             when (resource) {
                 is Resource.Loading -> {
                     _state.value = PokemonListState(isLoading = true)
                 }
                 is Resource.Success -> {
-                    _state.value = PokemonListState(pokemon = resource.data)
+                    if (resource.data.size < POKEMON_COUNT) {
+                        _state.value = _state.value.copy(pokemon = resource.data)
+                        loadLockedPokemon()
+                    } else {
+                        _state.value = PokemonListState(pokemon = resource.data)
+                    }
+                }
+                is Resource.Failure -> {
+                    _state.value = PokemonListState(error = resource.error)
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun loadLockedPokemon() {
+        pokemonList.loadLockedPokemon(listSize).onEach { resource ->
+            when (resource) {
+                is Resource.Loading -> {
+                    _state.value = _state.value.copy(isLoading = true)
+                }
+                is Resource.Success -> {
+                    val list = _state.value.pokemon
+                    _state.value = PokemonListState(
+                        pokemon = (list + resource.data).distinctBy { it.id }
+                    )
                 }
                 is Resource.Failure -> {
                     _state.value = PokemonListState(error = resource.error)
@@ -76,7 +101,7 @@ class PokemonViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    private fun initListState(uid: String) {
+    private fun initListState() {
         pokemonList.getUserPokemonCount(uid).onEach { resource ->
             when (resource) {
                 is Resource.Loading -> {
