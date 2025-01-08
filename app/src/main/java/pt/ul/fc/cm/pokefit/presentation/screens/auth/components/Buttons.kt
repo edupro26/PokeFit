@@ -35,15 +35,12 @@ import androidx.credentials.exceptions.GetCredentialCancellationException
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import pt.ul.fc.cm.pokefit.presentation.navigation.Screen
+import pt.ul.fc.cm.pokefit.R
 import pt.ul.fc.cm.pokefit.utils.Constants.WEB_CLIENT_ID
-import pt.ul.fc.cm.pokefit.utils.Response
 
 @Composable
 fun AuthenticationButton(
-    state: Response<Unit>,
     labelValue: String,
-    navigate: (String, Boolean) -> Unit,
     onClick: () -> Unit = {}
 ) {
     Button(
@@ -70,24 +67,18 @@ fun AuthenticationButton(
             )
         }
     }
-    HandleAuthResponse(state, navigate)
 }
 
 @Composable
-fun ContinueWithButton(
-    state: Response<Unit>,
+fun ContinueWithGoogle(
     labelValue: String,
-    painter: Int,
-    navigate: (String, Boolean) -> Unit,
     onGetCredential: (Credential) -> Unit
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     Surface (
         modifier = Modifier.fillMaxWidth().heightIn(48.dp),
-        onClick = {
-            handleGoogleRequest(coroutineScope, context, onGetCredential)
-        },
+        onClick = { handleGoogleRequest(coroutineScope, context, onGetCredential) },
         shape = RoundedCornerShape(15.dp),
         color = MaterialTheme.colorScheme.primaryContainer,
     ) {
@@ -97,7 +88,7 @@ fun ContinueWithButton(
         ) {
             Icon(
                 modifier = Modifier.size(36.dp).padding(end = 8.dp),
-                painter = painterResource(id = painter),
+                painter = painterResource(R.drawable.ic_logo_google),
                 tint = Color.Unspecified,
                 contentDescription = null
             )
@@ -108,21 +99,6 @@ fun ContinueWithButton(
                 color = MaterialTheme.colorScheme.onPrimaryContainer
             )
         }
-        HandleAuthResponse(state, navigate)
-    }
-}
-
-@Composable
-private fun HandleAuthResponse(
-    state: Response<Unit>,
-    navigate: (String, Boolean) -> Unit
-) {
-    when (state) {
-        is Response.Success -> { navigate(Screen.Home.route, true) }
-        is Response.Failure -> {
-            Toast.makeText(LocalContext.current, state.error, Toast.LENGTH_SHORT).show()
-        }
-        else -> {}
     }
 }
 
@@ -148,7 +124,11 @@ private fun handleGoogleRequest(
             onGetCredential(result.credential)
         } catch (e: Exception) {
             if (e !is GetCredentialCancellationException) {
-                Toast.makeText(context, "Error getting credential", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context,
+                    "Error getting credential",
+                    Toast.LENGTH_LONG
+                ).show()
             }
             Log.d("GoogleAuthButton", e.message.toString())
         }

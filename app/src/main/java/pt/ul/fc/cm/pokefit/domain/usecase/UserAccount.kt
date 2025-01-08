@@ -7,7 +7,7 @@ import pt.ul.fc.cm.pokefit.domain.repository.UserRepository
 import pt.ul.fc.cm.pokefit.utils.Response
 import javax.inject.Inject
 
-class Authentication @Inject constructor(
+class UserAccount @Inject constructor(
     private val authRepository: AuthRepository,
     private val userRepository: UserRepository
 ) {
