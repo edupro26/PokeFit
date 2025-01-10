@@ -26,6 +26,7 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
+    //TODO Increment user Score
     override suspend fun incrementPokemonCount(uid: String): Response<Unit> {
         return try {
             store.collection("users").document(uid)
@@ -35,6 +36,34 @@ class UserRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             Log.e("UserRepository", "Failed to increment pokemon count (${e::class.java.simpleName})")
             Response.Failure("Failed to increment pokemon count")
+        }
+    }
+
+    override suspend fun setScore(uid: String, score: Int): Response<Unit> {
+        return try {
+            store.collection("users").document(uid)
+                .update("userScore", score)
+                .await()
+            Response.Success(Unit)
+        } catch (e: Exception) {
+            Log.e("UserRepository", "Failed to set user score (${e::class.java.simpleName}): ${e.message}")
+            Response.Failure("Failed to set user score")
+        }
+    }
+
+    override suspend fun getGlobalLeaderboard(limit: Int): Response<List<User>> {
+        return try {
+            val users = store.collection("users")
+                .orderBy("userScore", com.google.firebase.firestore.Query.Direction.DESCENDING) // Sort by userScore in descending order
+                .limit(limit.toLong())
+                .get()
+                .await()
+                .toObjects(User::class.java)
+
+            Response.Success(users)
+        } catch (e: Exception) {
+            Log.e("UserRepository", "Failed to retrieve global leaderboard (${e::class.java.simpleName}): ${e.message}")
+            Response.Failure("Failed to retrieve global leaderboard")
         }
     }
 
