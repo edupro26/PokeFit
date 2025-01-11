@@ -27,6 +27,10 @@ fun UserCard(rank: Int, user: User, isCurrentUser: Boolean) {
             else
                 MaterialTheme.colorScheme.primaryContainer
         ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 3.dp,
+            pressedElevation = 3.dp
+        ),
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp, horizontal = 16.dp)
