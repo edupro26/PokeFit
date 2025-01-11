@@ -9,6 +9,9 @@ interface UserRepository {
 
     suspend fun incrementPokemonCount(uid: String): Response<Unit>
 
-    suspend fun getUserById(uid: String): Response<User>
+    suspend fun setScore(uid: String, score: Int): Response<Unit>
 
+    suspend fun getGlobalLeaderboard(limit: Int): Response<List<User>>
+
+    suspend fun getUserById(uid: String): Response<User>
 }

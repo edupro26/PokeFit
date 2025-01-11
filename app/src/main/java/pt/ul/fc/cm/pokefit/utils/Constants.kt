@@ -18,4 +18,6 @@ object Constants {
 
     const val POKEMON_COUNT = 100
 
+    const val TOP_10 = 10
+
 }
