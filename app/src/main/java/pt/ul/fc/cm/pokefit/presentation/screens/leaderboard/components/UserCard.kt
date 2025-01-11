@@ -10,17 +10,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import pt.ul.fc.cm.pokefit.R
 import pt.ul.fc.cm.pokefit.domain.model.User
 
 @Composable
-fun UserCard(rank: Int, user: User) {
+fun UserCard(rank: Int, user: User, isCurrentUser: Boolean) {
     Card(
         shape = RoundedCornerShape(15.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
+            containerColor = if (isCurrentUser)
+                MaterialTheme.colorScheme.primary
+            else
+                MaterialTheme.colorScheme.primaryContainer
         ),
         modifier = Modifier
             .fillMaxWidth()
@@ -43,7 +48,11 @@ fun UserCard(rank: Int, user: User) {
 
             // Circular avatar
             Image(
-                painter = rememberAsyncImagePainter(model = user.photoUrl),
+                painter = if (user.photoUrl != null) {
+                    rememberAsyncImagePainter(model = user.photoUrl)
+                } else {
+                    painterResource(id = R.drawable.trainer) // Use placeholder drawable
+                },
                 contentDescription = "${user.displayName}'s avatar",
                 modifier = Modifier
                     .size(48.dp)
@@ -67,7 +76,7 @@ fun UserCard(rank: Int, user: User) {
                 text = "${user.userScore} pts",
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colorScheme.primary
+                color = MaterialTheme.colorScheme.onPrimaryContainer
             )
         }
     }

@@ -41,6 +41,7 @@ fun LeaderboardScreen(
     viewModel: LeaderboardViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value // Get the state from the ViewModel
+    val currentUserId = viewModel.currentUserId // Get the current user ID
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     Scaffold(
@@ -70,6 +71,7 @@ fun LeaderboardScreen(
                 state.isLoading -> {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
                 }
+
                 !state.error.isNullOrBlank() -> {
                     Text(
                         text = state.error,
@@ -78,13 +80,18 @@ fun LeaderboardScreen(
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
                 }
+
                 else -> {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         itemsIndexed(state.users) { index, user ->
-                            UserCard(rank = index + 1, user = user)
+                            UserCard(
+                                rank = index + 1,
+                                user = user,
+                                isCurrentUser = user.uid == currentUserId // Highlight current user
+                            )
                         }
                     }
                 }
