@@ -3,6 +3,7 @@ package pt.ul.fc.cm.pokefit.data.repository
 import android.util.Log
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query.Direction.DESCENDING
 import kotlinx.coroutines.tasks.await
 import pt.ul.fc.cm.pokefit.domain.model.User
 import pt.ul.fc.cm.pokefit.domain.repository.UserRepository
@@ -26,7 +27,6 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    //TODO Increment user Score
     override suspend fun incrementPokemonCount(uid: String): Response<Unit> {
         return try {
             store.collection("users").document(uid)
@@ -40,6 +40,7 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun setScore(uid: String, score: Int): Response<Unit> {
+        // TODO: Finish the user score logic (and rename to FitPoints)
         return try {
             store.collection("users").document(uid)
                 .update("userScore", score)
@@ -54,12 +55,10 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun getGlobalLeaderboard(limit: Int): Response<List<User>> {
         return try {
             val users = store.collection("users")
-                .orderBy("userScore", com.google.firebase.firestore.Query.Direction.DESCENDING) // Sort by userScore in descending order
+                .orderBy("userScore", DESCENDING)
                 .limit(limit.toLong())
-                .get()
-                .await()
+                .get().await()
                 .toObjects(User::class.java)
-
             Response.Success(users)
         } catch (e: Exception) {
             Log.e("UserRepository", "Failed to retrieve global leaderboard (${e::class.java.simpleName}): ${e.message}")
