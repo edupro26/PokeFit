@@ -34,8 +34,7 @@ class PokemonList @Inject constructor(
 
     fun loadUserPokemon(uid: String): Flow<Resource<List<Pokemon>>> = flow {
         emit(Resource.Loading)
-        var response = pokemonRepository.getUserPokemon(uid)
-        when (response) {
+        when (val response = pokemonRepository.getUserPokemon(uid)) {
             is Response.Success -> {
                 emit(Resource.Success(response.data!!))
             }
@@ -73,8 +72,7 @@ class PokemonList @Inject constructor(
 
     fun getUserPokemonCount(uid: String): Flow<Resource<Int>> = flow {
         emit(Resource.Loading)
-        val user = userRepository.getUserById(uid)
-        when (user) {
+        when (val user = userRepository.getUserById(uid)) {
             is Response.Success -> {
                 emit(Resource.Success(user.data?.pokemonCount!!))
             }

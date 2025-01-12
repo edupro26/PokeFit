@@ -22,7 +22,7 @@ class InitialViewModel @Inject constructor(
         getAuthState()
     }
 
-    fun getAuthState() = viewModelScope.launch {
+    private fun getAuthState() = viewModelScope.launch {
         delay(500) // Wait for all app resources to load
         userAccount.refreshAuthState()
             .collect { isSignedIn  ->

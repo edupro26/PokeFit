@@ -14,8 +14,7 @@ class UserProfile @Inject constructor(
 
     fun load(uid: String): Flow<Resource<User>> = flow {
         emit(Resource.Loading)
-        val response = userRepository.getUserById(uid)
-        when (response) {
+        when (val response = userRepository.getUserById(uid)) {
             is Response.Success -> emit(Resource.Success(response.data!!))
             is Response.Failure -> emit(Resource.Failure(response.error))
         }
