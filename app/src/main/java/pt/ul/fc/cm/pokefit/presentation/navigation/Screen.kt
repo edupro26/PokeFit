@@ -2,18 +2,18 @@ package pt.ul.fc.cm.pokefit.presentation.navigation
 
 sealed class Screen(val route: String) {
 
-    object Initial : Screen("initial")
+    data object Initial : Screen("initial")
 
-    object Signin : Screen("signin")
+    data object Signin : Screen("signin")
 
-    object Signup : Screen("signup")
+    data object Signup : Screen("signup")
 
-    object Home : Screen("home")
+    data object Home : Screen("home")
 
-    object Pokemon : Screen("pokemon")
+    data object Pokemon : Screen("pokemon")
 
-    object Leaderboards : Screen("leaderboards")
+    data object Leaderboards : Screen("leaderboards")
 
-    object Profile : Screen("profile")
+    data object Profile : Screen("profile")
 
 }

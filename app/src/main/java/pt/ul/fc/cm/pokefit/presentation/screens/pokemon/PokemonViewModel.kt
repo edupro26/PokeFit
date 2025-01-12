@@ -33,8 +33,7 @@ class PokemonViewModel @Inject constructor(
 
     fun chooseStarterPokemon(pokemon: Pokemon) = viewModelScope.launch {
         _state.value = PokemonListState(isLoading = true)
-        val response = pokemonList.saveStarterPokemon(uid, pokemon)
-        when (response) {
+        when (val response = pokemonList.saveStarterPokemon(uid, pokemon)) {
             is Response.Success -> { loadPokemonList() }
             is Response.Failure -> {
                 _state.value = PokemonListState(error = response.error)
