@@ -44,31 +44,51 @@ android {
 }
 
 dependencies {
+    // -----------------------
     // Firebase Dependencies
+    // -----------------------
     implementation(platform((libs.firebase.bom)))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.crashlytics)
 
-    // Google Authentication
+    // ---------------------------------------
+    // Google Authentication Dependencies
+    // ---------------------------------------
     implementation(libs.google.play.services.auth)
     implementation(libs.android.credentials)
     implementation(libs.android.credentials.play.services.auth)
     implementation(libs.identity.googleid)
 
-    // Dagger-Hilt
+    // --------------------
+    // Dependency Injection
+    // --------------------
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
 
-    // Compose dependencies
-    implementation(libs.glide)
+    // ----------------------
+    // Networking Libraries
+    // ----------------------
     implementation(libs.retrofit2.retrofit)
     implementation(libs.converter.gson)
+
+    // ---------------------------
+    // Image Loading Libraries
+    // ---------------------------
     implementation(libs.coil.compose)
+    implementation(libs.glide)
+
+    // ---------------------------------------
+    // Navigation and Lifecycle Dependencies
+    // ---------------------------------------
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+
+    // ----------------------
+    // Jetpack Compose Core
+    // ----------------------
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
@@ -77,7 +97,9 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.runtime.livedata)
 
-    // Test dependencies
+    // -------------------------
+    // Testing Dependencies
+    // -------------------------
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
