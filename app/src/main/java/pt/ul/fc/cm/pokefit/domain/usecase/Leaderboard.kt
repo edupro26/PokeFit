@@ -14,8 +14,7 @@ class Leaderboard @Inject constructor(
 
     fun loadLeaderBoard(limit: Int): Flow<Resource<List<User>>> = flow {
         emit(Resource.Loading)
-        val response = userRepository.getGlobalLeaderboard(limit)
-        when (response) {
+        when (val response = userRepository.getGlobalLeaderboard(limit)) {
             is Response.Success -> {
                 emit(Resource.Success(response.data!!))
             }

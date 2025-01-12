@@ -28,8 +28,7 @@ class SigninViewModel @Inject constructor(
         password: String
     ) = viewModelScope.launch {
         _state.value = AuthState(isLoading = true)
-        val response = userAccount.signIn(email, password)
-        when (response) {
+        when (val response = userAccount.signIn(email, password)) {
             is Response.Success -> {
                 _state.value = _state.value.copy(success = true)
             }
@@ -43,8 +42,7 @@ class SigninViewModel @Inject constructor(
         if (credential is CustomCredential && credential.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
             val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
             _state.value = AuthState(isLoading = true)
-            val response = userAccount.continueWithGoogle(googleIdTokenCredential.idToken)
-            when (response) {
+            when (val response = userAccount.continueWithGoogle(googleIdTokenCredential.idToken)) {
                 is Response.Success -> {
                     _state.value = _state.value.copy(success = true)
                 }
