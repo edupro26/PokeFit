@@ -15,7 +15,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PokeFit"
-        android:enableOnBackInvokedCallback="true"
         tools:targetApi="35">
         <activity
             android:name=".presentation.MainActivity"
