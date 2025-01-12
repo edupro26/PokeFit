@@ -37,7 +37,7 @@ fun PermissionHandler(
             }
         }
     )
-    isGranted = remeberPermissionState(isGranted, context, countSteps)
+    isGranted = rememberPermissionState(isGranted, context, countSteps)
     when {
         !isGranted -> {
             LaunchedEffect(Unit) {
@@ -58,7 +58,7 @@ fun PermissionHandler(
 }
 
 @Composable
-private fun remeberPermissionState(
+private fun rememberPermissionState(
     isGranted: Boolean,
     context: Context,
     countSteps: () -> Unit
