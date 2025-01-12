@@ -2,7 +2,6 @@
     <string name="app_name">PokéFit</string>
     <string name="poke">POKÉ</string>
     <string name="fit">FIT</string>
-    <string name="welcome_back">Welcome Back!</string>
     <string name="create_an_account">Create an account</string>
     <string name="name">Enter your name</string>
     <string name="email">Enter your email</string>
@@ -18,10 +17,6 @@
     <string name="pokemon">Pokemon</string>
     <string name="leaderboards">Leaderboards</string>
     <string name="profile">Profile</string>
-    <string name="steps">Steps</string>
-    <string name="distance">Distance</string>
-    <string name="sleep">Sleep</string>
-    <string name="level">Level</string>
     <string name="activity_permission">We need permission to track your physical activity. To use this feature, please grant the permission in the phone settings</string>
     <string name="permission_required">Permission Required</string>
     <string name="go_to_settings">Go to Settings</string>
