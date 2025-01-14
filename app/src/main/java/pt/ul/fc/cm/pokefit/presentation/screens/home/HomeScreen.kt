@@ -24,7 +24,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import pt.ul.fc.cm.pokefit.R
 import pt.ul.fc.cm.pokefit.presentation.common.BottomAppBar
+import pt.ul.fc.cm.pokefit.presentation.common.BottomBarItem
 import pt.ul.fc.cm.pokefit.presentation.common.TopAppBar
+import pt.ul.fc.cm.pokefit.presentation.navigation.Screen
 import pt.ul.fc.cm.pokefit.presentation.screens.home.components.PermissionHandler
 import pt.ul.fc.cm.pokefit.presentation.screens.home.components.SelectedPokemon
 import pt.ul.fc.cm.pokefit.presentation.screens.home.components.SleepCard
@@ -42,9 +44,9 @@ fun HomeScreen(
     viewModel: HomeScreenViewModel = hiltViewModel()
 ) {
     val steps by viewModel.steps
-    val calories = 0 // TODO
+    val calories by viewModel.calories
     val distance = 0 // TODO
-    val timeActive = 0 // TODO
+    val timeActive by viewModel.activeTimeMinutes
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     PermissionHandler(
         context = LocalContext.current,
@@ -55,7 +57,7 @@ fun HomeScreen(
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         containerColor = MaterialTheme.colorScheme.surface,
-        topBar = { HomeTopBar(scrollBehavior) },
+        topBar = { HomeTopBar(scrollBehavior, navigate) },
         bottomBar = { BottomAppBar(navController, navigate) }
     ) { paddingValues ->
         Column(
@@ -138,12 +140,12 @@ private fun StatsSection(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun HomeTopBar(scrollBehavior: TopAppBarScrollBehavior) {
+private fun HomeTopBar(scrollBehavior: TopAppBarScrollBehavior, navigate: (String, Boolean) -> Unit) {
     TopAppBar(
         scrollBehavior = scrollBehavior,
         firstIcon = R.drawable.ic_top_map,
         firstDescription = "Map",
-        onFirstIconClick = { /*TODO*/ },
+        onFirstIconClick = { navigate(Screen.Map.route, false) },
         secondIcon = R.drawable.ic_top_tasks,
         secondDescription = "Goals",
         onSecondIconClick = { /*TODO*/ },

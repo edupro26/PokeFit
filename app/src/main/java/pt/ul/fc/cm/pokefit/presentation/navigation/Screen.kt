@@ -10,6 +10,8 @@ sealed class Screen(val route: String) {
 
     data object Home : Screen("home")
 
+    data object Map : Screen("map")
+
     data object Pokemon : Screen("pokemon")
 
     data object Leaderboards : Screen("leaderboards")

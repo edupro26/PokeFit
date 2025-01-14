@@ -60,6 +60,12 @@ dependencies {
     implementation(libs.android.credentials.play.services.auth)
     implementation(libs.identity.googleid)
 
+    // ---------------------------------------
+    // Google Maps Dependencies
+    // ---------------------------------------
+    implementation(libs.android.maps.compose)
+    implementation(libs.play.services.maps)
+
     // --------------------
     // Dependency Injection
     // --------------------

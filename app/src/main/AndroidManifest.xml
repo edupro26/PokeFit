@@ -16,6 +16,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PokeFit"
         tools:targetApi="35">
+        <!-- Google Maps API Key -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCFrm4eJuchvMsCNhBJCpYXpaexmg3Pg5k" />
         <activity
             android:name=".presentation.MainActivity"
             android:exported="true"
@@ -26,5 +30,6 @@
             </intent-filter>
         </activity>
     </application>
+
 
 </manifest>
