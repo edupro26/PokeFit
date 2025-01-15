@@ -61,10 +61,24 @@ dependencies {
     implementation(libs.identity.googleid)
 
     // ---------------------------------------
-    // Google Maps Dependencies
+    // Google Maps & location Dependencies
     // ---------------------------------------
     implementation(libs.android.maps.compose)
     implementation(libs.play.services.maps)
+    implementation(libs.play.services.location)
+
+    // ---------------------------------------
+    // Room (Armazenamento Local)
+    // ---------------------------------------
+    implementation (libs.androidx.room.runtime)
+    implementation (libs.androidx.room.ktx)
+    ksp (libs.androidx.room.compiler)
+
+    // ---------------------------------------
+    // Coroutines (threads)
+    // ---------------------------------------
+    implementation (libs.kotlinx.coroutines.android)
+
 
     // --------------------
     // Dependency Injection
