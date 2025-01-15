@@ -36,9 +36,10 @@ fun MapScreen(
     navigate: (String, Boolean) -> Unit,
     mapViewModel: MapViewModel = hiltViewModel()
 ) {
-    LaunchedEffect(Unit) {
-        mapViewModel.clearAllPoints()
-    }
+    //Limpa routes antigas (debug for now)
+//    LaunchedEffect(Unit) {
+//        mapViewModel.clearAllPoints()
+//    }
 
     // Inicia as atualizações de localização
     LocationUpdate(mapViewModel = mapViewModel)
