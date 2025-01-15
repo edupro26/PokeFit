@@ -54,36 +54,39 @@ fun PokemonScreen(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (!state.isChoosing) {
-                LazyColumn(
-                    modifier = Modifier
-                        .padding(start = 18.dp, end = 18.dp)
-                ) {
-                    items(state.pokemon) { pokemon ->
-                        PokemonCard(pokemon)
+            when {
+                state.isLoading -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
                     }
                 }
-            } else {
-                ShowStarterPokemon(state, viewModel)
-            }
-            if (state.isLoading) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
+                state.pokemon.size > 3 -> {
+                    LazyColumn(
+                        modifier = Modifier
+                            .padding(start = 18.dp, end = 18.dp)
+                    ) {
+                        items(state.pokemon) { pokemon ->
+                            PokemonCard(pokemon)
+                        }
+                    }
                 }
-            }
-            if (!state.error.isNullOrBlank()) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "Error: ${state.error}",
-                        fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                        fontWeight = FontWeight.Bold,
-                    )
+                state.pokemon.size == 3 -> {
+                    ShowStarterPokemon(state, viewModel)
+                }
+                !state.error.isNullOrBlank() -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Error: ${state.error}",
+                            fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
                 }
             }
         }
