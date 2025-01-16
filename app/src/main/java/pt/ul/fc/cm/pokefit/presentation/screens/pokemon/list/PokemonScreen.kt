@@ -28,6 +28,7 @@ import androidx.navigation.NavController
 import pt.ul.fc.cm.pokefit.R
 import pt.ul.fc.cm.pokefit.presentation.common.BottomAppBar
 import pt.ul.fc.cm.pokefit.presentation.common.TopAppBar
+import pt.ul.fc.cm.pokefit.presentation.navigation.Screen
 import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.list.components.ConfirmationDialog
 import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.list.components.PokemonCard
 import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.list.components.SelectStarterButton
@@ -67,14 +68,7 @@ fun PokemonScreen(
                     }
                 }
                 state.pokemon.size > 3 -> {
-                    LazyColumn(
-                        modifier = Modifier
-                            .padding(start = 18.dp, end = 18.dp)
-                    ) {
-                        items(state.pokemon) { pokemon ->
-                            PokemonCard(pokemon)
-                        }
-                    }
+                    ShowPokemonList(state, navController)
                 }
                 state.pokemon.size == 3 -> {
                     ShowStarterPokemon(state, viewModel)
@@ -92,6 +86,28 @@ fun PokemonScreen(
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun ShowPokemonList(
+    state: PokemonListState,
+    navController: NavController
+) {
+    LazyColumn(
+        modifier = Modifier
+            .padding(start = 18.dp, end = 18.dp)
+    ) {
+        items(state.pokemon) { pokemon ->
+            PokemonCard(
+                pokemon = pokemon,
+                onClick = {
+                    navController.navigate(
+                        Screen.PokemonDetail.route + "/${it.id}"
+                    )
+                }
+            )
         }
     }
 }

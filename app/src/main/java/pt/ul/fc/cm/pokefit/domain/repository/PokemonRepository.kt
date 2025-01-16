@@ -11,6 +11,8 @@ interface PokemonRepository {
 
     suspend fun getUserPokemon(uid: String): Response<List<Pokemon>>
 
+    suspend fun getPokemon(id: Int, uid: String): Response<Pokemon>
+
     suspend fun getPokemonListApi(limit: Int): List<Pokemon>
 
     suspend fun getPokemonInfoApi(name: String): Pokemon

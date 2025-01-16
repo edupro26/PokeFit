@@ -50,6 +50,23 @@ class PokemonRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getPokemon(id: Int, uid: String): Response<Pokemon> {
+        return try {
+            val pokemon = store.collection("users")
+                .document(uid).collection("pokemon")
+                .document(id.toString())
+                .get().await()
+            if (pokemon.exists()) {
+                Response.Success(pokemon.toObject(Pokemon::class.java))
+            } else {
+                Response.Success(null)
+            }
+        } catch (e: Exception) {
+            Log.e("PokemonRepository", "Failed to get pokemon $id (${e::class.java.simpleName})")
+            Response.Failure("Failed to get pokemon")
+        }
+    }
+
     override suspend fun getPokemonListApi(limit: Int): List<Pokemon> {
         if (_apiCache.isNotEmpty()) return _apiCache
         return pokeApi.getPokemonList(limit)

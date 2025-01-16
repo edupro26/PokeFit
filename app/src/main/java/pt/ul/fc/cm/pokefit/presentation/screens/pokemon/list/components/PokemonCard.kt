@@ -27,9 +27,12 @@ import pt.ul.fc.cm.pokefit.R
 import pt.ul.fc.cm.pokefit.domain.model.pokemon.Pokemon
 
 @Composable
-fun PokemonCard(pokemon: Pokemon) {
+fun PokemonCard(
+    pokemon: Pokemon,
+    onClick: (Pokemon) -> Unit
+) {
     Card(
-        onClick = { /* TODO navigate to details screen */ },
+        onClick = { onClick(pokemon) },
         shape = RoundedCornerShape(15.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer

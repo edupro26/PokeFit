@@ -12,6 +12,8 @@ sealed class Screen(val route: String) {
 
     data object Pokemon : Screen("pokemon")
 
+    data object PokemonDetail : Screen("pokemon_detail")
+
     data object Leaderboards : Screen("leaderboards")
 
     data object Profile : Screen("profile")
