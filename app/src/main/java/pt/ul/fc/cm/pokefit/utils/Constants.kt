@@ -16,7 +16,7 @@ object Constants {
 
     const val STARTER_3 = "squirtle"
 
-    const val POKEMON_COUNT = 100
+    const val POKEMON_COUNT = 1025
 
     const val TOP_10 = 10
 
