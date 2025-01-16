@@ -41,7 +41,7 @@ import pt.ul.fc.cm.pokefit.presentation.ui.theme.TimeActiveIconBackground
 fun HomeScreen(
     navController: NavController,
     navigate: (String, Boolean) -> Unit,
-    viewModel: HomeScreenViewModel = hiltViewModel()
+    viewModel: HomeScreenViewModel = hiltViewModel(),
 ) {
     val steps by viewModel.steps
     val calories by viewModel.calories

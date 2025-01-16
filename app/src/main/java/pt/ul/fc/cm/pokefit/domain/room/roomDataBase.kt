@@ -25,6 +25,9 @@ interface RoutePointDao {
     @Query("SELECT * FROM route_points ORDER BY timestamp ASC")
     fun getAllRoutePoints(): Flow<List<RoutePoint>>
 
+    @Query("SELECT * FROM route_points ORDER BY timestamp DESC LIMIT 1")
+    suspend fun getLastRoutePoint(): RoutePoint?
+
     @Query("DELETE FROM route_points")
     suspend fun clearAllRoutePoints() // New function to delete all points
 }
@@ -43,7 +46,7 @@ object DatabaseModule {
             context,
             AppDatabase::class.java,
             "app_database"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 
     @Provides
