@@ -14,11 +14,13 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -26,6 +28,7 @@ import androidx.navigation.NavController
 import pt.ul.fc.cm.pokefit.R
 import pt.ul.fc.cm.pokefit.presentation.common.BottomAppBar
 import pt.ul.fc.cm.pokefit.presentation.common.TopAppBar
+import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.components.ConfirmationDialog
 import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.components.PokemonCard
 import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.components.SelectStarterButton
 import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.components.StarterCard
@@ -102,28 +105,39 @@ private fun ShowStarterPokemon(
         modifier = Modifier
             .padding(start = 32.dp, end = 32.dp)
     ) {
+        var selected by remember { mutableIntStateOf(-1) }
+        var showConfirmation by remember { mutableStateOf(false) }
         Spacer(modifier = Modifier.size(16.dp))
         Text(
             modifier = Modifier.align(Alignment.CenterHorizontally),
-            text = "Choose your starter Pokemon",
+            text = stringResource(R.string.choose_your_starter_pokemon),
             style = MaterialTheme.typography.titleMedium
         )
         Spacer(modifier = Modifier.size(24.dp))
-        if (state.pokemon.isNotEmpty()) {
-            var selected by remember { mutableIntStateOf(-1) }
-            StarterCard(0, selected, state) {
-                selected = if (selected != 0) 0 else -1
-            }
-            Spacer(modifier = Modifier.size(16.dp))
-            StarterCard(1, selected, state) {
-                selected = if (selected != 1) 1 else -1
-            }
-            Spacer(modifier = Modifier.size(16.dp))
-            StarterCard(2, selected, state) {
-                selected = if (selected != 2) 2 else -1
-            }
-            Spacer(modifier = Modifier.size(24.dp))
-            SelectStarterButton(selected, state, viewModel)
+        StarterCard(0, selected, state) {
+            selected = if (selected != 0) 0 else -1
+        }
+        Spacer(modifier = Modifier.size(16.dp))
+        StarterCard(1, selected, state) {
+            selected = if (selected != 1) 1 else -1
+        }
+        Spacer(modifier = Modifier.size(16.dp))
+        StarterCard(2, selected, state) {
+            selected = if (selected != 2) 2 else -1
+        }
+        Spacer(modifier = Modifier.size(24.dp))
+        SelectStarterButton {
+            if (selected != -1) showConfirmation = true
+        }
+        if (showConfirmation) {
+            ConfirmationDialog(
+                pokemon = state.pokemon[selected],
+                onConfirm = { pokemon ->
+                    viewModel.chooseStarterPokemon(pokemon)
+                    showConfirmation = false
+                },
+                onCancel = { showConfirmation = false }
+            )
         }
     }
 }
