@@ -1,4 +1,4 @@
-package pt.ul.fc.cm.pokefit.presentation.screens.pokemon
+package pt.ul.fc.cm.pokefit.presentation.screens.pokemon.list
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
@@ -28,10 +28,10 @@ import androidx.navigation.NavController
 import pt.ul.fc.cm.pokefit.R
 import pt.ul.fc.cm.pokefit.presentation.common.BottomAppBar
 import pt.ul.fc.cm.pokefit.presentation.common.TopAppBar
-import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.components.ConfirmationDialog
-import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.components.PokemonCard
-import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.components.SelectStarterButton
-import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.components.StarterCard
+import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.list.components.ConfirmationDialog
+import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.list.components.PokemonCard
+import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.list.components.SelectStarterButton
+import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.list.components.StarterCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

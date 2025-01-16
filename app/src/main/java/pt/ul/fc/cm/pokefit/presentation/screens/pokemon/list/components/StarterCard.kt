@@ -1,4 +1,4 @@
-package pt.ul.fc.cm.pokefit.presentation.screens.pokemon.components
+package pt.ul.fc.cm.pokefit.presentation.screens.pokemon.list.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -13,7 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
-import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.PokemonListState
+import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.list.PokemonListState
 
 @Composable
 fun StarterCard(

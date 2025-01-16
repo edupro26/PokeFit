@@ -1,4 +1,4 @@
-package pt.ul.fc.cm.pokefit.presentation.screens.pokemon.components
+package pt.ul.fc.cm.pokefit.presentation.screens.pokemon.list.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image

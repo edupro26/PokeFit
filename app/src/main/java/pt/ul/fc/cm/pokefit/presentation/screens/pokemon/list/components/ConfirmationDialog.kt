@@ -1,4 +1,4 @@
-package pt.ul.fc.cm.pokefit.presentation.screens.pokemon.components
+package pt.ul.fc.cm.pokefit.presentation.screens.pokemon.list.components
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme

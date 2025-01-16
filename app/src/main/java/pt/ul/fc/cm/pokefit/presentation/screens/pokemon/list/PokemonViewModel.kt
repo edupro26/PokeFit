@@ -1,4 +1,4 @@
-package pt.ul.fc.cm.pokefit.presentation.screens.pokemon
+package pt.ul.fc.cm.pokefit.presentation.screens.pokemon.list
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
