@@ -13,13 +13,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
-import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.list.PokemonListState
+import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.list.ListState
 
 @Composable
 fun StarterCard(
     pokemonIndex: Int,
     selectedIndex: Int,
-    state: PokemonListState,
+    state: ListState,
     onSelect: () -> Unit
 ) {
     val pokemon = state.pokemon[pokemonIndex]

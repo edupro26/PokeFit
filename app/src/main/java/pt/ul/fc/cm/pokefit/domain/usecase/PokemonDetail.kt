@@ -14,7 +14,7 @@ class PokemonDetail @Inject constructor(
 
     fun loadPokemon(id: Int, uid: String): Flow<Resource<Pokemon>> = flow {
         emit(Resource.Loading)
-        when (val response = pokemonRepository.getPokemon(id, uid)) {
+        when (val response = pokemonRepository.getUserPokemon(id, uid)) {
             is Response.Success -> {
                 if (response.data != null) {
                     emit(Resource.Success(response.data))

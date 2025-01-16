@@ -36,7 +36,7 @@ class PokemonRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getUserPokemon(uid: String): Response<List<Pokemon>> {
+    override suspend fun getAllUserPokemon(uid: String): Response<List<Pokemon>> {
         return try {
             val pokemon = store.collection("users")
                 .document(uid).collection("pokemon")
@@ -50,7 +50,7 @@ class PokemonRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getPokemon(id: Int, uid: String): Response<Pokemon> {
+    override suspend fun getUserPokemon(id: Int, uid: String): Response<Pokemon> {
         return try {
             val pokemon = store.collection("users")
                 .document(uid).collection("pokemon")

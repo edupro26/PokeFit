@@ -9,9 +9,9 @@ interface PokemonRepository {
 
     suspend fun savePokemon(uid: String, pokemon: Pokemon): Response<Unit>
 
-    suspend fun getUserPokemon(uid: String): Response<List<Pokemon>>
+    suspend fun getAllUserPokemon(uid: String): Response<List<Pokemon>>
 
-    suspend fun getPokemon(id: Int, uid: String): Response<Pokemon>
+    suspend fun getUserPokemon(id: Int, uid: String): Response<Pokemon>
 
     suspend fun getPokemonListApi(limit: Int): List<Pokemon>
 

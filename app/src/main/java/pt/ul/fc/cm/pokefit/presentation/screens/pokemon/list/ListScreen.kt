@@ -36,10 +36,10 @@ import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.list.components.StarterC
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PokemonScreen(
+fun ListScreen(
     navController: NavController,
     navigate: (String, Boolean) -> Unit,
-    viewModel: PokemonViewModel = hiltViewModel()
+    viewModel: ListViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -92,7 +92,7 @@ fun PokemonScreen(
 
 @Composable
 private fun ShowPokemonList(
-    state: PokemonListState,
+    state: ListState,
     navController: NavController
 ) {
     LazyColumn(
@@ -114,8 +114,8 @@ private fun ShowPokemonList(
 
 @Composable
 private fun ShowStarterPokemon(
-    state: PokemonListState,
-    viewModel: PokemonViewModel
+    state: ListState,
+    viewModel: ListViewModel
 ) {
     Column(
         modifier = Modifier

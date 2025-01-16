@@ -12,7 +12,7 @@ import pt.ul.fc.cm.pokefit.presentation.screens.home.HomeScreen
 import pt.ul.fc.cm.pokefit.presentation.screens.initial.InitialScreen
 import pt.ul.fc.cm.pokefit.presentation.screens.leaderboard.LeaderboardScreen
 import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.detail.DetailScreen
-import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.list.PokemonScreen
+import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.list.ListScreen
 import pt.ul.fc.cm.pokefit.presentation.screens.profile.ProfileScreen
 
 @Composable
@@ -38,8 +38,8 @@ fun NavGraph(navController: NavHostController) {
                 navigate = navController::navigate,
             )
         }
-        composable(route = Screen.Pokemon.route) {
-            PokemonScreen(
+        composable(route = Screen.PokemonList.route) {
+            ListScreen(
                 navController = navController,
                 navigate = navController::navigate
             )
