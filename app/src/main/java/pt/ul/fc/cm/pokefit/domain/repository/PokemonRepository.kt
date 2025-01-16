@@ -15,6 +15,6 @@ interface PokemonRepository {
 
     suspend fun getPokemonListApi(limit: Int): List<Pokemon>
 
-    suspend fun getPokemonInfoApi(name: String): Pokemon
+    suspend fun getPokemonInfoApi(id: Int): Pokemon
 
 }

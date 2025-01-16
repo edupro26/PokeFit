@@ -74,8 +74,8 @@ class PokemonRepositoryImpl @Inject constructor(
             .also { _apiCache.addAll(it) }
     }
 
-    override suspend fun getPokemonInfoApi(name: String): Pokemon {
-        return pokeApi.getPokemonInfo(name).fromDto()
+    override suspend fun getPokemonInfoApi(id: Int): Pokemon {
+        return pokeApi.getPokemonInfo(id).fromDto()
     }
 
 }

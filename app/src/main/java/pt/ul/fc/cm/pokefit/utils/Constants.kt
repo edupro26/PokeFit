@@ -10,11 +10,11 @@ object Constants {
 
     const val WEB_CLIENT_ID = "817780719264-m6eukupbabftd0bg5v01l90mf8isf7r8.apps.googleusercontent.com"
 
-    const val STARTER_1 = "bulbasaur"
+    const val STARTER_1 = 1
 
-    const val STARTER_2 = "charmander"
+    const val STARTER_2 = 4
 
-    const val STARTER_3 = "squirtle"
+    const val STARTER_3 = 7
 
     const val POKEMON_COUNT = 1025
 

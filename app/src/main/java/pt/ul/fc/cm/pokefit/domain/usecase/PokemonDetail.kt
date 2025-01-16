@@ -20,7 +20,7 @@ class PokemonDetail @Inject constructor(
                     emit(Resource.Success(response.data))
                 } else {
                     emit(Resource.Success(
-                        pokemonRepository.getPokemonInfoApi(id.toString())
+                        pokemonRepository.getPokemonInfoApi(id)
                     ))
                 }
             }
