@@ -14,25 +14,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.PokemonListState
-import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.PokemonViewModel
+import pt.ul.fc.cm.pokefit.R
 
 @Composable
 fun SelectStarterButton(
-    selected: Int,
-    state: PokemonListState,
-    viewModel: PokemonViewModel
+    onClick: () -> Unit
 ) {
     Button(
         modifier = Modifier
             .height(48.dp)
             .fillMaxWidth(),
-        onClick = {
-            if (selected != -1) {
-                viewModel.chooseStarterPokemon(state.pokemon[selected])
-            }
-        },
+        onClick = { onClick() },
         contentPadding = PaddingValues(0.dp),
         colors = ButtonDefaults.buttonColors(Color.Transparent),
     ) {
@@ -47,7 +41,7 @@ fun SelectStarterButton(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "Select",
+                text = stringResource(R.string.select),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onPrimary,
             )

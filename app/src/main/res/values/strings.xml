@@ -20,4 +20,8 @@
     <string name="activity_permission">We need permission to track your physical activity. To use this feature, please grant the permission in the phone settings</string>
     <string name="permission_required">Permission Required</string>
     <string name="go_to_settings">Go to Settings</string>
+    <string name="select">Select</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="choose_your_starter_pokemon">Choose your starter Pokemon</string>
 </resources>
