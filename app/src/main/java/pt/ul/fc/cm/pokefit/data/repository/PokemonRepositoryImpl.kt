@@ -17,6 +17,9 @@ class PokemonRepositoryImpl @Inject constructor(
     private val store: FirebaseFirestore
 ) : PokemonRepository {
 
+    private val _apiCache = mutableListOf<Pokemon>()
+    override val apiCache: List<Pokemon> get() = _apiCache
+
     override suspend fun savePokemon(uid: String, pokemon: Pokemon): Response<Unit> {
         return try {
             store.runTransaction { transaction ->
@@ -48,7 +51,10 @@ class PokemonRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getPokemonListApi(limit: Int): List<Pokemon> {
-        return pokeApi.getPokemonList(limit).fromDto()
+        if (_apiCache.isNotEmpty()) return _apiCache
+        return pokeApi.getPokemonList(limit)
+            .fromDto()
+            .also { _apiCache.addAll(it) }
     }
 
     override suspend fun getPokemonInfoApi(name: String): Pokemon {
