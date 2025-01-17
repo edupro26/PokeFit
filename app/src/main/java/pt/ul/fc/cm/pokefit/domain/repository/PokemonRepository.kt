@@ -5,9 +5,9 @@ import pt.ul.fc.cm.pokefit.utils.Response
 
 interface PokemonRepository {
 
-    val apiCache: List<Pokemon>
-
     suspend fun savePokemon(uid: String, pokemon: Pokemon): Response<Unit>
+
+    suspend fun selectPokemon(id: Int, uid: String): Response<Unit>
 
     suspend fun getAllUserPokemon(uid: String): Response<List<Pokemon>>
 

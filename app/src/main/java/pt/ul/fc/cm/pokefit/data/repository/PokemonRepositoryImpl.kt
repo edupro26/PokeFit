@@ -17,8 +17,8 @@ class PokemonRepositoryImpl @Inject constructor(
     private val store: FirebaseFirestore
 ) : PokemonRepository {
 
-    private val _apiCache = mutableListOf<Pokemon>()
-    override val apiCache: List<Pokemon> get() = _apiCache
+    private val listCache = mutableListOf<Pokemon>()
+    private val mapCache = mutableMapOf<Int, Pokemon>()
 
     override suspend fun savePokemon(uid: String, pokemon: Pokemon): Response<Unit> {
         return try {
@@ -28,11 +28,31 @@ class PokemonRepositoryImpl @Inject constructor(
                     .document(pokemon.id.toString())
                 transaction.set(pokemonRef, pokemon)
                 transaction.update(userRef, "pokemonCount", FieldValue.increment(1))
-            }
+            }.await()
             Response.Success(Unit)
         } catch (e: Exception) {
             Log.e("PokemonRepository", "Failed to save pokemon (${e::class.java.simpleName})")
             Response.Failure("Failed to save pokemon")
+        }
+    }
+
+    override suspend fun selectPokemon(id: Int, uid: String): Response<Unit> {
+        return try {
+            val collectionRef = store.collection("users")
+                .document(uid).collection("pokemon")
+            val selectedQuery = collectionRef.whereEqualTo("selected", true)
+                .get().await()
+            store.runTransaction { transaction ->
+                for (doc in selectedQuery.documents) {
+                    transaction.update(doc.reference, "selected", false)
+                }
+                val pokemonRef = collectionRef.document(id.toString())
+                transaction.update(pokemonRef, "selected", true)
+            }.await()
+            Response.Success(Unit)
+        } catch (e: Exception) {
+            Log.e("PokemonRepository", "Failed to select pokemon $id (${e::class.java.simpleName})")
+            Response.Failure("Failed to select pokemon")
         }
     }
 
@@ -68,14 +88,17 @@ class PokemonRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getPokemonListApi(limit: Int): List<Pokemon> {
-        if (_apiCache.isNotEmpty()) return _apiCache
+        if (listCache.isNotEmpty()) return listCache
         return pokeApi.getPokemonList(limit)
             .fromDto()
-            .also { _apiCache.addAll(it) }
+            .also { listCache.addAll(it) }
     }
 
     override suspend fun getPokemonInfoApi(id: Int): Pokemon {
-        return pokeApi.getPokemonInfo(id).fromDto()
+        if (mapCache.containsKey(id)) return mapCache[id]!!
+        return pokeApi.getPokemonInfo(id)
+            .fromDto()
+            .also { mapCache[id] = it }
     }
 
 }

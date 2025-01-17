@@ -1,17 +1,22 @@
 package pt.ul.fc.cm.pokefit.presentation.screens.pokemon.detail
 
-import javax.inject.Inject
-import dagger.hilt.android.lifecycle.HiltViewModel
-import androidx.compose.runtime.mutableStateOf
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import pt.ul.fc.cm.pokefit.domain.usecase.PokemonDetail
 import pt.ul.fc.cm.pokefit.domain.usecase.UserAccount
+import pt.ul.fc.cm.pokefit.utils.Constants.PARAM_POKEMON_ID
 import pt.ul.fc.cm.pokefit.utils.Resource
+import pt.ul.fc.cm.pokefit.utils.Response
+import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
@@ -26,8 +31,28 @@ class DetailViewModel @Inject constructor(
     private val uid = userAccount.getCurrentUser()!!.uid
 
     init {
-        savedStateHandle.get<String>("pokemonId")?.let { id ->
+        savedStateHandle.get<String>(PARAM_POKEMON_ID)?.let { id ->
             loadPokemon(id.toInt(), uid)
+        }
+    }
+
+    fun selectPokemon(
+        id: Int,
+        context: Context,
+        popStack: () -> Unit
+    ) = viewModelScope.launch {
+        when (val response = pokemonDetail.selectPokemon(id, uid)) {
+            is Response.Success -> {
+                popStack()
+                Toast.makeText(
+                    context, "Pokemon selected", Toast.LENGTH_SHORT
+                ).show()
+            }
+            is Response.Failure -> {
+                Toast.makeText(
+                    context, response.error, Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 

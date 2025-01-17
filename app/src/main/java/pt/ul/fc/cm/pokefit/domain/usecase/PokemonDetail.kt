@@ -12,6 +12,10 @@ class PokemonDetail @Inject constructor(
     private val pokemonRepository: PokemonRepository
 ) {
 
+    suspend fun selectPokemon(id: Int, uid: String): Response<Unit> {
+        return pokemonRepository.selectPokemon(id, uid)
+    }
+
     fun loadPokemon(id: Int, uid: String): Flow<Resource<Pokemon>> = flow {
         emit(Resource.Loading)
         when (val response = pokemonRepository.getUserPokemon(id, uid)) {

@@ -14,6 +14,7 @@ import pt.ul.fc.cm.pokefit.presentation.screens.leaderboard.LeaderboardScreen
 import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.detail.DetailScreen
 import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.list.ListScreen
 import pt.ul.fc.cm.pokefit.presentation.screens.profile.ProfileScreen
+import pt.ul.fc.cm.pokefit.utils.Constants.PARAM_POKEMON_ID
 
 @Composable
 fun NavGraph(navController: NavHostController) {
@@ -45,7 +46,7 @@ fun NavGraph(navController: NavHostController) {
             )
         }
         composable(
-            route = Screen.PokemonDetail.route + "/{pokemonId}"
+            route = Screen.PokemonDetail.route + "/{$PARAM_POKEMON_ID}"
         ) {
             DetailScreen(navController = navController)
         }

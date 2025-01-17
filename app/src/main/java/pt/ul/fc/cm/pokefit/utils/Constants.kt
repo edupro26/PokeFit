@@ -20,4 +20,6 @@ object Constants {
 
     const val TOP_10 = 10
 
+    const val PARAM_POKEMON_ID = "pokemonId"
+
 }
