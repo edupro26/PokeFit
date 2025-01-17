@@ -39,7 +39,7 @@ class PokemonList @Inject constructor(
 
     fun loadPokemonList(uid: String): Flow<Resource<List<Pokemon>>> = flow {
         emit(Resource.Loading)
-        when (val locked = pokemonRepository.getUserPokemon(uid)) {
+        when (val locked = pokemonRepository.getAllUserPokemon(uid)) {
             is Response.Success -> {
                 try {
                     val unlocked = pokemonRepository.getPokemonListApi(POKEMON_COUNT)

@@ -7,5 +7,6 @@ data class User(
     val displayName: String = "",
     val photoUrl: String? = null,
     val pokemonCount: Int = 0,
-    val userScore: Int = 0
+    val userScore: Int = 0,
+    val fitCoins: Int = 500
 )

@@ -24,4 +24,6 @@
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="choose_your_starter_pokemon">Choose your starter Pokemon</string>
+    <string name="confirm_starter">Select this pokemon as your starter?</string>
+    <string name="confirm_unlock">Are you sure you want to unlock this pokemon?</string>
 </resources>

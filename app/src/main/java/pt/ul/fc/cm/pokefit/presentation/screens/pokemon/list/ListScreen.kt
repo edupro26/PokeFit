@@ -1,7 +1,12 @@
-package pt.ul.fc.cm.pokefit.presentation.screens.pokemon
+package pt.ul.fc.cm.pokefit.presentation.screens.pokemon.list
 
-import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
@@ -28,17 +33,18 @@ import androidx.navigation.NavController
 import pt.ul.fc.cm.pokefit.R
 import pt.ul.fc.cm.pokefit.presentation.common.BottomAppBar
 import pt.ul.fc.cm.pokefit.presentation.common.TopAppBar
-import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.components.ConfirmationDialog
-import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.components.PokemonCard
-import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.components.SelectStarterButton
-import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.components.StarterCard
+import pt.ul.fc.cm.pokefit.presentation.navigation.Screen
+import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.common.ConfirmationDialog
+import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.list.components.PokemonCard
+import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.list.components.SelectStarterButton
+import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.list.components.StarterCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PokemonScreen(
+fun ListScreen(
     navController: NavController,
     navigate: (String, Boolean) -> Unit,
-    viewModel: PokemonViewModel = hiltViewModel()
+    viewModel: ListViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -67,14 +73,7 @@ fun PokemonScreen(
                     }
                 }
                 state.pokemon.size > 3 -> {
-                    LazyColumn(
-                        modifier = Modifier
-                            .padding(start = 18.dp, end = 18.dp)
-                    ) {
-                        items(state.pokemon) { pokemon ->
-                            PokemonCard(pokemon)
-                        }
-                    }
+                    ShowPokemonList(state, navController)
                 }
                 state.pokemon.size == 3 -> {
                     ShowStarterPokemon(state, viewModel)
@@ -97,9 +96,31 @@ fun PokemonScreen(
 }
 
 @Composable
+private fun ShowPokemonList(
+    state: ListState,
+    navController: NavController
+) {
+    LazyColumn(
+        modifier = Modifier
+            .padding(start = 18.dp, end = 18.dp)
+    ) {
+        items(state.pokemon) { pokemon ->
+            PokemonCard(
+                pokemon = pokemon,
+                onClick = {
+                    navController.navigate(
+                        Screen.PokemonDetail.route + "/${it.id}"
+                    )
+                }
+            )
+        }
+    }
+}
+
+@Composable
 private fun ShowStarterPokemon(
-    state: PokemonListState,
-    viewModel: PokemonViewModel
+    state: ListState,
+    viewModel: ListViewModel
 ) {
     Column(
         modifier = Modifier
@@ -131,12 +152,12 @@ private fun ShowStarterPokemon(
         }
         if (showConfirmation) {
             ConfirmationDialog(
-                pokemon = state.pokemon[selected],
-                onConfirm = { pokemon ->
-                    viewModel.chooseStarterPokemon(pokemon)
+                text = stringResource(R.string.confirm_starter),
+                onCancel = { showConfirmation = false },
+                onConfirm = {
+                    viewModel.chooseStarterPokemon(state.pokemon[selected])
                     showConfirmation = false
-                },
-                onCancel = { showConfirmation = false }
+                }
             )
         }
     }

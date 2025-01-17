@@ -1,4 +1,4 @@
-package pt.ul.fc.cm.pokefit.presentation.screens.pokemon
+package pt.ul.fc.cm.pokefit.presentation.screens.pokemon.list
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
@@ -16,13 +16,13 @@ import pt.ul.fc.cm.pokefit.utils.Response
 import javax.inject.Inject
 
 @HiltViewModel
-class PokemonViewModel @Inject constructor(
+class ListViewModel @Inject constructor(
     userAccount: UserAccount,
     private val pokemonList: PokemonList
 ) : ViewModel() {
 
-    private val _state = mutableStateOf(PokemonListState())
-    val state: State<PokemonListState> = _state
+    private val _state = mutableStateOf(ListState())
+    val state: State<ListState> = _state
 
     private val uid = userAccount.getCurrentUser()!!.uid
 
@@ -37,11 +37,11 @@ class PokemonViewModel @Inject constructor(
     }
 
     fun chooseStarterPokemon(pokemon: Pokemon) = viewModelScope.launch {
-        _state.value = PokemonListState(isLoading = true)
+        _state.value = ListState(isLoading = true)
         when (val response = pokemonList.saveStarterPokemon(uid, pokemon)) {
             is Response.Success -> loadPokemonList()
             is Response.Failure -> {
-                _state.value = PokemonListState(error = response.error)
+                _state.value = ListState(error = response.error)
             }
         }
     }
@@ -50,13 +50,13 @@ class PokemonViewModel @Inject constructor(
         pokemonList.loadPokemonList(uid).onEach { resource ->
             when (resource) {
                 is Resource.Loading -> {
-                    _state.value = PokemonListState(isLoading = true)
+                    _state.value = ListState(isLoading = true)
                 }
                 is Resource.Success -> {
-                    _state.value = PokemonListState(pokemon = resource.data)
+                    _state.value = ListState(pokemon = resource.data)
                 }
                 is Resource.Failure -> {
-                    _state.value = PokemonListState(error = resource.error)
+                    _state.value = ListState(error = resource.error)
                 }
             }
         }.launchIn(viewModelScope)
@@ -66,25 +66,25 @@ class PokemonViewModel @Inject constructor(
         pokemonList.loadStarterPokemon().onEach { resource ->
             when (resource) {
                 is Resource.Loading -> {
-                    _state.value = PokemonListState(isLoading = true)
+                    _state.value = ListState(isLoading = true)
                 }
                 is Resource.Success -> {
-                    _state.value = PokemonListState(pokemon = resource.data)
+                    _state.value = ListState(pokemon = resource.data)
                 }
                 is Resource.Failure -> {
-                    _state.value = PokemonListState(error = resource.error)
+                    _state.value = ListState(error = resource.error)
                 }
             }
         }.launchIn(viewModelScope)
     }
 
     private suspend fun getUserPokemonCount(): Int {
-        _state.value = PokemonListState(isLoading = true)
+        _state.value = ListState(isLoading = true)
         val response = pokemonList.getUserPokemonCount(uid)
         return when (response) {
             is Response.Success -> response.data!!
             is Response.Failure -> {
-                _state.value = PokemonListState(error = response.error)
+                _state.value = ListState(error = response.error)
                 -1
             }
         }
