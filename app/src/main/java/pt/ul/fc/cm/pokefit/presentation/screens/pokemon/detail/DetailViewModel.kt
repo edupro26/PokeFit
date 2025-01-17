@@ -11,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import pt.ul.fc.cm.pokefit.domain.model.pokemon.Pokemon
 import pt.ul.fc.cm.pokefit.domain.usecase.PokemonDetail
 import pt.ul.fc.cm.pokefit.domain.usecase.UserAccount
 import pt.ul.fc.cm.pokefit.utils.Constants.PARAM_POKEMON_ID
@@ -46,6 +47,27 @@ class DetailViewModel @Inject constructor(
                 popStack()
                 Toast.makeText(
                     context, "Pokemon selected", Toast.LENGTH_SHORT
+                ).show()
+            }
+            is Response.Failure -> {
+                Toast.makeText(
+                    context, response.error, Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    fun unlockPokemon(
+        pokemon: Pokemon,
+        amount: Int,
+        context: Context,
+        popStack: () -> Unit
+    ) = viewModelScope.launch {
+        when (val response = pokemonDetail.unlockPokemon(pokemon, amount, uid)) {
+            is Response.Success -> {
+                popStack()
+                Toast.makeText(
+                    context, "Pokemon unlocked", Toast.LENGTH_SHORT
                 ).show()
             }
             is Response.Failure -> {

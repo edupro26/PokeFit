@@ -13,9 +13,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -25,8 +30,12 @@ import coil.compose.rememberAsyncImagePainter
 import pt.ul.fc.cm.pokefit.R
 import pt.ul.fc.cm.pokefit.domain.model.pokemon.Pokemon
 import pt.ul.fc.cm.pokefit.presentation.navigation.Screen
+import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.common.ConfirmationDialog
 import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.detail.components.DetailButton
 import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.detail.components.DetailTopBar
+import pt.ul.fc.cm.pokefit.utils.Constants.RARITY_1
+import pt.ul.fc.cm.pokefit.utils.Constants.RARITY_2
+import pt.ul.fc.cm.pokefit.utils.Constants.RARITY_3
 
 @Composable
 fun DetailScreen(
@@ -107,7 +116,12 @@ private fun ShowPokemonDetails(
                 )
             }
             pokemon.locked -> {
-                LockedPokemon()
+                LockedPokemon(
+                    pokemon = pokemon,
+                    context = context,
+                    viewModel = viewModel,
+                    navController = navController
+                )
             }
         }
     }
@@ -139,13 +153,49 @@ private fun UnLockedPokemon(
 }
 
 @Composable
-private fun LockedPokemon() {
+private fun LockedPokemon(
+    pokemon: Pokemon,
+    context: Context,
+    viewModel: DetailViewModel,
+    navController: NavController
+) {
     /* TODO show pokemon locked details */
+    var showConfirmation by remember { mutableStateOf(false) }
+    val fitCoins = calculateFitCoins(pokemon)
     DetailButton(
-        text = "Unlock",
+        text = fitCoins,
         containerColor = MaterialTheme.colorScheme.secondary,
-        textColor = MaterialTheme.colorScheme.onSecondary
-    ) {
+        textColor = MaterialTheme.colorScheme.onSecondary,
+        painter = painterResource(R.drawable.ic_fit_coins),
+        onClick = { showConfirmation = true }
+    )
+    if (showConfirmation) {
+        ConfirmationDialog(
+            text = stringResource(R.string.confirm_unlock),
+            onCancel = { showConfirmation = false },
+            onConfirm = {
+                viewModel.unlockPokemon(
+                    pokemon = pokemon,
+                    amount = fitCoins.toInt(),
+                    context = context,
+                    popStack = {
+                        navController.navigate(Screen.PokemonList.route) {
+                            popUpTo(Screen.PokemonList.route) { inclusive = true }
+                        }
+                    }
+                )
+                showConfirmation = false
+            }
+        )
+    }
+}
 
+private fun calculateFitCoins(pokemon: Pokemon): String {
+    val rarity = pokemon.details.rarity!!
+    return when {
+        rarity < RARITY_1 -> "1000"
+        rarity in RARITY_1..<RARITY_2 -> "3000"
+        rarity in RARITY_2..<RARITY_3 -> "6000"
+        else -> "9000"
     }
 }

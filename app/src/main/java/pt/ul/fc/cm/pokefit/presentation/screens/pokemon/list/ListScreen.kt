@@ -1,7 +1,12 @@
 package pt.ul.fc.cm.pokefit.presentation.screens.pokemon.list
 
-import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
@@ -29,7 +34,7 @@ import pt.ul.fc.cm.pokefit.R
 import pt.ul.fc.cm.pokefit.presentation.common.BottomAppBar
 import pt.ul.fc.cm.pokefit.presentation.common.TopAppBar
 import pt.ul.fc.cm.pokefit.presentation.navigation.Screen
-import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.list.components.ConfirmationDialog
+import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.common.ConfirmationDialog
 import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.list.components.PokemonCard
 import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.list.components.SelectStarterButton
 import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.list.components.StarterCard
@@ -147,12 +152,12 @@ private fun ShowStarterPokemon(
         }
         if (showConfirmation) {
             ConfirmationDialog(
-                pokemon = state.pokemon[selected],
-                onConfirm = { pokemon ->
-                    viewModel.chooseStarterPokemon(pokemon)
+                text = stringResource(R.string.confirm_starter),
+                onCancel = { showConfirmation = false },
+                onConfirm = {
+                    viewModel.chooseStarterPokemon(state.pokemon[selected])
                     showConfirmation = false
-                },
-                onCancel = { showConfirmation = false }
+                }
             )
         }
     }

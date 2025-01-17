@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query.Direction.DESCENDING
+import com.google.firebase.firestore.Transaction
 import kotlinx.coroutines.tasks.await
 import pt.ul.fc.cm.pokefit.data.remote.PokeApi
 import pt.ul.fc.cm.pokefit.data.remote.dtos.fromDto
@@ -23,17 +24,39 @@ class PokemonRepositoryImpl @Inject constructor(
     override suspend fun savePokemon(uid: String, pokemon: Pokemon): Response<Unit> {
         return try {
             store.runTransaction { transaction ->
-                val userRef = store.collection("users").document(uid)
-                val pokemonRef = userRef.collection("pokemon")
-                    .document(pokemon.id.toString())
-                transaction.set(pokemonRef, pokemon)
-                transaction.update(userRef, "pokemonCount", FieldValue.increment(1))
+                transaction.performSavePokemon(pokemon, uid)
             }.await()
             Response.Success(Unit)
         } catch (e: Exception) {
             Log.e("PokemonRepository", "Failed to save pokemon (${e::class.java.simpleName})")
             Response.Failure("Failed to save pokemon")
         }
+    }
+
+    override suspend fun unlockPokemon(pokemon: Pokemon, amount: Int, uid: String): Response<Unit> {
+        return try {
+            val userRef = store.collection("users").document(uid)
+            val fitCoins = userRef.get().await().getLong("fitCoins")!!
+            if (fitCoins < amount) {
+                Response.Failure("Insufficient Fit Coins")
+            }
+            store.runTransaction { transaction ->
+                transaction.update(userRef, "fitCoins", fitCoins - amount)
+                transaction.performSavePokemon(pokemon, uid)
+            }.await()
+            Response.Success(Unit)
+        } catch (e: Exception) {
+            Log.e("PokemonRepository", "Failed to unlock pokemon (${e::class.java.simpleName})")
+            Response.Failure("Failed to unlock pokemon")
+        }
+    }
+
+    private fun Transaction.performSavePokemon(pokemon: Pokemon, uid: String) {
+        val userRef = store.collection("users").document(uid)
+        val pokemonRef = userRef.collection("pokemon")
+            .document(pokemon.id.toString())
+        this.set(pokemonRef, pokemon)
+        this.update(userRef, "pokemonCount", FieldValue.increment(1))
     }
 
     override suspend fun selectPokemon(id: Int, uid: String): Response<Unit> {
