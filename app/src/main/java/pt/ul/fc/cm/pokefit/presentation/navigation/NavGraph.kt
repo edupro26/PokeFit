@@ -9,7 +9,7 @@ import androidx.navigation.compose.composable
 import pt.ul.fc.cm.pokefit.presentation.screens.auth.signin.SigninScreen
 import pt.ul.fc.cm.pokefit.presentation.screens.auth.signup.SignupScreen
 import pt.ul.fc.cm.pokefit.presentation.screens.initial.InitialScreen
-import pt.ul.fc.cm.pokefit.presentation.screens.home.HomeScreen
+import pt.ul.fc.cm.pokefit.presentation.screens.home.home.HomeScreen
 import pt.ul.fc.cm.pokefit.presentation.screens.home.map.MapScreen
 import pt.ul.fc.cm.pokefit.presentation.screens.leaderboard.LeaderboardScreen
 import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.detail.DetailScreen

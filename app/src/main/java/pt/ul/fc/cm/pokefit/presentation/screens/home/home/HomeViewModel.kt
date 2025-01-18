@@ -1,8 +1,7 @@
-package pt.ul.fc.cm.pokefit.presentation.screens.home
+package pt.ul.fc.cm.pokefit.presentation.screens.home.home
 
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,7 +10,7 @@ import pt.ul.fc.cm.pokefit.domain.sensor.MeasurableSensor
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeScreenViewModel @Inject constructor(
+class HomeViewModel @Inject constructor(
     private val stepCounter: MeasurableSensor
 ) : ViewModel() {
 

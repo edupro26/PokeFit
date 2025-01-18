@@ -1,4 +1,4 @@
-package pt.ul.fc.cm.pokefit.presentation.screens.home.components
+package pt.ul.fc.cm.pokefit.presentation.screens.home.home.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border

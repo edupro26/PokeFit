@@ -1,4 +1,4 @@
-package pt.ul.fc.cm.pokefit.presentation.screens.home
+package pt.ul.fc.cm.pokefit.presentation.screens.home.home
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,13 +24,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import pt.ul.fc.cm.pokefit.R
 import pt.ul.fc.cm.pokefit.presentation.common.BottomAppBar
-import pt.ul.fc.cm.pokefit.presentation.common.BottomBarItem
 import pt.ul.fc.cm.pokefit.presentation.common.TopAppBar
 import pt.ul.fc.cm.pokefit.presentation.navigation.Screen
-import pt.ul.fc.cm.pokefit.presentation.screens.home.components.PermissionHandler
-import pt.ul.fc.cm.pokefit.presentation.screens.home.components.SelectedPokemon
-import pt.ul.fc.cm.pokefit.presentation.screens.home.components.SleepCard
-import pt.ul.fc.cm.pokefit.presentation.screens.home.components.StatsCard
+import pt.ul.fc.cm.pokefit.presentation.screens.home.home.components.PermissionHandler
+import pt.ul.fc.cm.pokefit.presentation.screens.home.home.components.SelectedPokemon
+import pt.ul.fc.cm.pokefit.presentation.screens.home.home.components.SleepCard
+import pt.ul.fc.cm.pokefit.presentation.screens.home.home.components.StatsCard
 import pt.ul.fc.cm.pokefit.presentation.ui.theme.CaloriesIconBackground
 import pt.ul.fc.cm.pokefit.presentation.ui.theme.DistanceIconBackground
 import pt.ul.fc.cm.pokefit.presentation.ui.theme.StepsIconBackground
@@ -41,7 +40,7 @@ import pt.ul.fc.cm.pokefit.presentation.ui.theme.TimeActiveIconBackground
 fun HomeScreen(
     navController: NavController,
     navigate: (String, Boolean) -> Unit,
-    viewModel: HomeScreenViewModel = hiltViewModel(),
+    viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val steps by viewModel.steps
     val calories by viewModel.calories
@@ -57,7 +56,7 @@ fun HomeScreen(
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         containerColor = MaterialTheme.colorScheme.surface,
-        topBar = { HomeTopBar(scrollBehavior, navigate) },
+        topBar = { HomeTopBar(scrollBehavior, navController) },
         bottomBar = { BottomAppBar(navController, navigate) }
     ) { paddingValues ->
         Column(
@@ -140,12 +139,15 @@ private fun StatsSection(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun HomeTopBar(scrollBehavior: TopAppBarScrollBehavior, navigate: (String, Boolean) -> Unit) {
+private fun HomeTopBar(
+    scrollBehavior: TopAppBarScrollBehavior,
+    navController: NavController
+) {
     TopAppBar(
         scrollBehavior = scrollBehavior,
         firstIcon = R.drawable.ic_top_map,
         firstDescription = "Map",
-        onFirstIconClick = { navigate(Screen.Map.route, false) },
+        onFirstIconClick = { navController.navigate(Screen.Map.route) },
         secondIcon = R.drawable.ic_top_tasks,
         secondDescription = "Goals",
         onSecondIconClick = { /*TODO*/ },
