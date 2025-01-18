@@ -16,6 +16,8 @@ object Constants {
 
     const val TOP_10 = 10
 
+    const val STAT_MAX = 10000
+
     /* Starter Pokemon */
     const val STARTER_1 = 1
     const val STARTER_2 = 4

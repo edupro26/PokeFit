@@ -1,10 +1,10 @@
 package pt.ul.fc.cm.pokefit.presentation.screens.pokemon.detail
 
 import android.content.Context
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -26,16 +26,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import coil.compose.rememberAsyncImagePainter
-import pt.ul.fc.cm.pokefit.R
 import pt.ul.fc.cm.pokefit.domain.model.pokemon.Pokemon
 import pt.ul.fc.cm.pokefit.presentation.navigation.Screen
 import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.common.ConfirmationDialog
 import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.detail.components.DetailButton
 import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.detail.components.DetailTopBar
+import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.detail.components.DetailsSection
 import pt.ul.fc.cm.pokefit.utils.Constants.RARITY_1
 import pt.ul.fc.cm.pokefit.utils.Constants.RARITY_2
 import pt.ul.fc.cm.pokefit.utils.Constants.RARITY_3
+import pt.ul.fc.cm.pokefit.R
+import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.detail.components.StatsSection
 
 @Composable
 fun DetailScreen(
@@ -95,33 +96,28 @@ private fun ShowPokemonDetails(
     viewModel: DetailViewModel
 ) {
     val context = LocalContext.current
-    Column(
+    Box(
         modifier = Modifier
             .padding(start = 18.dp, end = 18.dp)
     ) {
-        Image(
-            painter = rememberAsyncImagePainter(pokemon.imgUrl),
-            contentDescription = "${pokemon.name} image",
-            modifier = Modifier
-                .size(160.dp)
-                .align(Alignment.CenterHorizontally)
-        )
-        when {
-            !pokemon.locked -> {
-                UnLockedPokemon(
-                    pokemon = pokemon,
-                    context = context,
-                    viewModel = viewModel,
-                    navController = navController
-                )
-            }
-            pokemon.locked -> {
-                LockedPokemon(
-                    pokemon = pokemon,
-                    context = context,
-                    viewModel = viewModel,
-                    navController = navController
-                )
+        Column {
+            when {
+                !pokemon.locked -> {
+                    UnLockedPokemon(
+                        pokemon = pokemon,
+                        context = context,
+                        viewModel = viewModel,
+                        navController = navController
+                    )
+                }
+                pokemon.locked -> {
+                    LockedPokemon(
+                        pokemon = pokemon,
+                        context = context,
+                        viewModel = viewModel,
+                        navController = navController
+                    )
+                }
             }
         }
     }
@@ -134,14 +130,26 @@ private fun UnLockedPokemon(
     viewModel: DetailViewModel,
     navController: NavController,
 ) {
-    /* TODO show pokemon unlocked details */
+    DetailsSection(
+        id = pokemon.id!!,
+        name = pokemon.name!!,
+        imgUrl = pokemon.imgUrl!!,
+        details = pokemon.details
+    )
+    Spacer(modifier = Modifier.size(24.dp))
+    StatsSection(
+        level = pokemon.level,
+        stats = pokemon.stats,
+        isLocked = pokemon.locked
+    )
+    Spacer(modifier = Modifier.size(24.dp))
     DetailButton(
         text = stringResource(R.string.select),
         containerColor = MaterialTheme.colorScheme.primary,
         textColor = MaterialTheme.colorScheme.onPrimary
     ) {
         viewModel.selectPokemon(
-            id = pokemon.id!!,
+            id = pokemon.id,
             context = context,
             popStack = {
                 navController.navigate(Screen.PokemonList.route) {
@@ -159,13 +167,25 @@ private fun LockedPokemon(
     viewModel: DetailViewModel,
     navController: NavController
 ) {
-    /* TODO show pokemon locked details */
     var showConfirmation by remember { mutableStateOf(false) }
     val fitCoins = calculateFitCoins(pokemon)
+    DetailsSection(
+        id = pokemon.id!!,
+        name = pokemon.name!!,
+        imgUrl = pokemon.imgUrl!!,
+        details = pokemon.details
+    )
+    Spacer(modifier = Modifier.size(24.dp))
+    StatsSection(
+        level = pokemon.level,
+        stats = pokemon.stats,
+        isLocked = pokemon.locked
+    )
+    Spacer(modifier = Modifier.size(24.dp))
     DetailButton(
         text = fitCoins,
-        containerColor = MaterialTheme.colorScheme.secondary,
-        textColor = MaterialTheme.colorScheme.onSecondary,
+        containerColor = MaterialTheme.colorScheme.primary,
+        textColor = MaterialTheme.colorScheme.onPrimary,
         painter = painterResource(R.drawable.ic_fit_coins),
         onClick = { showConfirmation = true }
     )
