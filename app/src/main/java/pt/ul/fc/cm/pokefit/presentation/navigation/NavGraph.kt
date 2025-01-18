@@ -41,10 +41,7 @@ fun NavGraph(navController: NavHostController) {
             )
         }
         composable(route = Screen.Map.route) {
-            MapScreen(
-                navController = navController,
-                navigate = navController::navigate,
-            )
+            MapScreen(navController = navController)
         }
         composable(route = Screen.PokemonList.route) {
             ListScreen(

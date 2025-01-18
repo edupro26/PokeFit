@@ -1,4 +1,4 @@
-package pt.ul.fc.cm.pokefit.presentation.screens.home.map
+package pt.ul.fc.cm.pokefit.presentation.screens.home.map.components
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.*
+import pt.ul.fc.cm.pokefit.presentation.screens.home.map.MapViewModel
 
 @Composable
 fun LocationUpdate(mapViewModel: MapViewModel) {
