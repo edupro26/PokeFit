@@ -1,5 +1,7 @@
 package pt.ul.fc.cm.pokefit.presentation.screens.pokemon.detail.components
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +24,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -78,10 +85,11 @@ fun StatsSection(
                     }
                 }
                 else -> {
-                    /* TODO progression logic */
-                    ShowLevel(level)
+                    var animate by remember { mutableStateOf(false) }
+                    ShowLevel(level, animate) /* TODO progression logic */
                     Spacer(modifier = Modifier.height(32.dp))
-                    ShowStats(stats)
+                    ShowStats(stats, animate)
+                    LaunchedEffect(Unit) { animate = true }
                 }
             }
         }
@@ -91,8 +99,9 @@ fun StatsSection(
 @Composable
 private fun ShowLevel(
     level: Int,
+    animate: Boolean,
     curExp: Int = 40,
-    maxExp: Int = 100,
+    maxExp: Int = 100
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -114,8 +123,10 @@ private fun ShowLevel(
             )
         }
         Box {
+            val progress = curExp.toFloat() / maxExp
+            val animation = animatedValue(progress, animate)
             LinearProgressIndicator(
-                progress = { curExp.toFloat() / maxExp },
+                progress = { animation },
                 color = MaterialTheme.colorScheme.primary,
                 trackColor = MaterialTheme.colorScheme.primary
                     .copy(alpha = 0.2f),
@@ -127,14 +138,19 @@ private fun ShowLevel(
             Text(
                 text = "$curExp / $maxExp",
                 modifier = Modifier.align(Alignment.Center),
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onPrimary,
+                fontWeight = FontWeight.Bold
             )
         }
     }
 }
 
 @Composable
-private fun ShowStats(stats: PokemonStats) {
+private fun ShowStats(
+    stats: PokemonStats,
+    animate: Boolean
+) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(14.dp),
         modifier = Modifier
@@ -144,6 +160,7 @@ private fun ShowStats(stats: PokemonStats) {
         StatItem(
             value = stats.happiness,
             name = "Happiness",
+            animate = animate,
             modifier = Modifier.weight(1f)
         )
         VerticalDivider(
@@ -154,6 +171,7 @@ private fun ShowStats(stats: PokemonStats) {
         StatItem(
             value = stats.physique,
             name = "Physique",
+            animate = animate,
             modifier = Modifier.weight(1f)
         )
         VerticalDivider(
@@ -164,6 +182,7 @@ private fun ShowStats(stats: PokemonStats) {
         StatItem(
             value = stats.health,
             name = "Health",
+            animate = animate,
             modifier = Modifier.weight(1f)
         )
     }
@@ -173,14 +192,9 @@ private fun ShowStats(stats: PokemonStats) {
 private fun StatItem(
     value: Int,
     name: String,
+    animate: Boolean,
     modifier: Modifier
 ) {
-    val progress = value.toFloat() / STAT_MAX
-    val color = when {
-        progress < 0.3 -> SadFaceTint
-        progress < 0.7 -> NeutralFaceTint
-        else -> HappyFaceTint
-    }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -193,8 +207,15 @@ private fun StatItem(
             color = MaterialTheme.colorScheme.onPrimaryContainer
         )
         Spacer(modifier = Modifier.height(16.dp))
+        val progress = value.toFloat() / STAT_MAX
+        val color = when {
+            progress < 0.3 -> SadFaceTint
+            progress < 0.7 -> NeutralFaceTint
+            else -> HappyFaceTint
+        }
+        val animation = animatedValue(progress, animate)
         LinearProgressIndicator(
-            progress = { progress },
+            progress = { animation },
             color = color,
             trackColor = color.copy(alpha = 0.2f),
             modifier = Modifier
@@ -224,4 +245,15 @@ private fun LockedIcon() {
             )
         }
     }
+}
+
+@Composable
+private fun animatedValue(
+    progress: Float,
+    trigger: Boolean
+): Float {
+    return animateFloatAsState(
+        targetValue = if (trigger) progress else 0f,
+        animationSpec = tween(1000, 250)
+    ).value
 }
