@@ -14,7 +14,7 @@ sealed class BottomBarItem(
         icon = R.drawable.ic_bottom_home
     )
     data object Pokemon : BottomBarItem(
-        route = Screen.Pokemon.route,
+        route = Screen.PokemonList.route,
         title = R.string.pokemon,
         icon = R.drawable.ic_bottom_pokemon
     )
