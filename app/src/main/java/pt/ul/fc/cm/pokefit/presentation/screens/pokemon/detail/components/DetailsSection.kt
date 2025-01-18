@@ -44,7 +44,7 @@ fun DetailsSection(
     name: String,
     imgUrl: String,
     details: PokemonDetails,
-    imageSize: Dp = 160.dp
+    imageSize: Dp = 150.dp
 ) {
     Box(
         contentAlignment = Alignment.TopCenter,

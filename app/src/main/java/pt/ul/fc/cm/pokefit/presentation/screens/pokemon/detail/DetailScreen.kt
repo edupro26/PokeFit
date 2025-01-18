@@ -36,6 +36,7 @@ import pt.ul.fc.cm.pokefit.utils.Constants.RARITY_1
 import pt.ul.fc.cm.pokefit.utils.Constants.RARITY_2
 import pt.ul.fc.cm.pokefit.utils.Constants.RARITY_3
 import pt.ul.fc.cm.pokefit.R
+import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.detail.components.StatsSection
 
 @Composable
 fun DetailScreen(
@@ -135,7 +136,13 @@ private fun UnLockedPokemon(
         imgUrl = pokemon.imgUrl!!,
         details = pokemon.details
     )
-    Spacer(modifier = Modifier.size(16.dp))
+    Spacer(modifier = Modifier.size(24.dp))
+    StatsSection(
+        level = pokemon.level,
+        stats = pokemon.stats,
+        isLocked = pokemon.locked
+    )
+    Spacer(modifier = Modifier.size(24.dp))
     DetailButton(
         text = stringResource(R.string.select),
         containerColor = MaterialTheme.colorScheme.primary,
@@ -168,7 +175,13 @@ private fun LockedPokemon(
         imgUrl = pokemon.imgUrl!!,
         details = pokemon.details
     )
-    Spacer(modifier = Modifier.size(16.dp))
+    Spacer(modifier = Modifier.size(24.dp))
+    StatsSection(
+        level = pokemon.level,
+        stats = pokemon.stats,
+        isLocked = pokemon.locked
+    )
+    Spacer(modifier = Modifier.size(24.dp))
     DetailButton(
         text = fitCoins,
         containerColor = MaterialTheme.colorScheme.primary,

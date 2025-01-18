@@ -26,4 +26,5 @@
     <string name="choose_your_starter_pokemon">Choose your starter Pokemon</string>
     <string name="confirm_starter">Select this pokemon as your starter?</string>
     <string name="confirm_unlock">Are you sure you want to unlock this pokemon?</string>
+    <string name="this_pokemon_is_locked">This pokemon is locked</string>
 </resources>
