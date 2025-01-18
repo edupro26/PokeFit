@@ -11,7 +11,7 @@ interface PokeApi {
     @GET("pokemon")
     suspend fun getPokemonList(@Query("limit") limit: Int): PokemonListDto
 
-    @GET("pokemon/{name}")
-    suspend fun getPokemonInfo(@Path("name") name: String): PokemonDto
+    @GET("pokemon/{id}")
+    suspend fun getPokemonInfo(@Path("id") id: Int): PokemonDto
 
 }

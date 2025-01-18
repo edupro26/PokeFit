@@ -12,7 +12,9 @@ sealed class Screen(val route: String) {
 
     data object Map : Screen("map")
 
-    data object Pokemon : Screen("pokemon")
+    data object PokemonList : Screen("pokemon_list")
+
+    data object PokemonDetail : Screen("pokemon_detail")
 
     data object Leaderboards : Screen("leaderboards")
 
