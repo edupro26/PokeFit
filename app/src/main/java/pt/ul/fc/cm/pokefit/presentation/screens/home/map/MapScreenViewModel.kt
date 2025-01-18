@@ -1,22 +1,25 @@
 package pt.ul.fc.cm.pokefit.presentation.screens.home.map
 
+import android.location.Location
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import android.location.Location
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.MarkerState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import pt.ul.fc.cm.pokefit.domain.model.RoutePoint
-import pt.ul.fc.cm.pokefit.domain.room.RoutePointDao
+import pt.ul.fc.cm.pokefit.domain.repository.RoutePointRepository
 import javax.inject.Inject
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 @HiltViewModel
 class MapViewModel @Inject constructor(
-    private val routePointDao: RoutePointDao
+    private val repository: RoutePointRepository
 ) : ViewModel() {
     val initialCameraPosition = CameraPosition.fromLatLngZoom(
         LatLng(38.736946, -9.142685), // Example: Lisbon, Portugal
@@ -29,7 +32,7 @@ class MapViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            routePointDao.getAllRoutePoints().collect { points ->
+            repository.getAllRoutePoints().collect { points ->
                 // Filtrar pontos pela velocidade
                 val filteredPoints = points.filter { it.speed <= 6 } // 21.6 km/h
                 _routePoints.value = filteredPoints
@@ -40,7 +43,7 @@ class MapViewModel @Inject constructor(
 
     fun saveRoutePoint(location: Location) {
         viewModelScope.launch {
-            val lastPoint = routePointDao.getLastRoutePoint()
+            val lastPoint = repository.getLastRoutePoint()
 
             // Calcular a distância do último ponto ao novo ponto
             val isNewRoute = if (lastPoint != null) {
@@ -63,7 +66,7 @@ class MapViewModel @Inject constructor(
             }
 
             // Inserir o novo ponto no banco de dados
-            routePointDao.insertRoutePoint(
+            repository.insertRoutePoint(
                 RoutePoint(
                     latitude = location.latitude,
                     longitude = location.longitude,
@@ -81,11 +84,11 @@ class MapViewModel @Inject constructor(
         val dLat = Math.toRadians(lat2 - lat1)
         val dLon = Math.toRadians(lon2 - lon1)
 
-        val a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
-                Math.sin(dLon / 2) * Math.sin(dLon / 2)
+        val a = sin(dLat / 2) * sin(dLat / 2) +
+                cos(Math.toRadians(lat1)) * cos(Math.toRadians(lat2)) *
+                sin(dLon / 2) * sin(dLon / 2)
 
-        val c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+        val c = 2 * atan2(sqrt(a), sqrt(1 - a))
 
         return earthRadius * c // Retorna a distância em metros
     }
@@ -107,7 +110,7 @@ class MapViewModel @Inject constructor(
 
     fun clearAllPoints() {
         viewModelScope.launch {
-            routePointDao.clearAllRoutePoints()
+            repository.clearAllRoutePoints()
         }
     }
 }

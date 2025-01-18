@@ -68,17 +68,16 @@ dependencies {
     implementation(libs.play.services.location)
 
     // ---------------------------------------
-    // Room (Armazenamento Local)
+    // Room Dependencies (SQLite)
     // ---------------------------------------
     implementation (libs.androidx.room.runtime)
     implementation (libs.androidx.room.ktx)
     ksp (libs.androidx.room.compiler)
 
     // ---------------------------------------
-    // Coroutines (threads)
+    // Coroutines
     // ---------------------------------------
     implementation (libs.kotlinx.coroutines.android)
-
 
     // --------------------
     // Dependency Injection
