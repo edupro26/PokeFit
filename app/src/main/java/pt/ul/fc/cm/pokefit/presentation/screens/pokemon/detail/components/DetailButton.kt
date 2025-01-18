@@ -60,7 +60,7 @@ fun DetailButton(
                     Icon(
                         painter = painter,
                         contentDescription = "FitCoins",
-                        tint = Color.Black
+                        tint = textColor
                     )
                 }
             }
