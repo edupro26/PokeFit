@@ -38,7 +38,7 @@ class PokemonRepositoryImpl @Inject constructor(
             val userRef = store.collection("users").document(uid)
             val fitCoins = userRef.get().await().getLong("fitCoins")!!
             if (fitCoins < amount) {
-                Response.Failure("Insufficient Fit Coins")
+                return Response.Failure("Insufficient Fit Coins")
             }
             store.runTransaction { transaction ->
                 transaction.update(userRef, "fitCoins", fitCoins - amount)
