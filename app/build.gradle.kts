@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -20,6 +22,19 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Get the API keys from local.properties
+        val properties = Properties()
+        properties.load(rootProject.file("local.properties").inputStream())
+
+        // Set MAPS_API_KEY in BuildConfig
+        buildConfigField(
+            "String",
+            "MAPS_API_KEY",
+            "\"${properties.getProperty("MAPS_API_KEY")}\""
+        )
+        // Pass MAPS_API_KEY to manifest placeholder
+        manifestPlaceholders["MAPS_API_KEY"] = properties.getProperty("MAPS_API_KEY")
     }
 
     buildTypes {
@@ -31,13 +46,21 @@ android {
             )
         }
     }
+    // Enable BuildConfig generation
+    buildFeatures {
+        buildConfig = true
+        compose = true
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlinOptions {
         jvmTarget = "17"
     }
+
     buildFeatures {
         compose = true
     }
@@ -59,6 +82,25 @@ dependencies {
     implementation(libs.android.credentials)
     implementation(libs.android.credentials.play.services.auth)
     implementation(libs.identity.googleid)
+
+    // ---------------------------------------
+    // Google Maps & location Dependencies
+    // ---------------------------------------
+    implementation(libs.android.maps.compose)
+    implementation(libs.play.services.maps)
+    implementation(libs.play.services.location)
+
+    // ---------------------------------------
+    // Room Dependencies (SQLite)
+    // ---------------------------------------
+    implementation (libs.androidx.room.runtime)
+    implementation (libs.androidx.room.ktx)
+    ksp (libs.androidx.room.compiler)
+
+    // ---------------------------------------
+    // Coroutines
+    // ---------------------------------------
+    implementation (libs.kotlinx.coroutines.android)
 
     // --------------------
     // Dependency Injection

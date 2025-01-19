@@ -8,8 +8,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import pt.ul.fc.cm.pokefit.presentation.screens.auth.signin.SigninScreen
 import pt.ul.fc.cm.pokefit.presentation.screens.auth.signup.SignupScreen
-import pt.ul.fc.cm.pokefit.presentation.screens.home.HomeScreen
 import pt.ul.fc.cm.pokefit.presentation.screens.initial.InitialScreen
+import pt.ul.fc.cm.pokefit.presentation.screens.home.home.HomeScreen
+import pt.ul.fc.cm.pokefit.presentation.screens.home.map.MapScreen
 import pt.ul.fc.cm.pokefit.presentation.screens.leaderboard.LeaderboardScreen
 import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.detail.DetailScreen
 import pt.ul.fc.cm.pokefit.presentation.screens.pokemon.list.ListScreen
@@ -38,6 +39,9 @@ fun NavGraph(navController: NavHostController) {
                 navController = navController,
                 navigate = navController::navigate,
             )
+        }
+        composable(route = Screen.Map.route) {
+            MapScreen(navController = navController)
         }
         composable(route = Screen.PokemonList.route) {
             ListScreen(

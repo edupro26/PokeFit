@@ -1,4 +1,4 @@
-package pt.ul.fc.cm.pokefit.presentation.screens.home.components
+package pt.ul.fc.cm.pokefit.presentation.screens.home.home.components
 
 import android.Manifest
 import android.content.Context
