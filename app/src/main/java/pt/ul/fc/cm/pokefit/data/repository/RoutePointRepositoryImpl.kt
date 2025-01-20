@@ -4,8 +4,9 @@ import kotlinx.coroutines.flow.Flow
 import pt.ul.fc.cm.pokefit.data.room.dao.RoutePointDao
 import pt.ul.fc.cm.pokefit.domain.model.RoutePoint
 import pt.ul.fc.cm.pokefit.domain.repository.RoutePointRepository
+import javax.inject.Inject
 
-class RoutePointRepositoryImpl(
+class RoutePointRepositoryImpl @Inject constructor(
     private val dao: RoutePointDao
 ) : RoutePointRepository {
 
@@ -26,3 +27,4 @@ class RoutePointRepositoryImpl(
     }
 
 }
+

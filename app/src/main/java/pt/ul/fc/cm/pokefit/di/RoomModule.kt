@@ -8,6 +8,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import pt.ul.fc.cm.pokefit.data.repository.RoutePointRepositoryImpl
 import pt.ul.fc.cm.pokefit.data.room.LocalDatabase
+import pt.ul.fc.cm.pokefit.data.room.dao.RoutePointDao
 import pt.ul.fc.cm.pokefit.domain.repository.RoutePointRepository
 import javax.inject.Singleton
 
@@ -22,7 +23,15 @@ object RoomModule {
             app,
             LocalDatabase::class.java,
             "room_database"
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRoutePointDao(database: LocalDatabase): RoutePointDao {
+        return database.routePointDao
     }
 
     @Provides
@@ -30,5 +39,5 @@ object RoomModule {
     fun provideRoutePointRepository(db: LocalDatabase): RoutePointRepository {
         return RoutePointRepositoryImpl(db.routePointDao)
     }
-
 }
+
