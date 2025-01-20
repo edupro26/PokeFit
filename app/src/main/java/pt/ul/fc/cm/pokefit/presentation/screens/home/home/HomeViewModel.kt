@@ -1,56 +1,66 @@
 package pt.ul.fc.cm.pokefit.presentation.screens.home.home
 
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import pt.ul.fc.cm.pokefit.domain.repository.StepCountRepository
 import pt.ul.fc.cm.pokefit.domain.sensor.MeasurableSensor
+import pt.ul.fc.cm.pokefit.domain.usecase.UserAccount
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val stepCounter: MeasurableSensor
+    userAccount: UserAccount,
+    private val stepCounter: MeasurableSensor,
+    private val stepsRepository: StepCountRepository
 ) : ViewModel() {
 
-    private var initialStepCount = 0
-    private var startTimeMillis: Long? = null // Tempo inicial em milissegundos
+    private val _state = mutableStateOf(HomeState())
+    val state: State<HomeState> = _state
 
-    private val _steps = mutableIntStateOf(0)
-    val steps: State<Int> = _steps
+    private val uid = userAccount.getCurrentUser()!!.uid
 
-    private val _calories = mutableIntStateOf(0)
-    val calories: State<Int> = _calories
+    private var lastRecordedSteps: Long = 0
 
-    private val _activeTimeMinutes = mutableIntStateOf(0)
-    val activeTimeMinutes: State<Int> = _activeTimeMinutes
+    init {
+        loadMetrics()
+    }
 
-    private val caloriesPerStep = 0.04 // Calorias por passo (valor médio)
-
-    fun countSteps() = viewModelScope.launch {
+    fun countSteps() {
         if (!stepCounter.isListening()) {
             stepCounter.startListening()
-
-            // Armazena o momento inicial
-            startTimeMillis = System.currentTimeMillis()
-
             stepCounter.setOnSensorValuesChangedListener { values ->
-                if (initialStepCount == 0) {
-                    initialStepCount = values[0].toInt()
-                }
-
-                val currentSteps = values[0].toInt() - initialStepCount
-                _steps.intValue = currentSteps
-                _calories.intValue = (currentSteps * caloriesPerStep).toInt()
-
-                // Atualiza o tempo ativo em minutos
-                startTimeMillis?.let { start ->
-                    val elapsedMillis = System.currentTimeMillis() - start
-                    _activeTimeMinutes.intValue = (elapsedMillis / 60000).toInt()
-                }
+                handleStepUpdates(values)
             }
         }
+    }
+
+    private fun handleStepUpdates(values: List<Float>) {
+        val steps = values.firstOrNull()?.toLong() ?: 0
+        viewModelScope.launch {
+            if (steps > lastRecordedSteps) {
+                stepsRepository.saveSteps(steps, uid)
+                lastRecordedSteps = steps
+                loadMetrics()
+            }
+        }
+    }
+
+    private fun loadMetrics() = viewModelScope.launch {
+        val stepCount = stepsRepository.getTodaySteps(uid)
+        _state.value = _state.value.copy(
+            steps = stepCount.toInt(),
+            calories = (stepCount * 0.04).toInt(),
+            distance = "%.2f".format(
+                Locale.ENGLISH,
+                stepCount * 0.000762
+            ).toDouble(),
+            activeMinutes = (stepCount / 80).toInt()
+        )
     }
 
     override fun onCleared() {
