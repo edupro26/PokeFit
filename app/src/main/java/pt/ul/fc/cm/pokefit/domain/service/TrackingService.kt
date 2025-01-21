@@ -71,7 +71,6 @@ class TrackingService : Service() {
 
     private fun stop() {
         Log.d(TAG, "Stopped tracking service")
-        stepCounter.stopListening()
         stopSelf()
     }
 
