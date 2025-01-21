@@ -40,6 +40,7 @@ abstract class AndroidSensor(
             return
         }
         sensorManager.unregisterListener(this)
+        isActive = false
         Log.d("AndroidSensor", "Stopped listening to sensor: $sensorType")
     }
 
