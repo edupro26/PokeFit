@@ -1,5 +1,7 @@
 package pt.ul.fc.cm.pokefit.presentation.screens.profile
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -7,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import pt.ul.fc.cm.pokefit.domain.service.TrackingService
 import pt.ul.fc.cm.pokefit.domain.usecase.UserAccount
 import pt.ul.fc.cm.pokefit.domain.usecase.UserProfile
 import pt.ul.fc.cm.pokefit.utils.Resource
@@ -29,9 +32,14 @@ class ProfileViewModel @Inject constructor(
         loadUserProfile(userAccount.getCurrentUser()!!.uid)
     }
 
-    fun signOut() {
+    fun signOut(context: Context) {
         userAccount.signOut()
         _isUserSignedIn.value = false
+
+        Intent(context, TrackingService::class.java).also {
+            it.action = TrackingService.Action.STOP.toString()
+            context.startService(it)
+        }
     }
 
     private fun loadUserProfile(uid: String) {

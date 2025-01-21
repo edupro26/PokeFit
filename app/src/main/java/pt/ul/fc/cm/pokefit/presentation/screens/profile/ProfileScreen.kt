@@ -19,6 +19,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -39,6 +40,7 @@ fun ProfileScreen(
 ) {
     val state = viewModel.state.value
     val isUserSignedIn = viewModel.isUserSignedIn.value
+    val context = LocalContext.current
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     ObserveSignoutEvent(isUserSignedIn, navigate)
     Scaffold (
@@ -70,7 +72,7 @@ fun ProfileScreen(
                 DisplayName(
                     displayName = state.user.displayName,
                     username = state.user.username,
-                    onSignout = { viewModel.signOut() }
+                    onSignout = { viewModel.signOut(context) }
                 )
             }
             if (!state.error.isNullOrBlank()) {

@@ -14,7 +14,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -42,15 +41,9 @@ fun HomeScreen(
     navigate: (String, Boolean) -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
-    val steps by viewModel.steps
-    val calories by viewModel.calories
-    val distance = 0 // TODO
-    val timeActive by viewModel.activeTimeMinutes
+    val state = viewModel.state.value
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    PermissionHandler(
-        context = LocalContext.current,
-        countSteps = { viewModel.countSteps() }
-    )
+    PermissionHandler(context = LocalContext.current)
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -73,7 +66,7 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.size(4.dp))
                 SelectedPokemon()
                 Spacer(modifier = Modifier.size(24.dp))
-                StatsSection(steps, calories, distance, timeActive)
+                StatsSection(state)
                 Spacer(modifier = Modifier.size(24.dp))
                 SleepCard()
             }
@@ -82,18 +75,13 @@ fun HomeScreen(
 }
 
 @Composable
-private fun StatsSection(
-    steps: Int,
-    calories: Int,
-    distance: Int,
-    timeActive: Int
-) {
+private fun StatsSection(state: HomeState) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         StatsCard(
-            value = steps.toString(),
+            value = state.steps.toString(),
             goal = "6000",
             unit = "steps",
             title = "Steps",
@@ -102,7 +90,7 @@ private fun StatsSection(
             modifier = Modifier.weight(1f)
         )
         StatsCard(
-            value = calories.toString(),
+            value = state.calories.toString(),
             goal = "500",
             unit = "kcal",
             title = "Calories",
@@ -117,7 +105,7 @@ private fun StatsSection(
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         StatsCard(
-            value = distance.toString(),
+            value = state.distance.toString(),
             goal = "5",
             unit = "km",
             title = "Distance",
@@ -126,7 +114,7 @@ private fun StatsSection(
             modifier = Modifier.weight(1f)
         )
         StatsCard(
-            value = timeActive.toString(),
+            value = state.activeMinutes.toString(),
             goal = "30",
             unit = "min",
             title = "Time Active",
