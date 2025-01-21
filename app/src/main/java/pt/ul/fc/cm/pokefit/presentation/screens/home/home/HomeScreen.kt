@@ -43,10 +43,7 @@ fun HomeScreen(
 ) {
     val state = viewModel.state.value
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    PermissionHandler(
-        context = LocalContext.current,
-        countSteps = { viewModel.countSteps() }
-    )
+    PermissionHandler(context = LocalContext.current)
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
